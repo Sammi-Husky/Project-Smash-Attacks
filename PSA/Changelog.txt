@@ -1,0 +1,29 @@
+﻿Project Smash Attacks - Version 1.3
+
+Originally Developed by Phantom Wings. 
+Current source of Sammi Husky's modified version:
+https://github.com/libertyernie/brawltools
+
+
+Smash Attacks: Super Smash Bros Brawl moveset editor.";
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details at:
+http://www.gnu.org/licenses.
+
+ ====================================
+|************ Change Log ************|
+ ====================================
+ - v1.3a- (?/??/2014)
+	. Replaced 'Remove' button with 'Nop selected' button, as nopping is currently more efficient.
+	. Fixed bug where after repack the saved file would still be open
+	. Fixed opening DDD. (Credit to Dantarion)
+	. Allowed parsing of 'Hidden' actions.
+	. Support for the SSE attribute list.

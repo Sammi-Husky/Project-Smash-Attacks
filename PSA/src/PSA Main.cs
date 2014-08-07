@@ -278,21 +278,21 @@ namespace SmashAttacks
         }
 
         //  Conversion to and from words (1 word = 4 bytes) for ease of programming.
-        public long ToWord(long val) {return val * S_WORD; }
-        public long FromWord(long val) {return val / S_WORD; }
-        public long ToBlock(long val) {return val * S_BLOCK; }
-        public long FromBlock(long val) {return val / S_BLOCK; }
-        public long FromWordRU(long val) {return FromWord(RoundUp(val, S_WORD)); }
-        public long FromWordRD(long val) {return FromWord(RoundDown(val, S_WORD)); }
-        public long FromBlockRU(long val) {return FromBlock(RoundUp(val, S_BLOCK)); }
-        public long FromBlockRD(long val) {return FromBlock(RoundDown(val, S_BLOCK)); }
+        public long ToWord(long val) { return val * S_WORD; }
+        public long FromWord(long val) { return val / S_WORD; }
+        public long ToBlock(long val) { return val * S_BLOCK; }
+        public long FromBlock(long val) { return val / S_BLOCK; }
+        public long FromWordRU(long val) { return FromWord(RoundUp(val, S_WORD)); }
+        public long FromWordRD(long val) { return FromWord(RoundDown(val, S_WORD)); }
+        public long FromBlockRU(long val) { return FromBlock(RoundUp(val, S_BLOCK)); }
+        public long FromBlockRD(long val) { return FromBlock(RoundDown(val, S_BLOCK)); }
 
         //  Conversion to and from hexadecimal with the option to automatically pad to 8 digits.
-        public string Hex(int val) {return TruncateLeft(val.ToString("X"), 8); }
-        public string Hex(long val) {return TruncateLeft(val.ToString("X"), 8); }
-        public string Hex8(int val) {return TruncateLeft(val.ToString("X"), 8).PadLeft(8, '0'); }
-        public string Hex8(long val) {return TruncateLeft(val.ToString("X"), 8).PadLeft(8, '0'); }
-        public int UnHex(string val) {return int.Parse(val, System.Globalization.NumberStyles.HexNumber); }
+        public string Hex(int val) { return TruncateLeft(val.ToString("X"), 8); }
+        public string Hex(long val) { return TruncateLeft(val.ToString("X"), 8); }
+        public string Hex8(int val) { return TruncateLeft(val.ToString("X"), 8).PadLeft(8, '0'); }
+        public string Hex8(long val) { return TruncateLeft(val.ToString("X"), 8).PadLeft(8, '0'); }
+        public int UnHex(string val) { return int.Parse(val, System.Globalization.NumberStyles.HexNumber); }
 
         //  Method for retrieval of a halfword that is part of a word.
         public string WordH(string val, int wordNum)
@@ -318,10 +318,10 @@ namespace SmashAttacks
 
             if (mantissa > 1)
                 while (mantissa > 2)
-                    {mantissa /= 2; exponent++;}
+                { mantissa /= 2; exponent++; }
             else
                 while (mantissa < 1)
-                    {mantissa *= 2; exponent--;}
+                { mantissa *= 2; exponent--; }
             mantissa -= 1;
             mantissa *= (float)Math.Pow(2, 23);
 
@@ -340,7 +340,7 @@ namespace SmashAttacks
 
             if (mantissa != 0)
                 while (((long)mantissa & 0x1) != 1)
-                    {mantissa /= 2; mantissaBits--;}
+                { mantissa /= 2; mantissaBits--; }
             mantissa /= (float)Math.Pow(2, mantissaBits);
             mantissa += 1;
 
@@ -351,17 +351,17 @@ namespace SmashAttacks
         //  Conversion from and to scalar methods.
         public long Scalar(float val) { float fVal = (val * 60000); return (long)fVal; }
         public float UnScalar(float val) { return val / 60000; }
-        
+
         //  Rounding up and down operations.
-        public long RoundUp(long val, long factor){return val + (factor-1) - (val + (factor-1)) % factor;}
-        public long RoundDown(long val, long factor){return val - val % factor; }
+        public long RoundUp(long val, long factor) { return val + (factor - 1) - (val + (factor - 1)) % factor; }
+        public long RoundDown(long val, long factor) { return val - val % factor; }
 
         //  Find the first occuring instance of the passed character.
         public int FindFirst(string str, int begin, char chr)
         {
             for (int i = begin; i < str.Length; i++)
                 if (str[i] == chr) return i;
-         
+
             return -1;
         }
 
@@ -380,7 +380,7 @@ namespace SmashAttacks
                     chrFound = chr[i];
                 }
             }
-            return result ;
+            return result;
         }
 
         //  FindFist ignoring any pairs of () and anything contained inside.
@@ -395,7 +395,7 @@ namespace SmashAttacks
             do
             {
                 if (chrResult == ')' && nested > 0) nested--;
-                searchResult = FindFirstOf(str, searchResult, searchCharacters, ref chrResult);    
+                searchResult = FindFirstOf(str, searchResult, searchCharacters, ref chrResult);
                 if (chrResult == '(') nested++;
                 searchResult++;
             } while ((nested > 0 || chrResult != chr) && chrResult != '\0');
@@ -444,7 +444,8 @@ namespace SmashAttacks
         }
 
         //  Delete any whitespace before and after the string.
-        public string ClearWhiteSpace(string str){
+        public string ClearWhiteSpace(string str)
+        {
             int whiteSpace = FindFirstNot(str, 0, ' ');
             if (whiteSpace > 0)
                 str = DelSubstring(str, 0, whiteSpace);
@@ -546,7 +547,7 @@ namespace SmashAttacks
         //  Return a comparrison sign corresponding to the value passed.
         public string GetComparrisonSign(long value)
         {
-            
+
             switch (value)
             {
                 case 0: return "<";
@@ -586,7 +587,7 @@ namespace SmashAttacks
         //  Return the air or ground status corresponding to the value passed.
         public string GetAirGroundStatus(long value)
         {
-            if(value > iAirGroundStats.Length)
+            if (value > iAirGroundStats.Length)
                 return "Undefined(" + value + ")";
 
             return iAirGroundStats[value];
@@ -640,14 +641,14 @@ namespace SmashAttacks
                 Array.Resize<string>(ref parameters, index + 1);
                 parameters[index] = strParams.Substring(loc, paramEnd - loc);
                 parameters[index] = ClearWhiteSpace(parameters[index]);
-                
+
                 loc = paramEnd + 1;
                 index++;
             } while (chrFound != ')' && chrFound != '\0');
 
             //  Check each parameter for keywords and resolve if they are present.
             for (int i = 0; i < parameters.Length; i++)
-                    if (parameters[i] != "") parameters[i] = ResolveEventSyntax(parameters[i], eventData);
+                if (parameters[i] != "") parameters[i] = ResolveEventSyntax(parameters[i], eventData);
 
             return parameters;
         }
@@ -655,7 +656,8 @@ namespace SmashAttacks
         //  Return the string result from the passed keyword and it`s parameters.
         public string ResolveKeyword(string keyword, string[] Params, Event eventData)
         {
-            switch (keyword){
+            switch (keyword)
+            {
                 case "\\value":
                     try { return ResolveParamTypes(eventData)[int.Parse(Params[0])]; }
                     catch { return "Value-" + Params[0]; }
@@ -683,7 +685,7 @@ namespace SmashAttacks
                     else return Params[4];
                 case "\\unhex":
                     try { return UnHex(Params[0]).ToString(); }
-                    catch { return Params[0];}
+                    catch { return Params[0]; }
                 case "\\hex":
                     try { return Hex(int.Parse(Params[0])); }
                     catch { return Params[0]; }
@@ -742,7 +744,7 @@ namespace SmashAttacks
             {
                 //  Format the event and it's parameters into readable script.
                 string syntax = GetEventSyntax(events[i].eventId);
-                script[i] = ResolveEventSyntax(syntax , events[i]);
+                script[i] = ResolveEventSyntax(syntax, events[i]);
                 if (script[i] == "") script[i] = GetDefaultSyntax(events[i]);
 
                 //  Add tabs to the script in correspondence to the code blocks.
@@ -794,7 +796,8 @@ namespace SmashAttacks
         //  Default values for each special.
         public string ResolveSpecials(long id)
         {
-            switch(id){
+            switch (id)
+            {
                 case 0x112: return Hex(id) + " Neutral B";
                 case 0x113: return Hex(id) + " Side B";
                 case 0x114: return Hex(id) + " Up B";
@@ -943,18 +946,29 @@ namespace SmashAttacks
         //  Read the moveset data from the file specified.
         public bool OpenFile(string fname)
         {
+            fileHeader = null; partitionHeader = null; dataHeader = null;
+            movesetData = null; pointerList = null; objectPointerList = null;
+            nameList = null; partitionHeader2 = null; effectPartition = null;
+
             bool errStatus = false;
             try
             {
                 if (UnpackFile(fname) == true)
                     throw (new Exception("Error unpacking file."));
 
-                //  Check if "data" exists on the object list.
-                if (GetString(nameList, GetWord(objectPointerList, 0x4)).Substring(0, 4) != "data")
+                // Search for "data" node.
+                int off = -8;
+                bool found = false;
+                while (off < 8 * 10 && !found)
+                {
+                    off += 8;
+                    found = GetString(nameList, GetWord(objectPointerList, 0x4 + off)).Substring(0, 4) == "data";
+                }
+                if (!found)
                     throw (new Exception("Cannot locate file data."));
 
                 //  Get all important pointers.
-                long pData = GetWord(objectPointerList, 0);
+                long pData = GetWord(objectPointerList, off);
                 int b = 0;
 
                 pAnimations = GetWord(pData + 0x0);
@@ -965,7 +979,7 @@ namespace SmashAttacks
                 pSubEvents[2] = GetWord(pData + 0x38);
                 pSubEvents[3] = GetWord(pData + 0x3C);
                 lBEvents = FromWord(GetWord(pData + 0x28) - pBEvents); //addr of Events - Pointer to Events / 4
-                while (GetWord((pData + 0x28) + (b*4)) != 0) { lBEvents++; b++; }
+                while (GetWord((pData + 0x28) + (b * 4)) != 0) { lBEvents++; b++; }
 
                 lSubEvents = FromWord(pSubEvents[1] - pSubEvents[0]);
 
@@ -992,7 +1006,7 @@ namespace SmashAttacks
                 }
                 pFadeData = GetWord(movesetData.Length - 4);
             }
-            catch(Exception error)
+            catch (Exception error)
             {
                 MessageBox.Show(error.Message);
                 errStatus = true;
@@ -1027,7 +1041,7 @@ namespace SmashAttacks
 
             //  Set the size value in the partition header.
             SetWord(ref partitionHeader, lPartition1, 0x4);
-            
+
             //  Set the size values in the moveset data header.
             SetWord(ref dataHeader, lPartition1, 0x0);
             SetWord(ref dataHeader, lMovesetData, 0x4);
@@ -1132,7 +1146,7 @@ namespace SmashAttacks
             try
             {
                 fstream = new FileStream(fileName, FileMode.Create);
-                
+
                 fstream.Write(fileHeader, 0, fileHeader.Length);
                 fstream.Write(partitionHeader, 0, partitionHeader.Length);
                 fstream.Write(dataHeader, 0, dataHeader.Length);
@@ -1159,6 +1173,7 @@ namespace SmashAttacks
                 fstream.Seek(RoundUp(fstream.Position, 0x20), SeekOrigin.Begin);
                 fstream.Write(partitionHeader2, 0, partitionHeader2.Length);
                 fstream.Write(effectPartition, 0, effectPartition.Length);
+                fstream.Close();
             }
             catch
             {
@@ -1204,7 +1219,7 @@ namespace SmashAttacks
                     eventData[i] = ReadEventData(offset + ToBlock(i));
 
                     if (eventData[i].GetEventWord() == 0)
-                        { Array.Resize<Event>(ref eventData, i); break; }
+                    { Array.Resize<Event>(ref eventData, i); break; }
                 }
             }
             return eventData;
@@ -1235,9 +1250,9 @@ namespace SmashAttacks
             SetWord(ref movesetData, value, offset);
 
             if (GetByte(pointerList, offset) == 1)
-            { 
-                SetByte(ref pointerList, 0, offset); 
-                return true; 
+            {
+                SetByte(ref pointerList, 0, offset);
+                return true;
             }
             return false;
         }
@@ -1248,7 +1263,7 @@ namespace SmashAttacks
             long pEventData = GetWord(pEventList);
             if (ClearPointer(value, pEventList) == false) return;
             long loc = pEventData;
-            
+
             //  Delete each event and it's parameter pointer in the event list.
             while (GetWord(loc) != 0)
             {
@@ -1275,9 +1290,9 @@ namespace SmashAttacks
                 SetWord(FADEFOOD, pParameters + ToBlock(i));
                 ClearPointer(FADEFOOD, pParameters + ToBlock(i) + B_WORD2);
             }
-        
+
         }
-        
+
         //  Allocate new space at the end of the file and return a pointer to it.
         public long Allocate(long words)
         {
@@ -1301,15 +1316,16 @@ namespace SmashAttacks
 
                 loc += 0x4;
                 if (sample != FADEFOOD && !endFound)
-                { 
-                    available = 0; 
-                    pFree = loc; 
+                {
+                    available = 0;
+                    pFree = loc;
                 }
             }
 
             //  Add the end tag for signalling the end of available space if the amount of
             //  available space was extended.
-            if (endFound){
+            if (endFound)
+            {
                 SetWord(FADEDATA, loc);
                 SetWord(pFadeData, loc + 0x4);
             }
@@ -1363,7 +1379,7 @@ namespace SmashAttacks
             if (lEventData != 0)
                 Release(pEventData, (lEventData + 1) * 2);
             pEventData = Allocate((lEventData + 2) * 2);
-            
+
             //  Re-add the events to the new list.
             for (int i = 0; i < lEventData; i++)
             {
@@ -1429,7 +1445,7 @@ namespace SmashAttacks
         //  Remove the specified event from the event list.
         public void RemoveEvent()
         {
-            for (int index = 0; index < lstEvents.SelectedIndices.Count; index++)
+            foreach (int index in lstEvents.SelectedIndices)
             {
                 if (pEventData == 0) return;
                 long olParameters = eventData[index].lParameters;
@@ -1532,7 +1548,7 @@ namespace SmashAttacks
         {
 
         }
-        
+
         // --------------------------------------------------- \\
         // -----------------Action Tab Methods---------------- \\
         // --------------------------------------------------- \\
@@ -1545,7 +1561,7 @@ namespace SmashAttacks
             btnDown.Enabled = true;
             btnPasteEvent.Enabled = true;
             btnCopyEvent.Enabled = true;
-            
+
             //  Update the events window when you change tabs.
             if (tbctrlActionEvents.SelectedIndex == 0) cboAction_SelectedIndexChanged(sender, e);
             if (tbctrlActionEvents.SelectedIndex == 1) cboSubAction_SelectedIndexChanged(sender, e);
@@ -1615,7 +1631,7 @@ namespace SmashAttacks
 
             if (nlAnimationName == 0) pAnimationName = 0;
             SetPointer(pAnimationName, pAnimationData + B_WORD2);
-            
+
             if (nlAnimationName > 1)
                 SetString(nAnimationName, pAnimationName);
         }
@@ -1625,7 +1641,7 @@ namespace SmashAttacks
             //  Pass in the transition time and animation flags.
             frmAnimFlags.inTransitionTime = (byte)GetByte(pAnimationData);
             frmAnimFlags.flags.SetByte((byte)GetByte(pAnimationData + 1));
-            
+
             frmAnimFlags.ShowDialog();
 
             //  Retrieve and set the changed transition time and flags.
@@ -1672,7 +1688,7 @@ namespace SmashAttacks
 
                     if (notList)
                         throw new Exception("Offset not recognised as a valid event list.");
-                }   
+                }
 
                 //  Allow basic modification of the event list.
                 btnModify.Enabled = true;
@@ -1688,7 +1704,7 @@ namespace SmashAttacks
                     btnPasteEvent.Enabled = true;
                 }
             }
-            catch(Exception error)
+            catch (Exception error)
             {
                 if (error.Message != "") MessageBox.Show(error.Message);
                 Array.Resize<Event>(ref eventData, 0);
@@ -1760,7 +1776,7 @@ namespace SmashAttacks
                 selected.Clear();
             //  If the item selected was the last item on the list, select the new last item on the list.
             if (lSelected == 0)
-                selected.Add(lstEvents.Items.Count-1);
+                selected.Add(lstEvents.Items.Count - 1);
         }
 
         private void btnUp_Click(object sender, EventArgs e)
@@ -1848,7 +1864,7 @@ namespace SmashAttacks
 
         private void dtgrdAttributes_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            if (dtgrdAttributes.CurrentCell == null) return; 
+            if (dtgrdAttributes.CurrentCell == null) return;
             int index = dtgrdAttributes.CurrentCell.RowIndex;
             string value = attributes.Rows[index][1].ToString();
 
@@ -1946,8 +1962,10 @@ namespace SmashAttacks
     {
         public InfoEvent() { dfltParameters = new long[0]; }
         public InfoEvent(string nId, string nName, string nDescription)
-            {idNumber = nId; name = nName; description = nDescription;
-            dfltParameters = new long[0];}
+        {
+            idNumber = nId; name = nName; description = nDescription;
+            dfltParameters = new long[0];
+        }
         ~InfoEvent() { }
 
         //  Translate a string of numbers into a set of default parameter types for the event.
@@ -1985,8 +2003,8 @@ namespace SmashAttacks
             name = new string[0];
             description = new string[0];
         }
-        
-        ~InfoParameter() {}
+
+        ~InfoParameter() { }
 
         public string GetName(long i)
         {
@@ -2008,8 +2026,8 @@ namespace SmashAttacks
     //  Info holder for the syntax of an event.
     public class InfoEventSyntax
     {
-        public InfoEventSyntax() {}
-        ~InfoEventSyntax() {}
+        public InfoEventSyntax() { }
+        ~InfoEventSyntax() { }
 
         public string idNumber;
         public string syntax;
@@ -2018,7 +2036,7 @@ namespace SmashAttacks
     //  Data holder for an event.
     public class Event
     {
-        public void SetEventWord(long v){eventWord = v; ResolveEventWord();}
+        public void SetEventWord(long v) { eventWord = v; ResolveEventWord(); }
         public long GetEventWord() { return eventWord; }
 
         //  Resolve for the string-hex version of the event word and adjust the number
@@ -2054,19 +2072,19 @@ namespace SmashAttacks
     //  Data holder for an 8-bit-set.
     public class Bitset
     {
-        public Bitset(){bitVal = new bool[8];}
-        ~Bitset() {}
+        public Bitset() { bitVal = new bool[8]; }
+        ~Bitset() { }
 
-        public void SetByte(byte v){byteVal = v; ResolveBits();}
-        public void SetBit(int b, bool v){bitVal[b] = v; ResolveByte();}
+        public void SetByte(byte v) { byteVal = v; ResolveBits(); }
+        public void SetBit(int b, bool v) { bitVal[b] = v; ResolveByte(); }
 
-        public byte GetByte() {return byteVal;}
-        public bool GetBit(int b) {return bitVal[b];}
+        public byte GetByte() { return byteVal; }
+        public bool GetBit(int b) { return bitVal[b]; }
 
         //  Set each bit according to the bitset's current byte value.
         public void ResolveBits()
         {
-            for (int i = 0; i < 8; i++) 
+            for (int i = 0; i < 8; i++)
                 bitVal[i] = (((long)Math.Pow(0x2, i) & byteVal) != 0 ? true : false);
         }
 
@@ -2074,8 +2092,8 @@ namespace SmashAttacks
         public void ResolveByte()
         {
             byteVal = 0;
-            for (int i = 0; i < 8; i++) 
-                if (bitVal[i] == true) 
+            for (int i = 0; i < 8; i++)
+                if (bitVal[i] == true)
                     byteVal += (byte)Math.Pow(0x2, i);
         }
 
