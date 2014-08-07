@@ -1,0 +1,71 @@
+﻿Here I will outline the different commands for setting up the event syntax displays.
+
+*Command names are case sensitive.*
+
+\name()
+Returns the name of the event.
+
+\value(X)
+Returns the value of parameter X in the form of it's type.
+
+\type(X)
+Returns the type of parameter X as a number from 0 to 6.
+
+\if (X, ?, Y, <true>, <false>)
+Evaluates X to Y using ? and executes the code according to the result.
+Comparison operators are:
+== equal to.
+!= not equal to.
+>= Greater or equal to.
+<= Lesser or equal to.
+>  Greater than.
+<  Lesser than.
+
+\hex(X)
+Returns the value of X converted to hex.
+
+\hex8(X)
+Returns the value of X converted to hex and padded to 8 digits.
+
+\unhex(X)
+Returns the value of X converted from hex.
+
+\half1(W)
+Returns the first halfword of word W (returns Y if W is YYYYXXXX).
+
+\half2(W)
+Returns the second halfword of word W (returns X if W is YYYYXXXX).
+
+\byte1(W)
+Returns the first byte of word W (returns X if W is XXYYYYYY).
+
+\byte2(W)
+Returns the second byte of word W (returns X if W is YYXXYYYY).
+
+\byte3(W)
+Returns the third byte of word W (returns X if W is YYYYXXYY).
+
+\byte4(W)
+Returns the fourth byte of word W (returns X if W is YYYYYYXX).
+
+\collision(X)
+Returns the collision status corresponding to X.
+
+\airground(X)
+Returns the air or ground status corresponding to X.
+
+\cmpsign(X)
+Returns a comparison symbol corresponding to X.
+
+\white()
+Used in specific cases when you require whitespace as part of a parameter. Example:
+
+if (X, ?, Y,      some text, some more text       )
+
+In this case, the whitespace before "some text" and after "some more text" will
+be cleared. Using \white will fix that:
+
+if (X, ?, Y, \white()      some text, some more text       \white())
+
+causing the operation to return "      some text" when true
+and "some more text       " when false.
