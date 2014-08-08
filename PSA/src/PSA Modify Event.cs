@@ -33,7 +33,7 @@ namespace SmashAttacks
         {
 
         }
-        
+
         //  Setup procedure.
         public void Setup()
         {
@@ -46,7 +46,7 @@ namespace SmashAttacks
                 pnlVariable,
                 pnlRequirement
             };
-               
+
             //  Setup requirements list.
             if (cboRequirement.Items.Count == 0)
                 for (int i = 0; i < p.iRequirements.Length; i++)
@@ -107,12 +107,14 @@ namespace SmashAttacks
         }
 
         //  Display the parameter's value according to it's type.
-        public void DisplayInType(long type, long value){
+        public void DisplayInType(long type, long value)
+        {
             for (int i = 0; i < typeDisp.Length; i++)
                 typeDisp[i].Visible = false;
-            typeDisp[type].Visible = true; 
+            typeDisp[type].Visible = true;
 
-            switch(type){
+            switch (type)
+            {
                 case 0: ShowBasic(value); break;
                 case 1: ShowScalar(value); break;
                 case 2: ShowPointer(value); break;
@@ -220,9 +222,9 @@ namespace SmashAttacks
             if (lstParameters.SelectedIndex == -1) return;
             int index = lstParameters.SelectedIndex;
 
-            try { eventData.parameters[index].word2 = p.UnHex(txtBasic.Text);}
+            try { eventData.parameters[index].word2 = p.UnHex(txtBasic.Text); }
             catch { eventData.parameters[index].word2 = 0; }
-            txtBasic.Text = p.Hex8(eventData.parameters[index].word2); 
+            txtBasic.Text = p.Hex8(eventData.parameters[index].word2);
         }
 
         private void txtScalar_Leave(object sender, EventArgs e)

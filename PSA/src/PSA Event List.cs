@@ -86,7 +86,7 @@ namespace SmashAttacks
             lstEvents.SelectedIndex = -1;
             for (int i = 0; i < iEvents.Length; i++)
                 if (eventId == iEvents[i].idNumber)
-                    { lstEvents.SelectedIndex = i; break; }
+                { lstEvents.SelectedIndex = i; break; }
 
         }
 

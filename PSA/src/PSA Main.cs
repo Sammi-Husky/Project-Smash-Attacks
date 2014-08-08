@@ -965,7 +965,7 @@ namespace SmashAttacks
                 bool found = false;
                 while (off < 8 * 10 && !found)
                 {
-                    off += 8; 
+                    off += 8;
                     found = GetString(nameList, GetWord(objectPointerList, 0x4 + off)).Substring(0, 4) == "data";
                 }
                 if (!found)
@@ -1837,15 +1837,15 @@ namespace SmashAttacks
 
             //  Copy each selected event on the event list.
             string s1 = "";
-            for (int i = 0; i < lSelected; i++) 
+            for (int i = 0; i < lSelected; i++)
             {
                 CopyEvent(selected[i]);
-                s1 += (lstEvents.Items[selected[i]].ToString() + "\n");               
+                s1 += (lstEvents.Items[selected[i]].ToString() + "\n");
             }
             s1 += "\n\n ============= \n";
-            s1 += "   "+lblEventListOffset.Text+"   ";
+            s1 += "   " + lblEventListOffset.Text + "   ";
             s1 += "\n ============= \n";
-            for (int i = 0; i < lSelected; i++) 
+            for (int i = 0; i < lSelected; i++)
             {
                 string EventID = eventData[selected[i]].eventId; string Params = eventData[selected[i]].pParameters.ToString("x");
                 Params = Params.PadLeft(8, '0');

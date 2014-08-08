@@ -15,7 +15,7 @@ namespace SmashAttacks
         public Bitset flags = new Bitset(); //  Animation flags.
         public byte inTransitionTime;       //  In transition time.
         public FormMain p;                  //  Handler for parent form for ease of access.
-        
+
         //  Array accessor for each check box.
         CheckBox[] chkFlags;
 
@@ -64,7 +64,7 @@ namespace SmashAttacks
 
         private void FormAnimationFlags_FormClosing(object sender, FormClosingEventArgs e)
         {
-            
+
         }
 
         // --------------------------------------------------- \\

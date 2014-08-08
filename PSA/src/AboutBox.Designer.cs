@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutBox));
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.lblName1 = new System.Windows.Forms.Label();
             this.lblName2 = new System.Windows.Forms.Label();
@@ -45,7 +44,7 @@
             // pictureBox1
             // 
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            //this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Image = global::PSA.Properties.Resources.pictureBox1_Image;
             this.pictureBox1.InitialImage = null;
             this.pictureBox1.Location = new System.Drawing.Point(8, 8);
             this.pictureBox1.Name = "pictureBox1";
@@ -109,9 +108,9 @@
             this.lblVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblVersion.Location = new System.Drawing.Point(144, 40);
             this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(22, 13);
+            this.lblVersion.Size = new System.Drawing.Size(28, 13);
             this.lblVersion.TabIndex = 6;
-            this.lblVersion.Text = "1.3";
+            this.lblVersion.Text = "1.3a";
             // 
             // lblGNULicense
             // 
@@ -135,6 +134,9 @@
             // lstAdditionalContributors
             // 
             this.lstAdditionalContributors.FormattingEnabled = true;
+            this.lstAdditionalContributors.Items.AddRange(new object[] {
+            "Sammi Husky",
+            "Dantarion"});
             this.lstAdditionalContributors.Location = new System.Drawing.Point(248, 24);
             this.lstAdditionalContributors.Name = "lstAdditionalContributors";
             this.lstAdditionalContributors.ScrollAlwaysVisible = true;
