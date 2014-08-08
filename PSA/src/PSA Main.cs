@@ -69,9 +69,11 @@ namespace SmashAttacks
         long pAnimationData = 0;            //  Pointer to the current Animation.
         long ipEventData = 0;               //  Index pointer to the current Event List.
         long pEventData = 0;                //  Pointer to the current Event List.
-        long pArticles = 0;
+        long pArticles = 0;                 //  Pointer to the article list
 
-        long lArticles = 0;
+        long pArticleActions = 0;           //  Pointer to article actions list
+
+        long lArticles = 0;                 //  Length of Article list
         long pFadeData = 0;                 //  Pointer to the start of useable space in the file.
 
         //  Variables containing short term stored data.
@@ -979,9 +981,9 @@ namespace SmashAttacks
                 pSubEvents[1] = GetWord(pData + 0x34); //Pointer  - Subaction gfx list
                 pSubEvents[2] = GetWord(pData + 0x38); //Pointer - Subaction sfx list
                 pSubEvents[3] = GetWord(pData + 0x3C); //Pointer - Subaction other list
-                pArticles = GetWord(pData + 0x90); //Pointer - The article list
+                pArticles = pData + 0x90; //Pointer - The article list
 
-                lArticles = pData - pArticles; //Number of articles
+                lArticles = FromWord(GetWord(movesetData.Length - 4) - pArticles); //Number of articles
                 lBEvents = FromWord(GetWord(pData + 0x2c) - pBEvents); //Number of Actions
                 lSubEvents = FromWord(pSubEvents[1] - pSubEvents[0]); //Number of subactions
 
