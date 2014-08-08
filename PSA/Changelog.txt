@@ -25,5 +25,6 @@ http://www.gnu.org/licenses.
 	. Replaced 'Remove' button with 'Nop selected' button, as nopping is currently more efficient.
 	. Fixed bug where after repack the saved file would still be open
 	. Fixed opening DDD. (Credit to Dantarion)
-	. Allowed parsing of 'Hidden' actions.
+	. Allowed parsing of hidden and empty actions.
 	. Support for the SSE attribute list.
+	. Copy button also copies selected events to clipboard

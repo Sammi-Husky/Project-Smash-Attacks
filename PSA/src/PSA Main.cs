@@ -69,7 +69,9 @@ namespace SmashAttacks
         long pAnimationData = 0;            //  Pointer to the current Animation.
         long ipEventData = 0;               //  Index pointer to the current Event List.
         long pEventData = 0;                //  Pointer to the current Event List.
+        long pArticles = 0;
 
+        long lArticles = 0;
         long pFadeData = 0;                 //  Pointer to the start of useable space in the file.
 
         //  Variables containing short term stored data.
@@ -961,7 +963,7 @@ namespace SmashAttacks
                 bool found = false;
                 while (off < 8 * 10 && !found)
                 {
-                    off += 8;
+                    off += 8; 
                     found = GetString(nameList, GetWord(objectPointerList, 0x4 + off)).Substring(0, 4) == "data";
                 }
                 if (!found)
@@ -969,19 +971,19 @@ namespace SmashAttacks
 
                 //  Get all important pointers.
                 long pData = GetWord(objectPointerList, off);
-                int b = 0;
 
-                pAnimations = GetWord(pData + 0x0);
-                pAttributes = GetWord(pData + 0x8);
-                pBEvents = GetWord(pData + 0x24);
-                pSubEvents[0] = GetWord(pData + 0x30);
-                pSubEvents[1] = GetWord(pData + 0x34);
-                pSubEvents[2] = GetWord(pData + 0x38);
-                pSubEvents[3] = GetWord(pData + 0x3C);
-                lBEvents = FromWord(GetWord(pData + 0x28) - pBEvents); //addr of Events - Pointer to Events / 4
-                while (GetWord((pData + 0x28) + (b * 4)) != 0) { lBEvents++; b++; }
+                pAnimations = GetWord(pData + 0x0); //Pointer - animation table
+                pAttributes = GetWord(pData + 0x8); //Pointer - attributes
+                pBEvents = GetWord(pData + 0x24); //Pointer - the Action list
+                pSubEvents[0] = GetWord(pData + 0x30); //Pointer - Subaction Main list
+                pSubEvents[1] = GetWord(pData + 0x34); //Pointer  - Subaction gfx list
+                pSubEvents[2] = GetWord(pData + 0x38); //Pointer - Subaction sfx list
+                pSubEvents[3] = GetWord(pData + 0x3C); //Pointer - Subaction other list
+                pArticles = GetWord(pData + 0x90); //Pointer - The article list
 
-                lSubEvents = FromWord(pSubEvents[1] - pSubEvents[0]);
+                lArticles = pData - pArticles; //Number of articles
+                lBEvents = FromWord(GetWord(pData + 0x2c) - pBEvents); //Number of Actions
+                lSubEvents = FromWord(pSubEvents[1] - pSubEvents[0]); //Number of subactions
 
                 //  Set the number of selections for the actions and sub actions lists.
                 cboAction.Items.Clear();
@@ -1060,6 +1062,7 @@ namespace SmashAttacks
             try
             {
                 fstream = new FileStream(fileName, FileMode.Open);
+
                 //  Calculate the length of each important segment in the file.
                 long lHeader = 0x40;
                 long lPartitionHeader = 0x20;
@@ -1831,9 +1834,22 @@ namespace SmashAttacks
             Array.Resize<Event>(ref copyBuffer, 0);
 
             //  Copy each selected event on the event list.
-            for (int i = 0; i < lSelected; i++)
+            string s1 = "";
+            for (int i = 0; i < lSelected; i++) 
+            {
                 CopyEvent(selected[i]);
-
+                s1 += (lstEvents.Items[selected[i]].ToString() + "\n");               
+            }
+            s1 += "\n\n ============= \n";
+            s1 += "   "+lblEventListOffset.Text+"   ";
+            s1 += "\n ============= \n";
+            for (int i = 0; i < lSelected; i++) 
+            {
+                string EventID = eventData[selected[i]].eventId; string Params = eventData[selected[i]].pParameters.ToString("x");
+                Params = Params.PadLeft(8, '0');
+                s1 += EventID + " " + Params + "\n";
+            }
+            Clipboard.SetText(s1);
             selected.Clear();
         }
 
