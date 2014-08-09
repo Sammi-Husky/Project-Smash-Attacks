@@ -45,6 +45,7 @@ namespace SmashAttacks
 
         //  Name of currently opened file.
         public string fname = "";
+        public string SafeName = "";
 
         //  Byte arrays to contain the different segments of the file.
         public byte[] fileHeader = null;
@@ -69,16 +70,13 @@ namespace SmashAttacks
         long pAnimationData = 0;            //  Pointer to the current Animation.
         long ipEventData = 0;               //  Index pointer to the current Event List.
         long pEventData = 0;                //  Pointer to the current Event List.
-        long pArticles = 0;                 //  Pointer to the article list
 
-        long pArticleActions = 0;           //  Pointer to article actions list
-
-        long lArticles = 0;                 //  Length of Article list
         long pFadeData = 0;                 //  Pointer to the start of useable space in the file.
 
         //  Variables containing short term stored data.
         Event[] eventData = new Event[0];
         Event[] copyBuffer = new Event[0];
+        int Ftype = 0;
 
         //  Data table for the attributes data grid.
         DataTable attributes = new DataTable();
@@ -950,6 +948,7 @@ namespace SmashAttacks
         //  Read the moveset data from the file specified.
         public bool OpenFile(string fname)
         {
+            cboEventObject.Items.Clear();
             fileHeader = null; partitionHeader = null; dataHeader = null;
             movesetData = null; pointerList = null; objectPointerList = null;
             nameList = null; partitionHeader2 = null; effectPartition = null;
@@ -981,15 +980,16 @@ namespace SmashAttacks
                 pSubEvents[1] = GetWord(pData + 0x34); //Pointer  - Subaction gfx list
                 pSubEvents[2] = GetWord(pData + 0x38); //Pointer - Subaction sfx list
                 pSubEvents[3] = GetWord(pData + 0x3C); //Pointer - Subaction other list
-                pArticles = pData + 0x90; //Pointer - The article list
 
-                lArticles = FromWord(GetWord(movesetData.Length - 4) - pArticles); //Number of articles
                 lBEvents = FromWord(GetWord(pData + 0x2c) - pBEvents); //Number of Actions
                 lSubEvents = FromWord(pSubEvents[1] - pSubEvents[0]); //Number of subactions
 
                 //  Set the number of selections for the actions and sub actions lists.
                 cboAction.Items.Clear();
                 cboSubAction.Items.Clear();
+                cboEventObject.Items.Add(SafeName.Substring(3,SafeName.Length - 7)); 
+                cboEventObject.SelectedIndex = 0;
+                
                 for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i + 0x112));
                 for (int i = 0; i < lSubEvents; i++) cboSubAction.Items.Add(Hex(i));
 
@@ -1002,6 +1002,72 @@ namespace SmashAttacks
                         attributes.Rows[i][1] = GetWord(pAttributes + ToWord(i));
                 }
 
+                //  Setup the empty space buffer at the end of the moveset data.
+                if (GetWord(movesetData.Length - 0x8) != FADEDATA)
+                {
+                     SetWord(FADEDATA, movesetData.Length);
+                     SetWord(movesetData.Length - 4, movesetData.Length);
+                }
+                pFadeData = GetWord(movesetData.Length - 4);
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message);
+                errStatus = true;
+            }
+
+            return errStatus;
+        }
+        public bool OpenKirbyHat(string fname)
+        {
+            fileHeader = null; partitionHeader = null; dataHeader = null;
+            movesetData = null; pointerList = null; objectPointerList = null;
+            nameList = null; partitionHeader2 = null; effectPartition = null;
+
+            bool errStatus = false;
+            try
+            {
+                if (UnpackFile(fname) == true)
+                    throw (new Exception("Error unpacking file."));
+
+                // Search for "data" node.
+                int off = -8;
+                bool found = false;
+                while (off < 8 * 10 && !found)
+                {
+                    off += 8;
+                    found = GetString(nameList, GetWord(objectPointerList, 0x4 + off)).Substring(0, 4) == "data";
+                }
+                if (!found)
+                    throw (new Exception("Cannot locate file data."));
+
+                //  Get all important pointers.
+                long pData = GetWord(objectPointerList, off);
+
+                pAttributes = GetWord(pData + 0x8); //Pointer - attributes
+                pBEvents = GetWord(pData); //Pointer - the Action list
+                lBEvents = FromWord(GetWord(pData + 0x8) - pBEvents); //Number of Actions
+
+                //  Set the number of selections for the actions and sub actions lists.
+                cboAction.Items.Clear();
+                cboEventObject.Items.Add(SafeName.Substring(3, SafeName.Length - 7));
+                cboEventObject.SelectedIndex = 0;
+
+                for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i + 0x112));
+
+
+                //  Setup Attribute Table.
+                attributes.Rows.Clear();
+                for (int i = 0; i <= FromWord(0x2E0); i++)
+                {
+                    iAttributes[i].description = "No description";
+                    attributes.Rows.Add("0x" + Hex(ToWord(i)));
+                    if (iAttributes[i].type == 0)
+                        attributes.Rows[i][1] = UnFloat(GetWord(pAttributes + ToWord(i)));
+                    else
+                        attributes.Rows[i][1] = GetWord(pAttributes + ToWord(i));
+                }
+             
                 //  Setup the empty space buffer at the end of the moveset data.
                 if (GetWord(movesetData.Length - 0x8) != FADEDATA)
                 {
@@ -1905,11 +1971,22 @@ namespace SmashAttacks
             string sname = opnDlg.SafeFileName;
             fname = opnDlg.FileName;
             saveDlg.FileName = sname;
+            SafeName = opnDlg.SafeFileName;
 
             try
             {
-                if (OpenFile(fname) == true)
-                    throw new Exception("Could not open file.");
+                if (SafeName.Contains("irby") && !SafeName.Contains("irby.pac")) 
+                {
+                    if (OpenKirbyHat(fname) == true)
+                        throw new Exception("Could not open file.");
+                    Ftype = 1;
+                }
+                else
+                {
+                    if (OpenFile(fname) == true)
+                        throw new Exception("Could not open file.");
+                    Ftype = 0;
+                }
 
                 this.Text = "Smash Attacks! - " + sname;
                 mnuSave.Enabled = true;
@@ -1919,8 +1996,11 @@ namespace SmashAttacks
                 tbctrlActionEvents.SelectedIndex = 0;
                 txtOffset.Text = "";
 
-                cboSubAction.SelectedIndex = 0; cboSubAction_SelectedIndexChanged(sender, e);
-                cboEventList.SelectedIndex = 0; cboSubAction_SelectedIndexChanged(sender, e);
+                if (Ftype == 0)
+                {
+                    cboSubAction.SelectedIndex = 0; cboSubAction_SelectedIndexChanged(sender, e);
+                    cboEventList.SelectedIndex = 0; cboSubAction_SelectedIndexChanged(sender, e);
+                }
                 cboAction.SelectedIndex = 0; cboAction_SelectedIndexChanged(sender, e);
             }
             catch (Exception error)

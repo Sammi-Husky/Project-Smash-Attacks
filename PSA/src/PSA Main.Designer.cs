@@ -38,8 +38,13 @@
             this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
-            this.tbctrlMain = new System.Windows.Forms.TabControl();
+            this.opnDlg = new System.Windows.Forms.OpenFileDialog();
+            this.saveDlg = new System.Windows.Forms.SaveFileDialog();
+            this.tbpgAttributes = new System.Windows.Forms.TabPage();
+            this.dtgrdAttributes = new System.Windows.Forms.DataGridView();
+            this.lblAttributeDescription = new System.Windows.Forms.Label();
             this.tbpgActions = new System.Windows.Forms.TabPage();
+            this.cboEventObject = new System.Windows.Forms.ComboBox();
             this.btnCopyEvent = new System.Windows.Forms.Button();
             this.btnPasteEvent = new System.Windows.Forms.Button();
             this.btnModify = new System.Windows.Forms.Button();
@@ -68,20 +73,16 @@
             this.label1 = new System.Windows.Forms.Label();
             this.lstEvents = new System.Windows.Forms.ListBox();
             this.lblEventDescription = new System.Windows.Forms.Label();
-            this.tbpgAttributes = new System.Windows.Forms.TabPage();
-            this.dtgrdAttributes = new System.Windows.Forms.DataGridView();
-            this.lblAttributeDescription = new System.Windows.Forms.Label();
-            this.opnDlg = new System.Windows.Forms.OpenFileDialog();
-            this.saveDlg = new System.Windows.Forms.SaveFileDialog();
+            this.tbctrlMain = new System.Windows.Forms.TabControl();
             this.mnuStrip.SuspendLayout();
-            this.tbctrlMain.SuspendLayout();
+            this.tbpgAttributes.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dtgrdAttributes)).BeginInit();
             this.tbpgActions.SuspendLayout();
             this.tbctrlActionEvents.SuspendLayout();
             this.tbpgSpecials.SuspendLayout();
             this.tbpgSubActionEvents.SuspendLayout();
             this.tbSubRoutines.SuspendLayout();
-            this.tbpgAttributes.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dtgrdAttributes)).BeginInit();
+            this.tbctrlMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // mnuStrip
@@ -110,7 +111,7 @@
             // mnuOpen
             // 
             this.mnuOpen.Name = "mnuOpen";
-            this.mnuOpen.Size = new System.Drawing.Size(152, 22);
+            this.mnuOpen.Size = new System.Drawing.Size(114, 22);
             this.mnuOpen.Text = "Open";
             this.mnuOpen.Click += new System.EventHandler(this.mnuOpen_Click);
             // 
@@ -118,7 +119,7 @@
             // 
             this.mnuSave.Enabled = false;
             this.mnuSave.Name = "mnuSave";
-            this.mnuSave.Size = new System.Drawing.Size(152, 22);
+            this.mnuSave.Size = new System.Drawing.Size(114, 22);
             this.mnuSave.Text = "Save";
             this.mnuSave.Click += new System.EventHandler(this.mnuSave_Click);
             // 
@@ -126,19 +127,19 @@
             // 
             this.mnuSaveAs.Enabled = false;
             this.mnuSaveAs.Name = "mnuSaveAs";
-            this.mnuSaveAs.Size = new System.Drawing.Size(152, 22);
+            this.mnuSaveAs.Size = new System.Drawing.Size(114, 22);
             this.mnuSaveAs.Text = "Save As";
             this.mnuSaveAs.Click += new System.EventHandler(this.mnuSaveAs_Click);
             // 
             // mnuLine
             // 
             this.mnuLine.Name = "mnuLine";
-            this.mnuLine.Size = new System.Drawing.Size(149, 6);
+            this.mnuLine.Size = new System.Drawing.Size(111, 6);
             // 
             // mnuExit
             // 
             this.mnuExit.Name = "mnuExit";
-            this.mnuExit.Size = new System.Drawing.Size(152, 22);
+            this.mnuExit.Size = new System.Drawing.Size(114, 22);
             this.mnuExit.Text = "Exit";
             this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
             // 
@@ -157,22 +158,81 @@
             this.mnuAbout.Text = "About";
             this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
             // 
-            // tbctrlMain
+            // opnDlg
             // 
-            this.tbctrlMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbctrlMain.Controls.Add(this.tbpgActions);
-            this.tbctrlMain.Controls.Add(this.tbpgAttributes);
-            this.tbctrlMain.Enabled = false;
-            this.tbctrlMain.Location = new System.Drawing.Point(8, 32);
-            this.tbctrlMain.Name = "tbctrlMain";
-            this.tbctrlMain.SelectedIndex = 0;
-            this.tbctrlMain.Size = new System.Drawing.Size(365, 464);
-            this.tbctrlMain.TabIndex = 1;
+            this.opnDlg.Filter = "Pac Files|*.pac|All files|*.*";
+            // 
+            // saveDlg
+            // 
+            this.saveDlg.DefaultExt = "pac";
+            this.saveDlg.Filter = "Pac Files|*.pac|All files|*.*";
+            // 
+            // tbpgAttributes
+            // 
+            this.tbpgAttributes.Controls.Add(this.dtgrdAttributes);
+            this.tbpgAttributes.Controls.Add(this.lblAttributeDescription);
+            this.tbpgAttributes.Location = new System.Drawing.Point(4, 22);
+            this.tbpgAttributes.Name = "tbpgAttributes";
+            this.tbpgAttributes.Padding = new System.Windows.Forms.Padding(3);
+            this.tbpgAttributes.Size = new System.Drawing.Size(357, 434);
+            this.tbpgAttributes.TabIndex = 1;
+            this.tbpgAttributes.Text = "Attributes";
+            this.tbpgAttributes.UseVisualStyleBackColor = true;
+            // 
+            // dtgrdAttributes
+            // 
+            this.dtgrdAttributes.AllowUserToAddRows = false;
+            this.dtgrdAttributes.AllowUserToDeleteRows = false;
+            this.dtgrdAttributes.AllowUserToResizeRows = false;
+            this.dtgrdAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dtgrdAttributes.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dtgrdAttributes.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
+            this.dtgrdAttributes.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dtgrdAttributes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dtgrdAttributes.ColumnHeadersVisible = false;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.Format = "N4";
+            dataGridViewCellStyle1.NullValue = null;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dtgrdAttributes.DefaultCellStyle = dataGridViewCellStyle1;
+            this.dtgrdAttributes.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
+            this.dtgrdAttributes.EnableHeadersVisualStyles = false;
+            this.dtgrdAttributes.GridColor = System.Drawing.SystemColors.ControlLight;
+            this.dtgrdAttributes.Location = new System.Drawing.Point(8, 8);
+            this.dtgrdAttributes.MultiSelect = false;
+            this.dtgrdAttributes.Name = "dtgrdAttributes";
+            this.dtgrdAttributes.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            this.dtgrdAttributes.RowHeadersWidth = 8;
+            this.dtgrdAttributes.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dtgrdAttributes.RowTemplate.Height = 16;
+            this.dtgrdAttributes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.dtgrdAttributes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dtgrdAttributes.Size = new System.Drawing.Size(341, 364);
+            this.dtgrdAttributes.TabIndex = 4;
+            this.dtgrdAttributes.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgrdAttributes_CellEndEdit);
+            this.dtgrdAttributes.CurrentCellChanged += new System.EventHandler(this.dtgrdAttributes_CurrentCellChanged);
+            // 
+            // lblAttributeDescription
+            // 
+            this.lblAttributeDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblAttributeDescription.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.lblAttributeDescription.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lblAttributeDescription.Location = new System.Drawing.Point(8, 385);
+            this.lblAttributeDescription.Name = "lblAttributeDescription";
+            this.lblAttributeDescription.Size = new System.Drawing.Size(341, 42);
+            this.lblAttributeDescription.TabIndex = 3;
             // 
             // tbpgActions
             // 
+            this.tbpgActions.Controls.Add(this.cboEventObject);
             this.tbpgActions.Controls.Add(this.btnCopyEvent);
             this.tbpgActions.Controls.Add(this.btnPasteEvent);
             this.tbpgActions.Controls.Add(this.btnModify);
@@ -187,16 +247,25 @@
             this.tbpgActions.Controls.Add(this.lblEventDescription);
             this.tbpgActions.Location = new System.Drawing.Point(4, 22);
             this.tbpgActions.Name = "tbpgActions";
-            this.tbpgActions.Size = new System.Drawing.Size(357, 438);
+            this.tbpgActions.Size = new System.Drawing.Size(357, 434);
             this.tbpgActions.TabIndex = 2;
             this.tbpgActions.Text = "Action Events";
             this.tbpgActions.UseVisualStyleBackColor = true;
+            // 
+            // cboEventObject
+            // 
+            this.cboEventObject.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboEventObject.FormattingEnabled = true;
+            this.cboEventObject.Location = new System.Drawing.Point(216, 5);
+            this.cboEventObject.Name = "cboEventObject";
+            this.cboEventObject.Size = new System.Drawing.Size(129, 21);
+            this.cboEventObject.TabIndex = 20;
             // 
             // btnCopyEvent
             // 
             this.btnCopyEvent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCopyEvent.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCopyEvent.Location = new System.Drawing.Point(312, 351);
+            this.btnCopyEvent.Location = new System.Drawing.Point(312, 347);
             this.btnCopyEvent.Name = "btnCopyEvent";
             this.btnCopyEvent.Size = new System.Drawing.Size(37, 19);
             this.btnCopyEvent.TabIndex = 19;
@@ -208,7 +277,7 @@
             // 
             this.btnPasteEvent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPasteEvent.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPasteEvent.Location = new System.Drawing.Point(312, 367);
+            this.btnPasteEvent.Location = new System.Drawing.Point(312, 363);
             this.btnPasteEvent.Name = "btnPasteEvent";
             this.btnPasteEvent.Size = new System.Drawing.Size(37, 20);
             this.btnPasteEvent.TabIndex = 18;
@@ -219,7 +288,7 @@
             // btnModify
             // 
             this.btnModify.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnModify.Location = new System.Drawing.Point(80, 351);
+            this.btnModify.Location = new System.Drawing.Point(80, 347);
             this.btnModify.Name = "btnModify";
             this.btnModify.Size = new System.Drawing.Size(64, 34);
             this.btnModify.TabIndex = 17;
@@ -231,7 +300,7 @@
             // 
             this.btnDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnDown.Font = new System.Drawing.Font("Wingdings 3", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this.btnDown.Location = new System.Drawing.Point(264, 363);
+            this.btnDown.Location = new System.Drawing.Point(264, 359);
             this.btnDown.Name = "btnDown";
             this.btnDown.Size = new System.Drawing.Size(40, 22);
             this.btnDown.TabIndex = 16;
@@ -243,7 +312,7 @@
             // 
             this.btnUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnUp.Font = new System.Drawing.Font("Wingdings 3", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this.btnUp.Location = new System.Drawing.Point(224, 363);
+            this.btnUp.Location = new System.Drawing.Point(224, 359);
             this.btnUp.Name = "btnUp";
             this.btnUp.Size = new System.Drawing.Size(40, 22);
             this.btnUp.TabIndex = 15;
@@ -254,7 +323,7 @@
             // btnNOP
             // 
             this.btnNOP.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnNOP.Location = new System.Drawing.Point(152, 351);
+            this.btnNOP.Location = new System.Drawing.Point(152, 347);
             this.btnNOP.Name = "btnNOP";
             this.btnNOP.Size = new System.Drawing.Size(64, 34);
             this.btnNOP.TabIndex = 14;
@@ -265,7 +334,7 @@
             // btnAdd
             // 
             this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAdd.Location = new System.Drawing.Point(8, 351);
+            this.btnAdd.Location = new System.Drawing.Point(8, 347);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(64, 34);
             this.btnAdd.TabIndex = 13;
@@ -275,8 +344,8 @@
             // 
             // tbctrlActionEvents
             // 
-            this.tbctrlActionEvents.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbctrlActionEvents.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tbctrlActionEvents.Controls.Add(this.tbpgSpecials);
             this.tbctrlActionEvents.Controls.Add(this.tbpgSubActionEvents);
             this.tbctrlActionEvents.Controls.Add(this.tbSubRoutines);
@@ -357,8 +426,8 @@
             // 
             // txtAnimationName
             // 
-            this.txtAnimationName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtAnimationName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtAnimationName.Location = new System.Drawing.Point(192, 8);
             this.txtAnimationName.MaxLength = 64;
             this.txtAnimationName.Name = "txtAnimationName";
@@ -463,8 +532,8 @@
             // 
             // lblEventListOffset
             // 
-            this.lblEventListOffset.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblEventListOffset.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblEventListOffset.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lblEventListOffset.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblEventListOffset.Location = new System.Drawing.Point(72, 104);
@@ -484,120 +553,63 @@
             // 
             // lstEvents
             // 
-            this.lstEvents.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lstEvents.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lstEvents.FormattingEnabled = true;
             this.lstEvents.HorizontalScrollbar = true;
             this.lstEvents.Location = new System.Drawing.Point(8, 123);
             this.lstEvents.Name = "lstEvents";
             this.lstEvents.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lstEvents.Size = new System.Drawing.Size(341, 225);
+            this.lstEvents.Size = new System.Drawing.Size(341, 212);
             this.lstEvents.TabIndex = 5;
             this.lstEvents.SelectedIndexChanged += new System.EventHandler(this.lstEvents_SelectedIndexChanged);
             this.lstEvents.DoubleClick += new System.EventHandler(this.lstEvents_DoubleClick);
             // 
             // lblEventDescription
             // 
-            this.lblEventDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblEventDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblEventDescription.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lblEventDescription.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lblEventDescription.Location = new System.Drawing.Point(8, 389);
+            this.lblEventDescription.Location = new System.Drawing.Point(8, 385);
             this.lblEventDescription.Name = "lblEventDescription";
             this.lblEventDescription.Size = new System.Drawing.Size(341, 42);
             this.lblEventDescription.TabIndex = 4;
             // 
-            // tbpgAttributes
+            // tbctrlMain
             // 
-            this.tbpgAttributes.Controls.Add(this.dtgrdAttributes);
-            this.tbpgAttributes.Controls.Add(this.lblAttributeDescription);
-            this.tbpgAttributes.Location = new System.Drawing.Point(4, 22);
-            this.tbpgAttributes.Name = "tbpgAttributes";
-            this.tbpgAttributes.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpgAttributes.Size = new System.Drawing.Size(357, 438);
-            this.tbpgAttributes.TabIndex = 1;
-            this.tbpgAttributes.Text = "Attributes";
-            this.tbpgAttributes.UseVisualStyleBackColor = true;
+            this.tbctrlMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbctrlMain.Controls.Add(this.tbpgActions);
+            this.tbctrlMain.Controls.Add(this.tbpgAttributes);
+            this.tbctrlMain.Enabled = false;
+            this.tbctrlMain.Location = new System.Drawing.Point(8, 32);
+            this.tbctrlMain.Name = "tbctrlMain";
+            this.tbctrlMain.SelectedIndex = 0;
+            this.tbctrlMain.Size = new System.Drawing.Size(365, 460);
+            this.tbctrlMain.TabIndex = 1;
             // 
-            // dtgrdAttributes
-            // 
-            this.dtgrdAttributes.AllowUserToAddRows = false;
-            this.dtgrdAttributes.AllowUserToDeleteRows = false;
-            this.dtgrdAttributes.AllowUserToResizeRows = false;
-            this.dtgrdAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.dtgrdAttributes.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dtgrdAttributes.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
-            this.dtgrdAttributes.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.dtgrdAttributes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dtgrdAttributes.ColumnHeadersVisible = false;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.Format = "N4";
-            dataGridViewCellStyle1.NullValue = null;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dtgrdAttributes.DefaultCellStyle = dataGridViewCellStyle1;
-            this.dtgrdAttributes.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
-            this.dtgrdAttributes.EnableHeadersVisualStyles = false;
-            this.dtgrdAttributes.GridColor = System.Drawing.SystemColors.ControlLight;
-            this.dtgrdAttributes.Location = new System.Drawing.Point(8, 8);
-            this.dtgrdAttributes.MultiSelect = false;
-            this.dtgrdAttributes.Name = "dtgrdAttributes";
-            this.dtgrdAttributes.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            this.dtgrdAttributes.RowHeadersWidth = 8;
-            this.dtgrdAttributes.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.dtgrdAttributes.RowTemplate.Height = 16;
-            this.dtgrdAttributes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dtgrdAttributes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dtgrdAttributes.Size = new System.Drawing.Size(341, 368);
-            this.dtgrdAttributes.TabIndex = 4;
-            this.dtgrdAttributes.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgrdAttributes_CellEndEdit);
-            this.dtgrdAttributes.CurrentCellChanged += new System.EventHandler(this.dtgrdAttributes_CurrentCellChanged);
-            // 
-            // lblAttributeDescription
-            // 
-            this.lblAttributeDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblAttributeDescription.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.lblAttributeDescription.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lblAttributeDescription.Location = new System.Drawing.Point(8, 389);
-            this.lblAttributeDescription.Name = "lblAttributeDescription";
-            this.lblAttributeDescription.Size = new System.Drawing.Size(341, 42);
-            this.lblAttributeDescription.TabIndex = 3;
-            // 
-            // opnDlg
-            // 
-            this.opnDlg.Filter = "Pac Files|*.pac|All files|*.*";
-            // 
-            // saveDlg
-            // 
-            this.saveDlg.DefaultExt = "pac";
-            this.saveDlg.Filter = "Pac Files|*.pac|All files|*.*";
-            // 
-            // Form1
+            // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(377, 504);
+            this.ClientSize = new System.Drawing.Size(377, 500);
             this.Controls.Add(this.tbctrlMain);
             this.Controls.Add(this.mnuStrip);
             this.MainMenuStrip = this.mnuStrip;
             this.MinimumSize = new System.Drawing.Size(385, 538);
-            this.Name = "Form1";
+            this.Name = "FormMain";
             this.ShowIcon = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "Smash Attacks!";
-            this.Load += new System.EventHandler(this.FormMain_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
+            this.Load += new System.EventHandler(this.FormMain_Load);
             this.mnuStrip.ResumeLayout(false);
             this.mnuStrip.PerformLayout();
-            this.tbctrlMain.ResumeLayout(false);
+            this.tbpgAttributes.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dtgrdAttributes)).EndInit();
             this.tbpgActions.ResumeLayout(false);
             this.tbctrlActionEvents.ResumeLayout(false);
             this.tbpgSpecials.ResumeLayout(false);
@@ -605,8 +617,7 @@
             this.tbpgSubActionEvents.PerformLayout();
             this.tbSubRoutines.ResumeLayout(false);
             this.tbSubRoutines.PerformLayout();
-            this.tbpgAttributes.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dtgrdAttributes)).EndInit();
+            this.tbctrlMain.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -620,44 +631,45 @@
         private System.Windows.Forms.ToolStripMenuItem mnuSave;
         private System.Windows.Forms.ToolStripSeparator mnuLine;
         private System.Windows.Forms.ToolStripMenuItem mnuExit;
-        private System.Windows.Forms.TabControl tbctrlMain;
-        private System.Windows.Forms.TabPage tbpgAttributes;
-        private System.Windows.Forms.TabPage tbpgActions;
         private System.Windows.Forms.OpenFileDialog opnDlg;
-        private System.Windows.Forms.Label lblAttributeDescription;
-        private System.Windows.Forms.Label lblEventDescription;
-        private System.Windows.Forms.ListBox lstEvents;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label lblEventListOffset;
         private System.Windows.Forms.ToolStripMenuItem mnuSaveAs;
         private System.Windows.Forms.SaveFileDialog saveDlg;
+        private System.Windows.Forms.ToolStripMenuItem mnuHelp;
+        private System.Windows.Forms.ToolStripMenuItem mnuAbout;
+        private System.Windows.Forms.TabPage tbpgAttributes;
+        private System.Windows.Forms.DataGridView dtgrdAttributes;
+        private System.Windows.Forms.Label lblAttributeDescription;
+        private System.Windows.Forms.TabPage tbpgActions;
+        private System.Windows.Forms.Button btnCopyEvent;
+        private System.Windows.Forms.Button btnPasteEvent;
+        private System.Windows.Forms.Button btnModify;
+        private System.Windows.Forms.Button btnDown;
+        private System.Windows.Forms.Button btnUp;
+        private System.Windows.Forms.Button btnNOP;
+        private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.TabControl tbctrlActionEvents;
+        private System.Windows.Forms.TabPage tbpgSpecials;
+        private System.Windows.Forms.ComboBox cboAction;
+        private System.Windows.Forms.Label lblName5;
         private System.Windows.Forms.TabPage tbpgSubActionEvents;
+        private System.Windows.Forms.Button btnAnimationFlags;
         private System.Windows.Forms.Label lblName3;
         private System.Windows.Forms.TextBox txtAnimationName;
         private System.Windows.Forms.ComboBox cboEventList;
         private System.Windows.Forms.Label lblName1;
         private System.Windows.Forms.ComboBox cboSubAction;
         private System.Windows.Forms.Label lblName2;
-        private System.Windows.Forms.TabPage tbpgSpecials;
-        private System.Windows.Forms.ComboBox cboAction;
-        private System.Windows.Forms.Label lblName5;
-        private System.Windows.Forms.Button btnAnimationFlags;
-        private System.Windows.Forms.Button btnAdd;
-        private System.Windows.Forms.Button btnUp;
-        private System.Windows.Forms.Button btnNOP;
-        private System.Windows.Forms.Button btnDown;
-        private System.Windows.Forms.Button btnModify;
-        private System.Windows.Forms.Button btnCopyEvent;
-        private System.Windows.Forms.Button btnPasteEvent;
-        private System.Windows.Forms.ToolStripMenuItem mnuHelp;
-        private System.Windows.Forms.ToolStripMenuItem mnuAbout;
         private System.Windows.Forms.TabPage tbSubRoutines;
+        private System.Windows.Forms.Button btnCreateSubRoutine;
         private System.Windows.Forms.Button btnGo;
         private System.Windows.Forms.TextBox txtOffset;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.DataGridView dtgrdAttributes;
-        private System.Windows.Forms.Button btnCreateSubRoutine;
+        private System.Windows.Forms.Label lblEventListOffset;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ListBox lstEvents;
+        private System.Windows.Forms.Label lblEventDescription;
+        private System.Windows.Forms.TabControl tbctrlMain;
+        private System.Windows.Forms.ComboBox cboEventObject;
 
     }
 }
