@@ -160,7 +160,7 @@
             // mnuAbout
             // 
             this.mnuAbout.Name = "mnuAbout";
-            this.mnuAbout.Size = new System.Drawing.Size(107, 22);
+            this.mnuAbout.Size = new System.Drawing.Size(152, 22);
             this.mnuAbout.Text = "About";
             this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
             // 

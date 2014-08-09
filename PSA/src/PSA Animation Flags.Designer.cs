@@ -32,9 +32,9 @@
             this.chkNoOutTransition = new System.Windows.Forms.CheckBox();
             this.chkLoop = new System.Windows.Forms.CheckBox();
             this.chkMovesCharacter = new System.Windows.Forms.CheckBox();
-            this.chkUnknown1 = new System.Windows.Forms.CheckBox();
-            this.chkUnknown2 = new System.Windows.Forms.CheckBox();
-            this.chkUnknown3 = new System.Windows.Forms.CheckBox();
+            this.chkFixedTranslation = new System.Windows.Forms.CheckBox();
+            this.chkFixedRotation = new System.Windows.Forms.CheckBox();
+            this.chkFixedScale = new System.Windows.Forms.CheckBox();
             this.chkTransitionOutFromStart = new System.Windows.Forms.CheckBox();
             this.chkUnknown4 = new System.Windows.Forms.CheckBox();
             this.txtInTransitionTime = new System.Windows.Forms.TextBox();
@@ -81,35 +81,35 @@
             this.chkMovesCharacter.Text = "Moves Character";
             this.chkMovesCharacter.UseVisualStyleBackColor = true;
             // 
-            // chkUnknown1
+            // chkFixedTranslation
             // 
-            this.chkUnknown1.AutoSize = true;
-            this.chkUnknown1.Location = new System.Drawing.Point(8, 104);
-            this.chkUnknown1.Name = "chkUnknown1";
-            this.chkUnknown1.Size = new System.Drawing.Size(72, 17);
-            this.chkUnknown1.TabIndex = 4;
-            this.chkUnknown1.Text = "Unknown";
-            this.chkUnknown1.UseVisualStyleBackColor = true;
+            this.chkFixedTranslation.AutoSize = true;
+            this.chkFixedTranslation.Location = new System.Drawing.Point(8, 104);
+            this.chkFixedTranslation.Name = "chkFixedTranslation";
+            this.chkFixedTranslation.Size = new System.Drawing.Size(106, 17);
+            this.chkFixedTranslation.TabIndex = 4;
+            this.chkFixedTranslation.Text = "Fixed Translation";
+            this.chkFixedTranslation.UseVisualStyleBackColor = true;
             // 
-            // chkUnknown2
+            // chkFixedRotation
             // 
-            this.chkUnknown2.AutoSize = true;
-            this.chkUnknown2.Location = new System.Drawing.Point(136, 32);
-            this.chkUnknown2.Name = "chkUnknown2";
-            this.chkUnknown2.Size = new System.Drawing.Size(72, 17);
-            this.chkUnknown2.TabIndex = 5;
-            this.chkUnknown2.Text = "Unknown";
-            this.chkUnknown2.UseVisualStyleBackColor = true;
+            this.chkFixedRotation.AutoSize = true;
+            this.chkFixedRotation.Location = new System.Drawing.Point(136, 32);
+            this.chkFixedRotation.Name = "chkFixedRotation";
+            this.chkFixedRotation.Size = new System.Drawing.Size(94, 17);
+            this.chkFixedRotation.TabIndex = 5;
+            this.chkFixedRotation.Text = "Fixed Rotation";
+            this.chkFixedRotation.UseVisualStyleBackColor = true;
             // 
-            // chkUnknown3
+            // chkFixedScale
             // 
-            this.chkUnknown3.AutoSize = true;
-            this.chkUnknown3.Location = new System.Drawing.Point(136, 56);
-            this.chkUnknown3.Name = "chkUnknown3";
-            this.chkUnknown3.Size = new System.Drawing.Size(72, 17);
-            this.chkUnknown3.TabIndex = 6;
-            this.chkUnknown3.Text = "Unknown";
-            this.chkUnknown3.UseVisualStyleBackColor = true;
+            this.chkFixedScale.AutoSize = true;
+            this.chkFixedScale.Location = new System.Drawing.Point(136, 56);
+            this.chkFixedScale.Name = "chkFixedScale";
+            this.chkFixedScale.Size = new System.Drawing.Size(81, 17);
+            this.chkFixedScale.TabIndex = 6;
+            this.chkFixedScale.Text = "Fixed Scale";
+            this.chkFixedScale.UseVisualStyleBackColor = true;
             // 
             // chkTransitionOutFromStart
             // 
@@ -170,9 +170,9 @@
             this.Controls.Add(this.txtInTransitionTime);
             this.Controls.Add(this.chkUnknown4);
             this.Controls.Add(this.chkTransitionOutFromStart);
-            this.Controls.Add(this.chkUnknown3);
-            this.Controls.Add(this.chkUnknown2);
-            this.Controls.Add(this.chkUnknown1);
+            this.Controls.Add(this.chkFixedScale);
+            this.Controls.Add(this.chkFixedRotation);
+            this.Controls.Add(this.chkFixedTranslation);
             this.Controls.Add(this.chkMovesCharacter);
             this.Controls.Add(this.chkLoop);
             this.Controls.Add(this.chkNoOutTransition);
@@ -182,8 +182,8 @@
             this.Name = "FormAnimationFlags";
             this.ShowIcon = false;
             this.Text = "Animation Flags";
-            this.Load += new System.EventHandler(this.FormAnimationFlags_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormAnimationFlags_FormClosing);
+            this.Load += new System.EventHandler(this.FormAnimationFlags_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -195,9 +195,9 @@
         private System.Windows.Forms.CheckBox chkNoOutTransition;
         private System.Windows.Forms.CheckBox chkLoop;
         private System.Windows.Forms.CheckBox chkMovesCharacter;
-        private System.Windows.Forms.CheckBox chkUnknown1;
-        private System.Windows.Forms.CheckBox chkUnknown2;
-        private System.Windows.Forms.CheckBox chkUnknown3;
+        private System.Windows.Forms.CheckBox chkFixedTranslation;
+        private System.Windows.Forms.CheckBox chkFixedRotation;
+        private System.Windows.Forms.CheckBox chkFixedScale;
         private System.Windows.Forms.CheckBox chkTransitionOutFromStart;
         private System.Windows.Forms.CheckBox chkUnknown4;
         private System.Windows.Forms.TextBox txtInTransitionTime;

@@ -77,8 +77,8 @@
             // 
             // lblName1
             // 
-            this.lblName1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblName1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblName1.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lblName1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblName1.Location = new System.Drawing.Point(16, 64);
@@ -122,8 +122,8 @@
             // 
             // lblParamDescription
             // 
-            this.lblParamDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblParamDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblParamDescription.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lblParamDescription.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblParamDescription.Location = new System.Drawing.Point(16, 187);
@@ -133,8 +133,8 @@
             // 
             // lblParameterListOffset
             // 
-            this.lblParameterListOffset.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblParameterListOffset.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblParameterListOffset.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lblParameterListOffset.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblParameterListOffset.Location = new System.Drawing.Point(80, 32);
@@ -154,8 +154,8 @@
             // 
             // lblEventName
             // 
-            this.lblEventName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblEventName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblEventName.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lblEventName.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblEventName.Location = new System.Drawing.Point(16, 8);
@@ -186,9 +186,9 @@
             // 
             // lstParameters
             // 
-            this.lstParameters.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lstParameters.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lstParameters.FormattingEnabled = true;
             this.lstParameters.Location = new System.Drawing.Point(16, 80);
             this.lstParameters.Name = "lstParameters";
@@ -205,7 +205,7 @@
             "Scalar",
             "Pointer",
             "Boolean",
-            "(4)",
+            "File",
             "Variable",
             "Requirement"});
             this.cboType.Location = new System.Drawing.Point(231, 64);
@@ -526,8 +526,8 @@
             this.Name = "FormModifyEvent";
             this.ShowIcon = false;
             this.Text = "Smash Attacks - Modify Event";
-            this.Load += new System.EventHandler(this.FormModifyEvent_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormModifyEvent_FormClosing);
+            this.Load += new System.EventHandler(this.FormModifyEvent_Load);
             this.pnlBasic.ResumeLayout(false);
             this.pnlBasic.PerformLayout();
             this.pnlScalar.ResumeLayout(false);

@@ -798,15 +798,15 @@ namespace SmashAttacks
         //  Default values for each special.
         public string ResolveSpecials(long id)
         {
-            switch (id)
-            {
-                case 0x112: return Hex(id) + " Neutral B";
-                case 0x113: return Hex(id) + " Side B";
-                case 0x114: return Hex(id) + " Up B";
-                case 0x115: return Hex(id) + " Down B";
-                case 0x116: return Hex(id) + " Final Smash";
-                default: return Hex(id);
-            }
+                switch (id)
+                {
+                    case 0x112: return Hex(id) + " Neutral B";
+                    case 0x113: return Hex(id) + " Side B";
+                    case 0x114: return Hex(id) + " Up B";
+                    case 0x115: return Hex(id) + " Down B";
+                    case 0x116: return Hex(id) + " Final Smash";
+                    default: return Hex(id);
+                }           
         }
 
         // --------------------------------------------------- \\
@@ -994,8 +994,11 @@ namespace SmashAttacks
                 for (int i = 0; i < lSubEvents; i++) cboSubAction.Items.Add(Hex(i));
 
                 //  Add attributes to the attribute table.
+                attributes.Clear();
                 for (int i = 0; i <= FromWord(0x2E0); i++)
                 {
+                    if (i < iAttributes.Length) { attributes.Rows.Add(iAttributes[i].name); }
+                    else { attributes.Rows.Add("0x" + Hex(ToWord(i))); }
                     if (iAttributes[i].type == 0)
                         attributes.Rows[i][1] = UnFloat(GetWord(pAttributes + ToWord(i)));
                     else
@@ -1007,6 +1010,81 @@ namespace SmashAttacks
                 {
                      SetWord(FADEDATA, movesetData.Length);
                      SetWord(movesetData.Length - 4, movesetData.Length);
+                }
+                pFadeData = GetWord(movesetData.Length - 4);
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message);
+                errStatus = true;
+            }
+
+            return errStatus;
+        }
+        public bool OpenItem(string fname)
+        {
+            cboEventObject.Items.Clear();
+            fileHeader = null; partitionHeader = null; dataHeader = null;
+            movesetData = null; pointerList = null; objectPointerList = null;
+            nameList = null; partitionHeader2 = null; effectPartition = null;
+
+            bool errStatus = false;
+            try
+            {
+                if (UnpackFile(fname) == true)
+                    throw (new Exception("Error unpacking file."));
+
+                // Search for "data" node.
+                int off = -8;
+                bool found = false;
+                while (off < 8 * 10 && !found)
+                {
+                    off += 8;
+                    found = GetString(nameList, GetWord(objectPointerList, 0x4 + off)).Substring(0, 4) == "anim";
+                }
+                if (!found)
+                    throw (new Exception("Cannot locate file data."));
+
+                //  Get all important pointers.
+                long pData = GetWord(objectPointerList, off);
+
+                pAnimations = GetWord(pData + 0x0); //Pointer - animation table
+                pAttributes = GetWord(pData + 0x8); //Pointer - attributes
+                pBEvents = GetWord(pData + 0x28); //Pointer - the Action list
+                pSubEvents[0] = GetWord(pData + 0x1c); //Pointer - Subaction Main list
+                pSubEvents[1] = GetWord(pData + 0x20); //Pointer  - Subaction gfx list
+                pSubEvents[2] = GetWord(pData + 0x24); //Pointer - Subaction sfx list
+                //pSubEvents[3] = GetWord(pData + 0x30); //Pointer - Subaction other list
+
+                lBEvents = FromWord(GetWord(pData + 0x2c) - pBEvents); //Number of Actions
+                lSubEvents = FromWord(pSubEvents[1] - pSubEvents[0]); //Number of subactions
+
+                //  Set the number of selections for the actions and sub actions lists.
+                cboAction.Items.Clear();
+                cboSubAction.Items.Clear();
+                cboEventObject.Items.Add(SafeName.Substring(3, SafeName.Length - 7));
+                cboEventObject.SelectedIndex = 0;
+
+                for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i));
+                for (int i = 0; i < lSubEvents; i++) cboSubAction.Items.Add(Hex(i));
+
+                //  Add attributes to the attribute table.
+                attributes.Clear();
+                attributes.Rows.Add("0x00");
+                iAttributes[0].description = "No description";
+                for (int i = 0; i <= FromWord(0x00); i++)
+                {
+                    if (iAttributes[i].type == 0)
+                        attributes.Rows[i][1] = UnFloat(GetWord(pAttributes + ToWord(i)));
+                    else
+                        attributes.Rows[i][1] = GetWord(pAttributes + ToWord(i));
+                }
+
+                //  Setup the empty space buffer at the end of the moveset data.
+                if (GetWord(movesetData.Length - 0x8) != FADEDATA)
+                {
+                    SetWord(FADEDATA, movesetData.Length);
+                    SetWord(movesetData.Length - 4, movesetData.Length);
                 }
                 pFadeData = GetWord(movesetData.Length - 4);
             }
@@ -1990,7 +2068,6 @@ namespace SmashAttacks
             fname = opnDlg.FileName;
             saveDlg.FileName = sname;
             SafeName = opnDlg.SafeFileName;
-
             try
             {
                 if (SafeName.Contains("irby") && !SafeName.Contains("irby.pac")) 
@@ -1998,6 +2075,12 @@ namespace SmashAttacks
                     if (OpenKirbyHat(fname) == true)
                         throw new Exception("Could not open file.");
                     Ftype = 1;
+                }
+                else if (SafeName.Contains("Itm") || SafeName.Contains("Item") || SafeName.Contains("itm"))
+                {
+                    if (OpenItem(fname) == true)
+                        throw new Exception("Could not open file.");
+                    Ftype = 2;
                 }
                 else
                 {
@@ -2014,7 +2097,7 @@ namespace SmashAttacks
                 tbctrlActionEvents.SelectedIndex = 0;
                 txtOffset.Text = "";
 
-                if (Ftype == 0)
+                if (Ftype == 0 || Ftype == 2)
                 {
                     cboSubAction.SelectedIndex = 0; cboSubAction_SelectedIndexChanged(sender, e);
                     cboEventList.SelectedIndex = 0; cboSubAction_SelectedIndexChanged(sender, e);

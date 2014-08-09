@@ -90,8 +90,14 @@
     <EmbeddedResource Include="src\AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="src\PSA Animation Flags.resx">
+      <DependentUpon>PSA Animation Flags.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="src\PSA Main.resx">
       <DependentUpon>PSA Main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\PSA Modify Event.resx">
+      <DependentUpon>PSA Modify Event.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">

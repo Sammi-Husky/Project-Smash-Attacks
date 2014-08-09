@@ -23,6 +23,11 @@ https://github.com/libertyernie/brawltools
 	. Replaced 'Remove' button with 'Nop selected' button, as nopping is currently more efficient.
 	. Fixed bug where after repack the saved file would still be open
 	. Fixed opening DDD. (Credit to Dantarion)
-	. Allowed parsing of hidden and empty actions.
-	. Support for the SSE attribute list.
-	. Copy button also copies selected events to clipboard
+	. Allowed parsing exit actions as well as blanks actions.
+	. Copy button also copies selected events to clipboard as text
+	. Added right click menu to attributes grid to view specific attributes as either int, float, or raw hex.
+	. Kirby hats are now supported*
+	. Items are now support*
+
+	*The Kirby hats and items must have "irby" present in the filenames for the program to recognize this file as a kirby hat
+	*The item files must have either "Itm", "itm", or "Item" present within the filename to recognize it as an item file.

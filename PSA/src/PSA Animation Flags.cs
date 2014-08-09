@@ -42,9 +42,9 @@ namespace SmashAttacks
                 chkNoOutTransition,
                 chkLoop,
                 chkMovesCharacter,
-                chkUnknown1,
-                chkUnknown2,
-                chkUnknown3,
+                chkFixedTranslation,
+                chkFixedRotation,
+                chkFixedScale,
                 chkTransitionOutFromStart,
                 chkUnknown4};
 
