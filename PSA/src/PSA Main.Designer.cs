@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.mnuStrip = new System.Windows.Forms.MenuStrip();
             this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -42,6 +43,10 @@
             this.saveDlg = new System.Windows.Forms.SaveFileDialog();
             this.tbpgAttributes = new System.Windows.Forms.TabPage();
             this.dtgrdAttributes = new System.Windows.Forms.DataGridView();
+            this.AttributeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.showAsFloatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showAsIntToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showAsRawToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblAttributeDescription = new System.Windows.Forms.Label();
             this.tbpgActions = new System.Windows.Forms.TabPage();
             this.cboEventObject = new System.Windows.Forms.ComboBox();
@@ -77,6 +82,7 @@
             this.mnuStrip.SuspendLayout();
             this.tbpgAttributes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtgrdAttributes)).BeginInit();
+            this.AttributeContextMenu.SuspendLayout();
             this.tbpgActions.SuspendLayout();
             this.tbctrlActionEvents.SuspendLayout();
             this.tbpgSpecials.SuspendLayout();
@@ -211,6 +217,7 @@
             this.dtgrdAttributes.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             this.dtgrdAttributes.RowHeadersWidth = 8;
             this.dtgrdAttributes.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dtgrdAttributes.RowTemplate.ContextMenuStrip = this.AttributeContextMenu;
             this.dtgrdAttributes.RowTemplate.Height = 16;
             this.dtgrdAttributes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dtgrdAttributes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
@@ -218,6 +225,36 @@
             this.dtgrdAttributes.TabIndex = 4;
             this.dtgrdAttributes.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgrdAttributes_CellEndEdit);
             this.dtgrdAttributes.CurrentCellChanged += new System.EventHandler(this.dtgrdAttributes_CurrentCellChanged);
+            // 
+            // AttributeContextMenu
+            // 
+            this.AttributeContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showAsFloatToolStripMenuItem,
+            this.showAsIntToolStripMenuItem,
+            this.showAsRawToolStripMenuItem});
+            this.AttributeContextMenu.Name = "AttributeContextMenu";
+            this.AttributeContextMenu.Size = new System.Drawing.Size(145, 70);
+            // 
+            // showAsFloatToolStripMenuItem
+            // 
+            this.showAsFloatToolStripMenuItem.Name = "showAsFloatToolStripMenuItem";
+            this.showAsFloatToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.showAsFloatToolStripMenuItem.Text = "Show as float";
+            this.showAsFloatToolStripMenuItem.Click += new System.EventHandler(this.showAsFloatToolStripMenuItem_Click);
+            // 
+            // showAsIntToolStripMenuItem
+            // 
+            this.showAsIntToolStripMenuItem.Name = "showAsIntToolStripMenuItem";
+            this.showAsIntToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.showAsIntToolStripMenuItem.Text = "Show as int";
+            this.showAsIntToolStripMenuItem.Click += new System.EventHandler(this.showAsIntToolStripMenuItem_Click);
+            // 
+            // showAsRawToolStripMenuItem
+            // 
+            this.showAsRawToolStripMenuItem.Name = "showAsRawToolStripMenuItem";
+            this.showAsRawToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.showAsRawToolStripMenuItem.Text = "Show as raw";
+            this.showAsRawToolStripMenuItem.Click += new System.EventHandler(this.showAsRawToolStripMenuItem_Click);
             // 
             // lblAttributeDescription
             // 
@@ -610,6 +647,7 @@
             this.mnuStrip.PerformLayout();
             this.tbpgAttributes.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dtgrdAttributes)).EndInit();
+            this.AttributeContextMenu.ResumeLayout(false);
             this.tbpgActions.ResumeLayout(false);
             this.tbctrlActionEvents.ResumeLayout(false);
             this.tbpgSpecials.ResumeLayout(false);
@@ -670,6 +708,10 @@
         private System.Windows.Forms.Label lblEventDescription;
         private System.Windows.Forms.TabControl tbctrlMain;
         private System.Windows.Forms.ComboBox cboEventObject;
+        private System.Windows.Forms.ContextMenuStrip AttributeContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem showAsFloatToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showAsIntToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showAsRawToolStripMenuItem;
 
     }
 }

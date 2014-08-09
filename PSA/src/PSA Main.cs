@@ -1961,6 +1961,24 @@ namespace SmashAttacks
 
             attributes.Rows[index][1] = value;
         }
+        private void showAsFloatToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int i = dtgrdAttributes.SelectedRows[0].Index;
+            attributes.Rows[i][1] = UnFloat(GetWord(pAttributes + ToWord(i)));
+            dtgrdAttributes.Invalidate();
+        }
+        private void showAsIntToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int i = dtgrdAttributes.SelectedRows[0].Index;
+            attributes.Rows[i][1] = GetWord(pAttributes + ToWord(i));
+            dtgrdAttributes.Invalidate();
+        }
+        private void showAsRawToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int i = dtgrdAttributes.SelectedRows[0].Index;
+            attributes.Rows[i][1] = GetWord(pAttributes + ToWord(i)).ToString("x").ToUpper();
+            dtgrdAttributes.Invalidate();
+        }
 
         // --------------------------------------------------- \\
         // ------------------Menu Methods--------------------- \\
@@ -2013,7 +2031,6 @@ namespace SmashAttacks
         {
             SaveFile(fname);
         }
-
         private void mnuSaveAs_Click(object sender, EventArgs e)
         {
             if (saveDlg.ShowDialog() == DialogResult.Cancel) return;
@@ -2027,12 +2044,10 @@ namespace SmashAttacks
 
             this.Text = "Smash Attacks! - " + sname;
         }
-
         private void mnuExit_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-
         private void mnuAbout_Click(object sender, EventArgs e)
         {
             frmAbout.ShowDialog();
