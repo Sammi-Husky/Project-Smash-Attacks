@@ -948,7 +948,7 @@ namespace SmashAttacks
         //  Read the moveset data from the file specified.
         public bool OpenFile(string fname)
         {
-            cboEventObject.Items.Clear();
+            DataTree.Nodes.Clear();
             fileHeader = null; partitionHeader = null; dataHeader = null;
             movesetData = null; pointerList = null; objectPointerList = null;
             nameList = null; partitionHeader2 = null; effectPartition = null;
@@ -987,8 +987,8 @@ namespace SmashAttacks
                 //  Set the number of selections for the actions and sub actions lists.
                 cboAction.Items.Clear();
                 cboSubAction.Items.Clear();
-                cboEventObject.Items.Add(sname.Substring(3,sname.Length - 7)); 
-                cboEventObject.SelectedIndex = 0;
+                DataTree.Nodes.Add(sname.Substring(3,sname.Length - 7)); 
+                DataTree.SelectedNode =DataTree.Nodes[0];
                 
                 for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i + 0x112));
                 for (int i = 0; i < lSubEvents; i++) cboSubAction.Items.Add(Hex(i));
@@ -1023,7 +1023,7 @@ namespace SmashAttacks
         }
         public bool OpenItem(string fname)
         {
-            cboEventObject.Items.Clear();
+            DataTree.Nodes.Clear();
             fileHeader = null; partitionHeader = null; dataHeader = null;
             movesetData = null; pointerList = null; objectPointerList = null;
             nameList = null; partitionHeader2 = null; effectPartition = null;
@@ -1062,8 +1062,8 @@ namespace SmashAttacks
                 //  Set the number of selections for the actions and sub actions lists.
                 cboAction.Items.Clear();
                 cboSubAction.Items.Clear();
-                cboEventObject.Items.Add(sname.Substring(3, sname.Length - 7));
-                cboEventObject.SelectedIndex = 0;
+                DataTree.Nodes.Add(sname.Substring(3, sname.Length - 7));
+                DataTree.SelectedNode =DataTree.Nodes[0];
 
                 for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i));
                 for (int i = 0; i < lSubEvents; i++) cboSubAction.Items.Add(Hex(i));
@@ -1127,8 +1127,8 @@ namespace SmashAttacks
 
                 //  Set the number of selections for the actions and sub actions lists.
                 cboAction.Items.Clear();
-                cboEventObject.Items.Add(sname.Substring(3, sname.Length - 7));
-                cboEventObject.SelectedIndex = 0;
+                DataTree.Nodes.Add(sname.Substring(3, sname.Length - 7));
+                DataTree.SelectedNode =DataTree.Nodes[0];
 
                 for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i + 0x112));
 
@@ -2135,6 +2135,33 @@ namespace SmashAttacks
         private void mnuAbout_Click(object sender, EventArgs e)
         {
             frmAbout.ShowDialog();
+        }
+
+        private void FormMain_Resize(object sender, EventArgs e)
+        {
+            if (!checkBox1.Checked)
+            {
+                if (tbctrlMain.Width != this.Width - 31) { tbctrlMain.Width = this.Width - 31; }
+            }
+             else if (checkBox1.Checked) 
+            { 
+                 if(tbctrlMain.Width != this.Width - (DataTree.Width +62)){tbctrlMain.Width =this.Width - (DataTree.Width +62); }
+            }
+        }
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked) 
+            {
+                tbctrlMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+                DataTree.Visible = true; this.Width += DataTree.Width + 31; tbctrlMain.Width = this.Width - (DataTree.Width + 62);
+            }
+            else if (!checkBox1.Checked) 
+            {
+                tbctrlMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)));
+                DataTree.Visible = false; this.Width -= DataTree.Width + 31; tbctrlMain.Width = this.Width - 31;
+            }
         }
 
     }

@@ -49,7 +49,6 @@
             this.showAsRawToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblAttributeDescription = new System.Windows.Forms.Label();
             this.tbpgActions = new System.Windows.Forms.TabPage();
-            this.cboEventObject = new System.Windows.Forms.ComboBox();
             this.btnCopyEvent = new System.Windows.Forms.Button();
             this.btnPasteEvent = new System.Windows.Forms.Button();
             this.btnModify = new System.Windows.Forms.Button();
@@ -79,6 +78,8 @@
             this.lstEvents = new System.Windows.Forms.ListBox();
             this.lblEventDescription = new System.Windows.Forms.Label();
             this.tbctrlMain = new System.Windows.Forms.TabControl();
+            this.DataTree = new System.Windows.Forms.TreeView();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.mnuStrip.SuspendLayout();
             this.tbpgAttributes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtgrdAttributes)).BeginInit();
@@ -98,7 +99,7 @@
             this.mnuHelp});
             this.mnuStrip.Location = new System.Drawing.Point(0, 0);
             this.mnuStrip.Name = "mnuStrip";
-            this.mnuStrip.Size = new System.Drawing.Size(377, 24);
+            this.mnuStrip.Size = new System.Drawing.Size(379, 24);
             this.mnuStrip.TabIndex = 0;
             this.mnuStrip.Text = "menuStrip1";
             // 
@@ -160,7 +161,7 @@
             // mnuAbout
             // 
             this.mnuAbout.Name = "mnuAbout";
-            this.mnuAbout.Size = new System.Drawing.Size(152, 22);
+            this.mnuAbout.Size = new System.Drawing.Size(107, 22);
             this.mnuAbout.Text = "About";
             this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
             // 
@@ -269,7 +270,6 @@
             // 
             // tbpgActions
             // 
-            this.tbpgActions.Controls.Add(this.cboEventObject);
             this.tbpgActions.Controls.Add(this.btnCopyEvent);
             this.tbpgActions.Controls.Add(this.btnPasteEvent);
             this.tbpgActions.Controls.Add(this.btnModify);
@@ -288,15 +288,6 @@
             this.tbpgActions.TabIndex = 2;
             this.tbpgActions.Text = "Action Events";
             this.tbpgActions.UseVisualStyleBackColor = true;
-            // 
-            // cboEventObject
-            // 
-            this.cboEventObject.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboEventObject.FormattingEnabled = true;
-            this.cboEventObject.Location = new System.Drawing.Point(216, 5);
-            this.cboEventObject.Name = "cboEventObject";
-            this.cboEventObject.Size = new System.Drawing.Size(129, 21);
-            this.cboEventObject.TabIndex = 20;
             // 
             // btnCopyEvent
             // 
@@ -616,9 +607,8 @@
             // 
             // tbctrlMain
             // 
-            this.tbctrlMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbctrlMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.tbctrlMain.Controls.Add(this.tbpgActions);
             this.tbctrlMain.Controls.Add(this.tbpgAttributes);
             this.tbctrlMain.Enabled = false;
@@ -628,13 +618,36 @@
             this.tbctrlMain.Size = new System.Drawing.Size(365, 460);
             this.tbctrlMain.TabIndex = 1;
             // 
+            // DataTree
+            // 
+            this.DataTree.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.DataTree.Location = new System.Drawing.Point(161, 52);
+            this.DataTree.Name = "DataTree";
+            this.DataTree.Size = new System.Drawing.Size(204, 440);
+            this.DataTree.TabIndex = 2;
+            this.DataTree.Visible = false;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(281, 27);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(74, 17);
+            this.checkBox1.TabIndex = 21;
+            this.checkBox1.Text = "Data Tree";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(377, 500);
-            this.Controls.Add(this.tbctrlMain);
+            this.ClientSize = new System.Drawing.Size(379, 500);
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.mnuStrip);
+            this.Controls.Add(this.tbctrlMain);
+            this.Controls.Add(this.DataTree);
             this.MainMenuStrip = this.mnuStrip;
             this.MinimumSize = new System.Drawing.Size(385, 538);
             this.Name = "FormMain";
@@ -643,6 +656,7 @@
             this.Text = "Smash Attacks!";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
             this.Load += new System.EventHandler(this.FormMain_Load);
+            this.Resize += new System.EventHandler(this.FormMain_Resize);
             this.mnuStrip.ResumeLayout(false);
             this.mnuStrip.PerformLayout();
             this.tbpgAttributes.ResumeLayout(false);
@@ -662,7 +676,6 @@
         }
 
         #endregion
-
         private System.Windows.Forms.MenuStrip mnuStrip;
         private System.Windows.Forms.ToolStripMenuItem mnuFile;
         private System.Windows.Forms.ToolStripMenuItem mnuOpen;
@@ -707,11 +720,12 @@
         private System.Windows.Forms.ListBox lstEvents;
         private System.Windows.Forms.Label lblEventDescription;
         private System.Windows.Forms.TabControl tbctrlMain;
-        private System.Windows.Forms.ComboBox cboEventObject;
         private System.Windows.Forms.ContextMenuStrip AttributeContextMenu;
         private System.Windows.Forms.ToolStripMenuItem showAsFloatToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showAsIntToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showAsRawToolStripMenuItem;
+        private System.Windows.Forms.TreeView DataTree;
+        private System.Windows.Forms.CheckBox checkBox1;
 
     }
 }
