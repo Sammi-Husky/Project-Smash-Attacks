@@ -45,7 +45,7 @@ namespace SmashAttacks
 
         //  Name of currently opened file.
         public string fname = "";
-        public string SafeName = "";
+        public string sname = "";
 
         //  Byte arrays to contain the different segments of the file.
         public byte[] fileHeader = null;
@@ -987,7 +987,7 @@ namespace SmashAttacks
                 //  Set the number of selections for the actions and sub actions lists.
                 cboAction.Items.Clear();
                 cboSubAction.Items.Clear();
-                cboEventObject.Items.Add(SafeName.Substring(3,SafeName.Length - 7)); 
+                cboEventObject.Items.Add(sname.Substring(3,sname.Length - 7)); 
                 cboEventObject.SelectedIndex = 0;
                 
                 for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i + 0x112));
@@ -1062,7 +1062,7 @@ namespace SmashAttacks
                 //  Set the number of selections for the actions and sub actions lists.
                 cboAction.Items.Clear();
                 cboSubAction.Items.Clear();
-                cboEventObject.Items.Add(SafeName.Substring(3, SafeName.Length - 7));
+                cboEventObject.Items.Add(sname.Substring(3, sname.Length - 7));
                 cboEventObject.SelectedIndex = 0;
 
                 for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i));
@@ -1107,7 +1107,6 @@ namespace SmashAttacks
             {
                 if (UnpackFile(fname) == true)
                     throw (new Exception("Error unpacking file."));
-
                 // Search for "data" node.
                 int off = -8;
                 bool found = false;
@@ -1128,7 +1127,7 @@ namespace SmashAttacks
 
                 //  Set the number of selections for the actions and sub actions lists.
                 cboAction.Items.Clear();
-                cboEventObject.Items.Add(SafeName.Substring(3, SafeName.Length - 7));
+                cboEventObject.Items.Add(sname.Substring(3, sname.Length - 7));
                 cboEventObject.SelectedIndex = 0;
 
                 for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i + 0x112));
@@ -1159,7 +1158,7 @@ namespace SmashAttacks
                 MessageBox.Show(error.Message);
                 errStatus = true;
             }
-
+            cboEventList.Items.Clear();
             return errStatus;
         }
 
@@ -1730,8 +1729,8 @@ namespace SmashAttacks
         // -------------------Sub Actions Tab----------------- \\
         private void cboSubAction_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cboEventList.SelectedIndex == -1) return;
-            if (cboSubAction.SelectedIndex == -1) return;
+            if (cboEventList.SelectedIndex == -1||Ftype==1) return;
+            if (cboSubAction.SelectedIndex == -1||Ftype ==1) return;
             int index1 = cboEventList.SelectedIndex;
             int index2 = cboSubAction.SelectedIndex;
             long pAnimationName;
@@ -2064,19 +2063,22 @@ namespace SmashAttacks
         private void mnuOpen_Click(object sender, EventArgs e)
         {
             if (opnDlg.ShowDialog() == DialogResult.Cancel) return;
-            string sname = opnDlg.SafeFileName;
+            sname = opnDlg.SafeFileName;
             fname = opnDlg.FileName;
             saveDlg.FileName = sname;
-            SafeName = opnDlg.SafeFileName;
+
+            cboSubAction.Items.Clear();
+            cboAction.Items.Clear();
+            txtAnimationName.Text = "";
             try
             {
-                if (SafeName.Contains("irby") && !SafeName.Contains("irby.pac")) 
+                if (sname.Contains("irby") && !sname.Contains("irby.pac")) 
                 {
                     if (OpenKirbyHat(fname) == true)
                         throw new Exception("Could not open file.");
                     Ftype = 1;
                 }
-                else if (SafeName.Contains("Itm") || SafeName.Contains("Item") || SafeName.Contains("itm"))
+                else if (sname.Contains("Itm") || sname.Contains("Item") || sname.Contains("itm"))
                 {
                     if (OpenItem(fname) == true)
                         throw new Exception("Could not open file.");
@@ -2097,12 +2099,11 @@ namespace SmashAttacks
                 tbctrlActionEvents.SelectedIndex = 0;
                 txtOffset.Text = "";
 
-                if (Ftype == 0 || Ftype == 2)
-                {
-                    cboSubAction.SelectedIndex = 0; cboSubAction_SelectedIndexChanged(sender, e);
-                    cboEventList.SelectedIndex = 0; cboSubAction_SelectedIndexChanged(sender, e);
-                }
-                cboAction.SelectedIndex = 0; cboAction_SelectedIndexChanged(sender, e);
+                if (cboAction.Items.Count == 0) { cboAction.Items.Add("<null>"); }
+                if (cboSubAction.Items.Count == 0) { cboSubAction.Items.Add("<null>"); cboEventList.Items.Add("<null>");}
+                cboSubAction.SelectedIndex = 0; cboSubAction_SelectedIndexChanged(sender, e); 
+                cboEventList.SelectedIndex = 0; cboSubAction_SelectedIndexChanged(sender, e); 
+                cboAction.SelectedIndex = 0; cboAction_SelectedIndexChanged(sender, e); 
             }
             catch (Exception error)
             {
