@@ -46,7 +46,6 @@
             this.AttributeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showAsFloatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAsIntToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showAsRawToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblAttributeDescription = new System.Windows.Forms.Label();
             this.tbpgActions = new System.Windows.Forms.TabPage();
             this.btnCopyEvent = new System.Windows.Forms.Button();
@@ -79,7 +78,7 @@
             this.lblEventDescription = new System.Windows.Forms.Label();
             this.tbctrlMain = new System.Windows.Forms.TabControl();
             this.DataTree = new System.Windows.Forms.TreeView();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.chkDataTree = new System.Windows.Forms.CheckBox();
             this.mnuStrip.SuspendLayout();
             this.tbpgAttributes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtgrdAttributes)).BeginInit();
@@ -231,31 +230,23 @@
             // 
             this.AttributeContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showAsFloatToolStripMenuItem,
-            this.showAsIntToolStripMenuItem,
-            this.showAsRawToolStripMenuItem});
+            this.showAsIntToolStripMenuItem});
             this.AttributeContextMenu.Name = "AttributeContextMenu";
-            this.AttributeContextMenu.Size = new System.Drawing.Size(145, 70);
+            this.AttributeContextMenu.Size = new System.Drawing.Size(153, 70);
             // 
             // showAsFloatToolStripMenuItem
             // 
             this.showAsFloatToolStripMenuItem.Name = "showAsFloatToolStripMenuItem";
-            this.showAsFloatToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.showAsFloatToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.showAsFloatToolStripMenuItem.Text = "Show as float";
             this.showAsFloatToolStripMenuItem.Click += new System.EventHandler(this.showAsFloatToolStripMenuItem_Click);
             // 
             // showAsIntToolStripMenuItem
             // 
             this.showAsIntToolStripMenuItem.Name = "showAsIntToolStripMenuItem";
-            this.showAsIntToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.showAsIntToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.showAsIntToolStripMenuItem.Text = "Show as int";
             this.showAsIntToolStripMenuItem.Click += new System.EventHandler(this.showAsIntToolStripMenuItem_Click);
-            // 
-            // showAsRawToolStripMenuItem
-            // 
-            this.showAsRawToolStripMenuItem.Name = "showAsRawToolStripMenuItem";
-            this.showAsRawToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.showAsRawToolStripMenuItem.Text = "Show as raw";
-            this.showAsRawToolStripMenuItem.Click += new System.EventHandler(this.showAsRawToolStripMenuItem_Click);
             // 
             // lblAttributeDescription
             // 
@@ -622,32 +613,37 @@
             // 
             this.DataTree.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.DataTree.Location = new System.Drawing.Point(161, 52);
+            this.DataTree.Indent = 13;
+            this.DataTree.Location = new System.Drawing.Point(120, 52);
             this.DataTree.Name = "DataTree";
-            this.DataTree.Size = new System.Drawing.Size(204, 440);
+            this.DataTree.Size = new System.Drawing.Size(245, 440);
             this.DataTree.TabIndex = 2;
             this.DataTree.Visible = false;
+            this.DataTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.DataTree_NodeMouseDoubleClick);
             // 
-            // checkBox1
+            // chkDataTree
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(281, 27);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(74, 17);
-            this.checkBox1.TabIndex = 21;
-            this.checkBox1.Text = "Data Tree";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.chkDataTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkDataTree.AutoSize = true;
+            this.chkDataTree.Location = new System.Drawing.Point(281, 27);
+            this.chkDataTree.Name = "chkDataTree";
+            this.chkDataTree.Size = new System.Drawing.Size(74, 17);
+            this.chkDataTree.TabIndex = 21;
+            this.chkDataTree.Text = "Data Tree";
+            this.chkDataTree.UseVisualStyleBackColor = true;
+            this.chkDataTree.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(379, 500);
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.chkDataTree);
             this.Controls.Add(this.mnuStrip);
-            this.Controls.Add(this.tbctrlMain);
             this.Controls.Add(this.DataTree);
+            this.Controls.Add(this.tbctrlMain);
             this.MainMenuStrip = this.mnuStrip;
             this.MinimumSize = new System.Drawing.Size(385, 538);
             this.Name = "FormMain";
@@ -723,9 +719,8 @@
         private System.Windows.Forms.ContextMenuStrip AttributeContextMenu;
         private System.Windows.Forms.ToolStripMenuItem showAsFloatToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showAsIntToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem showAsRawToolStripMenuItem;
         private System.Windows.Forms.TreeView DataTree;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox chkDataTree;
 
     }
 }

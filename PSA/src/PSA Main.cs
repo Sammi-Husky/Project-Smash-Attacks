@@ -798,15 +798,15 @@ namespace SmashAttacks
         //  Default values for each special.
         public string ResolveSpecials(long id)
         {
-                switch (id)
-                {
-                    case 0x112: return Hex(id) + " Neutral B";
-                    case 0x113: return Hex(id) + " Side B";
-                    case 0x114: return Hex(id) + " Up B";
-                    case 0x115: return Hex(id) + " Down B";
-                    case 0x116: return Hex(id) + " Final Smash";
-                    default: return Hex(id);
-                }           
+            switch (id)
+            {
+                case 0x112: return Hex(id) + " Neutral B";
+                case 0x113: return Hex(id) + " Side B";
+                case 0x114: return Hex(id) + " Up B";
+                case 0x115: return Hex(id) + " Down B";
+                case 0x116: return Hex(id) + " Final Smash";
+                default: return Hex(id);
+            }
         }
 
         // --------------------------------------------------- \\
@@ -948,11 +948,6 @@ namespace SmashAttacks
         //  Read the moveset data from the file specified.
         public bool OpenFile(string fname)
         {
-            DataTree.Nodes.Clear();
-            fileHeader = null; partitionHeader = null; dataHeader = null;
-            movesetData = null; pointerList = null; objectPointerList = null;
-            nameList = null; partitionHeader2 = null; effectPartition = null;
-
             bool errStatus = false;
             try
             {
@@ -971,30 +966,19 @@ namespace SmashAttacks
                     throw (new Exception("Cannot locate file data."));
 
                 //  Get all important pointers.
-                long pData = GetWord(objectPointerList, off);
-
+                long pData  = GetWord(objectPointerList, off);
                 pAnimations = GetWord(pData + 0x0); //Pointer - animation table
                 pAttributes = GetWord(pData + 0x8); //Pointer - attributes
-                pBEvents = GetWord(pData + 0x24); //Pointer - the Action list
-                pSubEvents[0] = GetWord(pData + 0x30); //Pointer - Subaction Main list
-                pSubEvents[1] = GetWord(pData + 0x34); //Pointer  - Subaction gfx list
-                pSubEvents[2] = GetWord(pData + 0x38); //Pointer - Subaction sfx list
-                pSubEvents[3] = GetWord(pData + 0x3C); //Pointer - Subaction other list
-
-                lBEvents = FromWord(GetWord(pData + 0x2c) - pBEvents); //Number of Actions
-                lSubEvents = FromWord(pSubEvents[1] - pSubEvents[0]); //Number of subactions
 
                 //  Set the number of selections for the actions and sub actions lists.
-                cboAction.Items.Clear();
-                cboSubAction.Items.Clear();
-                DataTree.Nodes.Add(sname.Substring(3,sname.Length - 7)); 
-                DataTree.SelectedNode =DataTree.Nodes[0];
-                
-                for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i + 0x112));
-                for (int i = 0; i < lSubEvents; i++) cboSubAction.Items.Add(Hex(i));
+                DataTree.Nodes.Add(sname.Substring(3, sname.Length - 7));
+                DataTree.Nodes[0].Nodes.Add("Attributes").Tag = "val";
+                ResolveObjects();
+
+                GetActions(pData);
+                GetSubactions(pData);
 
                 //  Add attributes to the attribute table.
-                attributes.Clear();
                 for (int i = 0; i <= FromWord(0x2E0); i++)
                 {
                     if (i < iAttributes.Length) { attributes.Rows.Add(iAttributes[i].name); }
@@ -1008,8 +992,8 @@ namespace SmashAttacks
                 //  Setup the empty space buffer at the end of the moveset data.
                 if (GetWord(movesetData.Length - 0x8) != FADEDATA)
                 {
-                     SetWord(FADEDATA, movesetData.Length);
-                     SetWord(movesetData.Length - 4, movesetData.Length);
+                    SetWord(FADEDATA, movesetData.Length);
+                    SetWord(movesetData.Length - 4, movesetData.Length);
                 }
                 pFadeData = GetWord(movesetData.Length - 4);
             }
@@ -1023,11 +1007,6 @@ namespace SmashAttacks
         }
         public bool OpenItem(string fname)
         {
-            DataTree.Nodes.Clear();
-            fileHeader = null; partitionHeader = null; dataHeader = null;
-            movesetData = null; pointerList = null; objectPointerList = null;
-            nameList = null; partitionHeader2 = null; effectPartition = null;
-
             bool errStatus = false;
             try
             {
@@ -1050,26 +1029,15 @@ namespace SmashAttacks
 
                 pAnimations = GetWord(pData + 0x0); //Pointer - animation table
                 pAttributes = GetWord(pData + 0x8); //Pointer - attributes
-                pBEvents = GetWord(pData + 0x28); //Pointer - the Action list
-                pSubEvents[0] = GetWord(pData + 0x1c); //Pointer - Subaction Main list
-                pSubEvents[1] = GetWord(pData + 0x20); //Pointer  - Subaction gfx list
-                pSubEvents[2] = GetWord(pData + 0x24); //Pointer - Subaction sfx list
-                //pSubEvents[3] = GetWord(pData + 0x30); //Pointer - Subaction other list
-
-                lBEvents = FromWord(GetWord(pData + 0x2c) - pBEvents); //Number of Actions
-                lSubEvents = FromWord(pSubEvents[1] - pSubEvents[0]); //Number of subactions
 
                 //  Set the number of selections for the actions and sub actions lists.
-                cboAction.Items.Clear();
-                cboSubAction.Items.Clear();
                 DataTree.Nodes.Add(sname.Substring(3, sname.Length - 7));
-                DataTree.SelectedNode =DataTree.Nodes[0];
+                ResolveObjects();
 
-                for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i));
-                for (int i = 0; i < lSubEvents; i++) cboSubAction.Items.Add(Hex(i));
+                GetActions(pData);
+                GetSubactions(pData);
 
                 //  Add attributes to the attribute table.
-                attributes.Clear();
                 attributes.Rows.Add("0x00");
                 iAttributes[0].description = "No description";
                 for (int i = 0; i <= FromWord(0x00); i++)
@@ -1098,10 +1066,6 @@ namespace SmashAttacks
         }
         public bool OpenKirbyHat(string fname)
         {
-            fileHeader = null; partitionHeader = null; dataHeader = null;
-            movesetData = null; pointerList = null; objectPointerList = null;
-            nameList = null; partitionHeader2 = null; effectPartition = null;
-
             bool errStatus = false;
             try
             {
@@ -1119,32 +1083,17 @@ namespace SmashAttacks
                     throw (new Exception("Cannot locate file data."));
 
                 //  Get all important pointers.
-                long pData = GetWord(objectPointerList, off);
+                long pData = GetWord(objectPointerList, off);  //Data offsets
 
-                pAttributes = GetWord(pData + 0x8); //Pointer - attributes
-                pBEvents = GetWord(pData); //Pointer - the Action list
-                lBEvents = FromWord(GetWord(pData + 0x8) - pBEvents); //Number of Actions
+                //Enumerate object list
+                DataTree.Nodes.Add(sname.Substring(3, sname.Length - 7));
+                DataTree.Nodes[0].Tag = "EventData";
+                ResolveObjects();
 
                 //  Set the number of selections for the actions and sub actions lists.
-                cboAction.Items.Clear();
-                DataTree.Nodes.Add(sname.Substring(3, sname.Length - 7));
-                DataTree.SelectedNode =DataTree.Nodes[0];
+                DataTree.SelectedNode = DataTree.Nodes[0];
+                GetActions(pData);
 
-                for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i + 0x112));
-
-
-                //  Setup Attribute Table.
-                attributes.Rows.Clear();
-                for (int i = 0; i <= FromWord(0x2E0); i++)
-                {
-                    iAttributes[i].description = "No description";
-                    attributes.Rows.Add("0x" + Hex(ToWord(i)));
-                    if (iAttributes[i].type == 0)
-                        attributes.Rows[i][1] = UnFloat(GetWord(pAttributes + ToWord(i)));
-                    else
-                        attributes.Rows[i][1] = GetWord(pAttributes + ToWord(i));
-                }
-             
                 //  Setup the empty space buffer at the end of the moveset data.
                 if (GetWord(movesetData.Length - 0x8) != FADEDATA)
                 {
@@ -1160,6 +1109,78 @@ namespace SmashAttacks
             }
             cboEventList.Items.Clear();
             return errStatus;
+        }
+
+        public void GetActions(long pData)
+        {
+            cboAction.Items.Clear();
+            switch (Ftype)
+            {
+
+                case 0:
+                    pBEvents = GetWord(pData + 0x24); //Pointer - the Action list
+                    lBEvents = FromWord(GetWord(pData + 0x2c) - pBEvents); //Number of Actions
+                    break;
+                case 1:
+                    pBEvents = GetWord(pData); //Pointer - the Action list
+                    lBEvents = GetWord(pData + 0x4) * 2; //Number of Actions
+                    break;
+                case 2:
+                    pBEvents = GetWord(pData + 0x28); //Pointer - the Action list
+                    lBEvents = FromWord(GetWord(pData + 0x2c) - pBEvents); //Number of Actions
+                    break;
+            }
+            for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i + 0x112));
+        }
+        public void GetSubactions(long pData)
+        {
+            cboSubAction.Items.Clear();
+            switch (Ftype)
+            {
+
+                case 0:
+                    pSubEvents[0] = GetWord(pData + 0x30); //Pointer - Subaction Main list
+                    pSubEvents[1] = GetWord(pData + 0x34); //Pointer  - Subaction gfx list
+                    pSubEvents[2] = GetWord(pData + 0x38); //Pointer - Subaction sfx list
+                    pSubEvents[3] = GetWord(pData + 0x3C); //Pointer - Subaction other list
+                    lSubEvents = FromWord(pSubEvents[1] - pSubEvents[0]); //Number of subactions
+                    break;
+                case 1:
+
+                    break;
+                case 2:
+                    pSubEvents[0] = GetWord(pData + 0x1c); //Pointer - Subaction Main list
+                    pSubEvents[1] = GetWord(pData + 0x20); //Pointer  - Subaction gfx list
+                    pSubEvents[2] = GetWord(pData + 0x24); //Pointer - Subaction sfx list
+                    //pSubEvents[3] = GetWord(pData + 0x30); //Pointer - Subaction other list
+                    lSubEvents = FromWord(pSubEvents[1] - pSubEvents[0]); //Number of subactions
+                    break;
+            }
+            for (int i = 0; i < lSubEvents; i++) cboSubAction.Items.Add(Hex(i));
+        }
+        public void ResolveObjects()
+        {
+            int off1 = 8;
+            while (off1 < objectPointerList.Length - 8)
+            {
+                var n = new DataNode(GetString(nameList, GetWord(objectPointerList, 0x4 + off1)), DataNode.Type.ValueList, GetWord(objectPointerList, off1));
+                DataTree.Nodes[0].Nodes.Add(n);
+                off1 += 8;
+            }
+        }
+
+        public void DisplayAttributes(long length, long off)
+        {
+            attributes.Clear();
+            for (int i = 0; i <= length; i++)
+            {
+                if (i < iAttributes.Length) { attributes.Rows.Add(iAttributes[i].name); }
+                else { attributes.Rows.Add("0x" + Hex(ToWord(i))); }
+                if (iAttributes[i].type == 0)
+                    attributes.Rows[i][1] = UnFloat(GetWord(off + ToWord(i)));
+                else
+                    attributes.Rows[i][1] = GetWord(off + ToWord(i));
+            }
         }
 
         //  Save the moveset data into the file specified.
@@ -1729,8 +1750,8 @@ namespace SmashAttacks
         // -------------------Sub Actions Tab----------------- \\
         private void cboSubAction_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cboEventList.SelectedIndex == -1||Ftype==1) return;
-            if (cboSubAction.SelectedIndex == -1||Ftype ==1) return;
+            if (cboEventList.SelectedIndex == -1 || Ftype == 1) return;
+            if (cboSubAction.SelectedIndex == -1 || Ftype == 1) return;
             int index1 = cboEventList.SelectedIndex;
             int index2 = cboSubAction.SelectedIndex;
             long pAnimationName;
@@ -2032,7 +2053,7 @@ namespace SmashAttacks
             if (iAttributes[index].type == 0)
                 try { SetWord(Float(float.Parse(value)), pAttributes + ToWord(index)); }
                 catch { value = UnFloat(GetWord(pAttributes + ToWord(index))).ToString(); }
-            else
+            else if (iAttributes[index].type == 1)
                 try { SetWord(long.Parse(value), pAttributes + ToWord(index)); }
                 catch { value = GetWord(pAttributes + ToWord(index)).ToString(); }
 
@@ -2050,12 +2071,6 @@ namespace SmashAttacks
             attributes.Rows[i][1] = GetWord(pAttributes + ToWord(i));
             dtgrdAttributes.Invalidate();
         }
-        private void showAsRawToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            int i = dtgrdAttributes.SelectedRows[0].Index;
-            attributes.Rows[i][1] = GetWord(pAttributes + ToWord(i)).ToString("x").ToUpper();
-            dtgrdAttributes.Invalidate();
-        }
 
         // --------------------------------------------------- \\
         // ------------------Menu Methods--------------------- \\
@@ -2070,25 +2085,31 @@ namespace SmashAttacks
             cboSubAction.Items.Clear();
             cboAction.Items.Clear();
             txtAnimationName.Text = "";
+            attributes.Clear();
+
+            DataTree.Nodes.Clear(); lstEvents.Items.Clear();
+            fileHeader = null; partitionHeader = null; dataHeader = null;
+            movesetData = null; pointerList = null; objectPointerList = null;
+            nameList = null; partitionHeader2 = null; effectPartition = null;
             try
             {
-                if (sname.Contains("irby") && !sname.Contains("irby.pac")) 
+                if (sname.Contains("irby") && !sname.Contains("irby.pac"))
                 {
+                    Ftype = 1;
                     if (OpenKirbyHat(fname) == true)
                         throw new Exception("Could not open file.");
-                    Ftype = 1;
                 }
                 else if (sname.Contains("Itm") || sname.Contains("Item") || sname.Contains("itm"))
                 {
+                    Ftype = 2;
                     if (OpenItem(fname) == true)
                         throw new Exception("Could not open file.");
-                    Ftype = 2;
                 }
                 else
                 {
+                    Ftype = 0;
                     if (OpenFile(fname) == true)
                         throw new Exception("Could not open file.");
-                    Ftype = 0;
                 }
 
                 this.Text = "Smash Attacks! - " + sname;
@@ -2100,10 +2121,10 @@ namespace SmashAttacks
                 txtOffset.Text = "";
 
                 if (cboAction.Items.Count == 0) { cboAction.Items.Add("<null>"); }
-                if (cboSubAction.Items.Count == 0) { cboSubAction.Items.Add("<null>"); cboEventList.Items.Add("<null>");}
-                cboSubAction.SelectedIndex = 0; cboSubAction_SelectedIndexChanged(sender, e); 
-                cboEventList.SelectedIndex = 0; cboSubAction_SelectedIndexChanged(sender, e); 
-                cboAction.SelectedIndex = 0; cboAction_SelectedIndexChanged(sender, e); 
+                if (cboSubAction.Items.Count == 0) { cboSubAction.Items.Add("<null>"); cboEventList.Items.Add("<null>"); }
+                cboSubAction.SelectedIndex = 0; cboSubAction_SelectedIndexChanged(sender, e);
+                cboEventList.SelectedIndex = 0; cboSubAction_SelectedIndexChanged(sender, e);
+                cboAction.SelectedIndex = 0; cboAction_SelectedIndexChanged(sender, e);
             }
             catch (Exception error)
             {
@@ -2139,24 +2160,25 @@ namespace SmashAttacks
 
         private void FormMain_Resize(object sender, EventArgs e)
         {
-            if (!checkBox1.Checked)
+            if (!chkDataTree.Checked)
             {
                 if (tbctrlMain.Width != this.Width - 31) { tbctrlMain.Width = this.Width - 31; }
             }
-             else if (checkBox1.Checked) 
-            { 
-                 if(tbctrlMain.Width != this.Width - (DataTree.Width +62)){tbctrlMain.Width =this.Width - (DataTree.Width +62); }
+            else if (chkDataTree.Checked)
+            {
+                if (tbctrlMain.Width != this.Width - (DataTree.Width + 62)) { tbctrlMain.Width = this.Width - (DataTree.Width + 62); }
             }
         }
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBox1.Checked) 
+            if (chkDataTree.Checked)
             {
                 tbctrlMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-                DataTree.Visible = true; this.Width += DataTree.Width + 31; tbctrlMain.Width = this.Width - (DataTree.Width + 62);
+                DataTree.Visible = true;
+                this.Width += DataTree.Width + 31; tbctrlMain.Width = this.Width - (DataTree.Width + 62);
             }
-            else if (!checkBox1.Checked) 
+            else if (!chkDataTree.Checked)
             {
                 tbctrlMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
@@ -2164,6 +2186,34 @@ namespace SmashAttacks
             }
         }
 
+        private void DataTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            DataNode selected = (DataNode)DataTree.SelectedNode;
+            if (DataTree.SelectedNode != DataTree.Nodes[0])
+            {
+                int absoluteIndex = (DataTree.SelectedNode.Parent.Index + 1) + DataTree.SelectedNode.Index;
+                if (selected.type == DataNode.Type.ValueList)
+                {
+                    tbctrlMain.SelectedTab = tbctrlMain.TabPages[1];
+                    DisplayAttributes(FromWord(0x10), selected.address );
+                    pAttributes = selected.address;
+                }
+                else if ((string)DataTree.SelectedNode.Tag == "EventData")
+                {
+                    tbctrlMain.SelectedTab = tbctrlMain.TabPages[0];
+                    GetActions(selected.address);
+                    GetSubactions(selected.address);
+                }
+            }
+            else
+            {
+                int absoluteIndex = 0;
+                tbctrlMain.SelectedTab = tbctrlMain.TabPages[0];
+                GetActions(selected.address);
+                GetSubactions(selected.address);
+            }
+            
+        }
     }
 
     // --------------------------------------------------- \\
@@ -2324,4 +2374,24 @@ namespace SmashAttacks
         byte byteVal;
         bool[] bitVal;
     }
+
+    public class DataNode : TreeNode
+    {
+        public DataNode(string Name, Type Type, long Address)
+        {
+            address = Address;
+            this.Text = Name;
+            type = Type;
+        }
+
+        public Type type;
+        public enum Type
+        {
+            None = -1,
+            EventData = 0,
+            ValueList = 1,
+        }
+        public long address;
+    }
 }
+
