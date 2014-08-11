@@ -971,8 +971,8 @@ namespace SmashAttacks
                 pAttributes = GetWord(pData + 0x8); //Pointer - attributes
 
                 //  Set the number of selections for the actions and sub actions lists.
-                DataTree.Nodes.Add(sname.Substring(3, sname.Length - 7));
-                DataTree.Nodes[0].Nodes.Add("Attributes").Tag = "val";
+                DataTree.Nodes.Add(new DataNode(sname.Substring(3, sname.Length - 7),DataNode.Type.EventData,pData));
+                DataTree.Nodes[0].Nodes.Add(new DataNode("Attributes", DataNode.Type.ValueList, pAttributes));
                 ResolveObjects();
 
                 GetActions(pData);
@@ -2176,7 +2176,8 @@ namespace SmashAttacks
                 tbctrlMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
                 DataTree.Visible = true;
-                this.Width += DataTree.Width + 31; tbctrlMain.Width = this.Width - (DataTree.Width + 62);
+                    this.Width += DataTree.Width + 31;
+                    tbctrlMain.Width = this.Width - (DataTree.Width + 62);                
             }
             else if (!chkDataTree.Checked)
             {
@@ -2188,31 +2189,20 @@ namespace SmashAttacks
 
         private void DataTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            DataNode selected = (DataNode)DataTree.SelectedNode;
-            if (DataTree.SelectedNode != DataTree.Nodes[0])
-            {
-                int absoluteIndex = (DataTree.SelectedNode.Parent.Index + 1) + DataTree.SelectedNode.Index;
+                DataNode selected = (DataNode)DataTree.SelectedNode;
+
                 if (selected.type == DataNode.Type.ValueList)
                 {
                     tbctrlMain.SelectedTab = tbctrlMain.TabPages[1];
                     DisplayAttributes(FromWord(0x10), selected.address );
                     pAttributes = selected.address;
                 }
-                else if ((string)DataTree.SelectedNode.Tag == "EventData")
+                else if (selected.type == DataNode.Type.EventData)
                 {
                     tbctrlMain.SelectedTab = tbctrlMain.TabPages[0];
                     GetActions(selected.address);
                     GetSubactions(selected.address);
                 }
-            }
-            else
-            {
-                int absoluteIndex = 0;
-                tbctrlMain.SelectedTab = tbctrlMain.TabPages[0];
-                GetActions(selected.address);
-                GetSubactions(selected.address);
-            }
-            
         }
     }
 
@@ -2385,13 +2375,13 @@ namespace SmashAttacks
         }
 
         public Type type;
+        public long address;
         public enum Type
         {
             None = -1,
             EventData = 0,
             ValueList = 1,
         }
-        public long address;
     }
 }
 
