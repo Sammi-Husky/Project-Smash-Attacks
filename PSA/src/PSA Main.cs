@@ -957,7 +957,7 @@ namespace SmashAttacks
                 // Search for "data" node.
                 int off = -8;
                 bool found = false;
-                while (off < 8 * 10 && !found)
+                while (off < objectPointerList.Length &&!found)
                 {
                     off += 8;
                     found = GetString(nameList, GetWord(objectPointerList, 0x4 + off)).Substring(0, 4) == "data";
@@ -1031,7 +1031,7 @@ namespace SmashAttacks
                 pAttributes = GetWord(pData + 0x8); //Pointer - attributes
 
                 //  Set the number of selections for the actions and sub actions lists.
-                DataTree.Nodes.Add(sname.Substring(3, sname.Length - 7));
+                DataTree.Nodes.Add(new DataNode(sname.Substring(3, sname.Length - 7), DataNode.Type.EventData, pData));
                 ResolveObjects();
 
                 GetActions(pData);
@@ -1086,8 +1086,7 @@ namespace SmashAttacks
                 long pData = GetWord(objectPointerList, off);  //Data offsets
 
                 //Enumerate object list
-                DataTree.Nodes.Add(sname.Substring(3, sname.Length - 7));
-                DataTree.Nodes[0].Tag = "EventData";
+                DataTree.Nodes.Add(new DataNode(sname.Substring(3, sname.Length - 7), DataNode.Type.EventData, pData));
                 ResolveObjects();
 
                 //  Set the number of selections for the actions and sub actions lists.
@@ -1107,7 +1106,6 @@ namespace SmashAttacks
                 MessageBox.Show(error.Message);
                 errStatus = true;
             }
-            cboEventList.Items.Clear();
             return errStatus;
         }
 
@@ -1120,17 +1118,20 @@ namespace SmashAttacks
                 case 0:
                     pBEvents = GetWord(pData + 0x24); //Pointer - the Action list
                     lBEvents = FromWord(GetWord(pData + 0x2c) - pBEvents); //Number of Actions
+                    for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i + 0x112));
                     break;
                 case 1:
                     pBEvents = GetWord(pData); //Pointer - the Action list
                     lBEvents = GetWord(pData + 0x4) * 2; //Number of Actions
+                    for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i));
                     break;
                 case 2:
                     pBEvents = GetWord(pData + 0x28); //Pointer - the Action list
                     lBEvents = FromWord(GetWord(pData + 0x2c) - pBEvents); //Number of Actions
+                    for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i));
                     break;
             }
-            for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i + 0x112));
+
         }
         public void GetSubactions(long pData)
         {
@@ -1152,7 +1153,7 @@ namespace SmashAttacks
                     pSubEvents[0] = GetWord(pData + 0x1c); //Pointer - Subaction Main list
                     pSubEvents[1] = GetWord(pData + 0x20); //Pointer  - Subaction gfx list
                     pSubEvents[2] = GetWord(pData + 0x24); //Pointer - Subaction sfx list
-                    //pSubEvents[3] = GetWord(pData + 0x30); //Pointer - Subaction other list
+                    pSubEvents[3] = GetWord(pData + 0x14); //Pointer - Subaction other list
                     lSubEvents = FromWord(pSubEvents[1] - pSubEvents[0]); //Number of subactions
                     break;
             }
@@ -1160,12 +1161,16 @@ namespace SmashAttacks
         }
         public void ResolveObjects()
         {
-            int off1 = 8;
-            while (off1 < objectPointerList.Length - 8)
+            int off1 = 0;
+            if (objectPointerList.Length > 1)
             {
-                var n = new DataNode(GetString(nameList, GetWord(objectPointerList, 0x4 + off1)), DataNode.Type.ValueList, GetWord(objectPointerList, off1));
-                DataTree.Nodes[0].Nodes.Add(n);
-                off1 += 8;
+                DataTree.Nodes.Add(new DataNode("References"));
+                while (off1 < objectPointerList.Length - 8)
+                {
+                    var n = new DataNode(GetString(nameList, GetWord(objectPointerList, 0x4 + off1)), DataNode.Type.None, GetWord(objectPointerList, off1));
+                    if (n.Text != "data") { DataTree.Nodes[1].Nodes.Add(n); }
+                    off1 += 8;
+                }
             }
         }
 
@@ -1506,7 +1511,6 @@ namespace SmashAttacks
         {
             for (int i = 0; i < words; i++)
                 ClearPointer(FADEFOOD, offset + ToWord(i));
-
         }
 
         // --------------------------------------------------- \\
@@ -1750,8 +1754,8 @@ namespace SmashAttacks
         // -------------------Sub Actions Tab----------------- \\
         private void cboSubAction_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cboEventList.SelectedIndex == -1 || Ftype == 1) return;
-            if (cboSubAction.SelectedIndex == -1 || Ftype == 1) return;
+            if (cboEventList.SelectedIndex == -1) return;
+            if (cboSubAction.SelectedIndex == -1) return;
             int index1 = cboEventList.SelectedIndex;
             int index2 = cboSubAction.SelectedIndex;
             long pAnimationName;
@@ -2084,9 +2088,12 @@ namespace SmashAttacks
 
             cboSubAction.Items.Clear();
             cboAction.Items.Clear();
+            cboSubAction.Enabled = false;
+            cboEventList.Enabled = false;
+
             txtAnimationName.Text = "";
             attributes.Clear();
-
+            
             DataTree.Nodes.Clear(); lstEvents.Items.Clear();
             fileHeader = null; partitionHeader = null; dataHeader = null;
             movesetData = null; pointerList = null; objectPointerList = null;
@@ -2121,9 +2128,12 @@ namespace SmashAttacks
                 txtOffset.Text = "";
 
                 if (cboAction.Items.Count == 0) { cboAction.Items.Add("<null>"); }
-                if (cboSubAction.Items.Count == 0) { cboSubAction.Items.Add("<null>"); cboEventList.Items.Add("<null>"); }
-                cboSubAction.SelectedIndex = 0; cboSubAction_SelectedIndexChanged(sender, e);
-                cboEventList.SelectedIndex = 0; cboSubAction_SelectedIndexChanged(sender, e);
+                if (cboSubAction.Items.Count != 0) 
+                {
+                    cboSubAction.Enabled = true; cboEventList.Enabled = true;
+                    cboSubAction.SelectedIndex = 0; cboSubAction_SelectedIndexChanged(sender, e);
+                    cboEventList.SelectedIndex = 0; cboSubAction_SelectedIndexChanged(sender, e);
+                }
                 cboAction.SelectedIndex = 0; cboAction_SelectedIndexChanged(sender, e);
             }
             catch (Exception error)
@@ -2189,20 +2199,22 @@ namespace SmashAttacks
 
         private void DataTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
+            if (DataTree.SelectedNode != null)
+            {
                 DataNode selected = (DataNode)DataTree.SelectedNode;
-
-                if (selected.type == DataNode.Type.ValueList)
+                if (selected.type == DataNode.Type.EventData)
+                {
+                        tbctrlMain.SelectedTab = tbctrlMain.TabPages[0];
+                        GetActions(selected.address);
+                        GetSubactions(selected.address);
+                }
+                else if (selected.type == DataNode.Type.ValueList)
                 {
                     tbctrlMain.SelectedTab = tbctrlMain.TabPages[1];
-                    DisplayAttributes(FromWord(0x10), selected.address );
-                    pAttributes = selected.address;
+                    DisplayAttributes(FromWord(0x2E0), selected.address);
+                    tbctrlMain.Invalidate();
                 }
-                else if (selected.type == DataNode.Type.EventData)
-                {
-                    tbctrlMain.SelectedTab = tbctrlMain.TabPages[0];
-                    GetActions(selected.address);
-                    GetSubactions(selected.address);
-                }
+            }
         }
     }
 
@@ -2367,6 +2379,7 @@ namespace SmashAttacks
 
     public class DataNode : TreeNode
     {
+        public DataNode(string Name) {address = 0; this.Text = Name; type = Type.None;}
         public DataNode(string Name, Type Type, long Address)
         {
             address = Address;
@@ -2382,6 +2395,18 @@ namespace SmashAttacks
             EventData = 0,
             ValueList = 1,
         }
+    }
+    public class ArticleNode : DataNode
+    {
+        public ArticleNode(string name,long address): base(name,Type.EventData,address)
+        {
+
+        }
+        public long pAnimations;
+        public long pActions;
+        public long lActions;
+        public long[] pSubactions;
+        public long lSubactions;
     }
 }
 
