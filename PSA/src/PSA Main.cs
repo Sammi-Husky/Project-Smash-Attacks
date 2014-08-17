@@ -128,6 +128,11 @@ namespace SmashAttacks
                         iAttributes[i].description = "No Description Available.";
 
                     sr.ReadLine();
+                    Graphics g = this.CreateGraphics();
+                    Rectangle rect = new Rectangle(10, 10, 150, 150);
+                    PaintEventArgs e = new PaintEventArgs(g,rect);
+                    e.Graphics.DrawRectangle(Pens.Red, rect);
+                    
                 }
                 sr.Close();
                 sr = null;
@@ -996,6 +1001,7 @@ namespace SmashAttacks
                     SetWord(movesetData.Length - 4, movesetData.Length);
                 }
                 pFadeData = GetWord(movesetData.Length - 4);
+                ResolveArticles(pData);
             }
             catch (Exception error)
             {
@@ -1133,6 +1139,14 @@ namespace SmashAttacks
             }
 
         }
+        public void GetArticleActions(long pData)
+        {
+            cboAction.Items.Clear();
+            pBEvents = GetWord(pData + 0x14); //Pointer - the Action list
+            long off2off = GetWord(pData + 0x10);
+            lBEvents = FromWord(GetWord(off2off + 0x04) - pBEvents); //Number of Actions
+            for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i));
+        }
         public void GetSubactions(long pData)
         {
             cboSubAction.Items.Clear();
@@ -1159,12 +1173,38 @@ namespace SmashAttacks
             }
             for (int i = 0; i < lSubEvents; i++) cboSubAction.Items.Add(Hex(i));
         }
+        public void GetArticleSubactions(long pData)
+        {
+            cboSubAction.Items.Clear();
+            pSubEvents[0] = GetWord(pData + 0x18); //Pointer - Subaction Main list
+            pSubEvents[1] = GetWord(pData + 0x1c); //Pointer  - Subaction gfx list
+            pSubEvents[2] = GetWord(pData + 0x20); //Pointer - Subaction sfx list
+            //pSubEvents[3] = GetWord(pData + 0x3C); //Pointer - Subaction other list
+            lSubEvents = FromWord(pSubEvents[1] - pSubEvents[0]); //Number of subactions
+            for (int i = 0; i < lSubEvents; i++) cboSubAction.Items.Add(Hex(i));
+        }
+
+        public void ResolveArticles(long pData)
+        {
+            long pFloats = pData + 0x7c;
+            long lFloats = FromWord((pFadeData - pFloats))/2;
+
+            long pArticles = pFloats + ToWord(lFloats);
+            if (GetWord(pArticles + 0x04) < 0x50) { lFloats += 2; pArticles += ToWord(2); }
+            
+            long lArticles = FromWord(pFadeData - pArticles);
+            for (int i = 0; i < lArticles; i++)
+            {
+                ArticleNode n = new ArticleNode("Article[" + i + "]", GetWord(pArticles + ToWord(i)));
+                DataTree.Nodes[0].Nodes.Add(n);
+            }
+        }
         public void ResolveObjects()
         {
             int off1 = 0;
             if (objectPointerList.Length > 1)
             {
-                DataTree.Nodes.Add(new DataNode("References"));
+                DataTree.Nodes.Add(new BaseNode("References"));
                 while (off1 < objectPointerList.Length - 8)
                 {
                     var n = new DataNode(GetString(nameList, GetWord(objectPointerList, 0x4 + off1)), DataNode.Type.None, GetWord(objectPointerList, off1));
@@ -2201,18 +2241,28 @@ namespace SmashAttacks
         {
             if (DataTree.SelectedNode != null)
             {
-                DataNode selected = (DataNode)DataTree.SelectedNode;
-                if (selected.type == DataNode.Type.EventData)
+                if (DataTree.SelectedNode is DataNode)
                 {
+                    DataNode selected = (DataNode)DataTree.SelectedNode;
+                    if (selected.type == DataNode.Type.EventData)
+                    {
                         tbctrlMain.SelectedTab = tbctrlMain.TabPages[0];
                         GetActions(selected.address);
                         GetSubactions(selected.address);
+                    }
+                    else if (selected.type == DataNode.Type.ValueList)
+                    {
+                        tbctrlMain.SelectedTab = tbctrlMain.TabPages[1];
+                        DisplayAttributes(FromWord(0x2E0), selected.address);
+                        tbctrlMain.Invalidate();
+                    }
                 }
-                else if (selected.type == DataNode.Type.ValueList)
+                else if (DataTree.SelectedNode is ArticleNode)
                 {
-                    tbctrlMain.SelectedTab = tbctrlMain.TabPages[1];
-                    DisplayAttributes(FromWord(0x2E0), selected.address);
-                    tbctrlMain.Invalidate();
+                    ArticleNode selected = (ArticleNode)DataTree.SelectedNode;
+                    tbctrlMain.SelectedTab = tbctrlMain.TabPages[0];
+                    GetArticleActions(selected.address);
+                    GetArticleSubactions(selected.address);
                 }
             }
         }
@@ -2377,10 +2427,11 @@ namespace SmashAttacks
         bool[] bitVal;
     }
 
-    public class DataNode : TreeNode
+    // Extended Treenode classes
+    public class BaseNode : TreeNode
     {
-        public DataNode(string Name) {address = 0; this.Text = Name; type = Type.None;}
-        public DataNode(string Name, Type Type, long Address)
+        public BaseNode(string Name) {address = 0; this.Text = Name; type = Type.None;}
+        public BaseNode(string Name, Type Type, long Address)
         {
             address = Address;
             this.Text = Name;
@@ -2396,11 +2447,25 @@ namespace SmashAttacks
             ValueList = 1,
         }
     }
-    public class ArticleNode : DataNode
+    public class DataNode : BaseNode
+    {
+        public DataNode(string name, Type type, long address): base(name, type, address)
+        {
+            this.Text = name;
+            this.address = address;
+        }
+        public long pAnimations;
+        public long pActions;
+        public long lActions;
+        public long[] pSubactions;
+        public long lSubactions;
+    }
+    public class ArticleNode : BaseNode
     {
         public ArticleNode(string name,long address): base(name,Type.EventData,address)
         {
-
+            this.Text = name;
+            this.address = address;
         }
         public long pAnimations;
         public long pActions;
