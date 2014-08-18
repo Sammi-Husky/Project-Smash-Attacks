@@ -1001,7 +1001,7 @@ namespace SmashAttacks
                     SetWord(movesetData.Length - 4, movesetData.Length);
                 }
                 pFadeData = GetWord(movesetData.Length - 4);
-                ResolveArticles(pData);
+                GetArticles(pData);
             }
             catch (Exception error)
             {
@@ -1139,14 +1139,7 @@ namespace SmashAttacks
             }
 
         }
-        public void GetArticleActions(long pData)
-        {
-            cboAction.Items.Clear();
-            pBEvents = GetWord(pData + 0x14); //Pointer - the Action list
-            long off2off = GetWord(pData + 0x10);
-            lBEvents = FromWord(GetWord(off2off + 0x04) - pBEvents); //Number of Actions
-            for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i));
-        }
+
         public void GetSubactions(long pData)
         {
             cboSubAction.Items.Clear();
@@ -1173,31 +1166,40 @@ namespace SmashAttacks
             }
             for (int i = 0; i < lSubEvents; i++) cboSubAction.Items.Add(Hex(i));
         }
-        public void GetArticleSubactions(long pData)
-        {
-            cboSubAction.Items.Clear();
-            pSubEvents[0] = GetWord(pData + 0x18); //Pointer - Subaction Main list
-            pSubEvents[1] = GetWord(pData + 0x1c); //Pointer  - Subaction gfx list
-            pSubEvents[2] = GetWord(pData + 0x20); //Pointer - Subaction sfx list
-            //pSubEvents[3] = GetWord(pData + 0x3C); //Pointer - Subaction other list
-            lSubEvents = FromWord(pSubEvents[1] - pSubEvents[0]); //Number of subactions
-            for (int i = 0; i < lSubEvents; i++) cboSubAction.Items.Add(Hex(i));
-        }
 
-        public void ResolveArticles(long pData)
+        public void GetArticles(long pData)
         {
             long pFloats = pData + 0x7c;
             long lFloats = FromWord((pFadeData - pFloats))/2;
 
             long pArticles = pFloats + ToWord(lFloats);
-            if (GetWord(pArticles + 0x04) < 0x50) { lFloats += 2; pArticles += ToWord(2); }
-            
+            if (GetWord(pArticles + 0x04) < 0x50) { lFloats += 2; pArticles += ToWord(2); }           
             long lArticles = FromWord(pFadeData - pArticles);
+
             for (int i = 0; i < lArticles; i++)
             {
                 ArticleNode n = new ArticleNode("Article[" + i + "]", GetWord(pArticles + ToWord(i)));
                 DataTree.Nodes[0].Nodes.Add(n);
             }
+        }
+        public void ResolveArticle(long pData)
+        {
+            cboAction.Items.Clear();
+            cboSubAction.Items.Clear();
+
+            pAnimations = GetWord(pData + 0x10);// pointer - Animations list
+            pBEvents = GetWord(pData + 0x14); //Pointer - the Action list
+            pSubEvents[0] = GetWord(pData + 0x18); //Pointer - Subaction Main list
+            pSubEvents[1] = GetWord(pData + 0x1c); //Pointer  - Subaction gfx list
+            pSubEvents[2] = GetWord(pData + 0x20); //Pointer - Subaction sfx list
+            //pSubEvents[3] = GetWord(pData + 0x3C); //Pointer - Subaction other list
+
+            lBEvents = FromWord(GetWord(pAnimations + 0x04) - pBEvents); //Number of Actions
+            lSubEvents = FromWord(pSubEvents[1] - pSubEvents[0]); //Number of subactions
+
+            for (int i = 0; i < lSubEvents; i++) cboSubAction.Items.Add(Hex(i));
+            for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i));
+
         }
         public void ResolveObjects()
         {
@@ -2259,10 +2261,14 @@ namespace SmashAttacks
                 }
                 else if (DataTree.SelectedNode is ArticleNode)
                 {
+                    cboAction.Items.Clear();
+                    lstEvents.Items.Clear();
                     ArticleNode selected = (ArticleNode)DataTree.SelectedNode;
                     tbctrlMain.SelectedTab = tbctrlMain.TabPages[0];
-                    GetArticleActions(selected.address);
-                    GetArticleSubactions(selected.address);
+                    ResolveArticle(selected.address);
+
+                    cboAction.SelectedIndex = 0;
+                    cboSubAction.SelectedIndex = 0;
                 }
             }
         }
