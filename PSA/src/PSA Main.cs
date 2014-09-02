@@ -962,7 +962,7 @@ namespace SmashAttacks
 
                 //  Get all important pointers.
                 long pData = GetWord(objectPointerList, off);
-                pAnimations = GetWord(pData + 0x0); //Pointer - animation table
+                GetAnimations(pData);
                 pAttributes = GetWord(pData + 0x8); //Pointer - attributes
                 pSSEAttributes = GetWord(pData + 0xC); //pointer - SSE Attributes
 
@@ -1026,7 +1026,7 @@ namespace SmashAttacks
                 //  Get all important pointers.
                 long pData = GetWord(objectPointerList, off);
 
-                pAnimations = GetWord(pData + 0x0); //Pointer - animation table
+                GetAnimations(pData);
                 pAttributes = GetWord(pData + 0x8); //Pointer - attributes
 
                 //  Set the number of selections for the actions and sub actions lists.
@@ -1109,6 +1109,10 @@ namespace SmashAttacks
         }
 
         // Enumerate data lists
+        public void GetAnimations(long pData)
+        {
+            pAnimations = GetWord(pData + 0x0); //Pointer - animation table
+        }
         public void GetActions(long pData)
         {
             cboAction.Items.Clear();
@@ -1163,22 +1167,24 @@ namespace SmashAttacks
         {
             long pHeaderEXT = pData + 0x7C;
             long lHeaderEXT = FromWord(pFadeData - pHeaderEXT);
-            int ArticleCount = -1;
+            int ArticleCount = 0;
 
             for (int i = 0; i < lHeaderEXT; i++)
             {
-                try
-                {
-                    if (GetWord(pHeaderEXT + ToWord(i) + 0x04) < 0xFFF) { i += 2;}
-                    fixed (byte* ptr = movesetData)
+                long Addr = GetWord(pHeaderEXT + ToWord(i));
+                if(Addr < movesetData.Length)
+                    try
                     {
-                        Article art = new Article(pFadeData, GetWord(pHeaderEXT + ToWord(i)), ptr);
-                        ArticleCount++;
-                        ArticleNode n = new ArticleNode("Article["+ArticleCount+"]", GetWord(pHeaderEXT + ToWord(i)));
-                        DataTree.Nodes[0].Nodes.Add(n);
+
+                        fixed (byte* ptr = movesetData)
+                        {
+                            Article art = new Article(pFadeData, Addr, ptr);
+                            ArticleNode n = new ArticleNode("Article[" + ArticleCount + "]", GetWord(pHeaderEXT + ToWord(i)));
+                            DataTree.Nodes[0].Nodes.Add(n);
+                            ArticleCount++;
+                        }
                     }
-                }
-                catch { }
+                    catch { }
             }
         }
 
@@ -1193,14 +1199,13 @@ namespace SmashAttacks
             pSubEvents[0] = GetWord(pData + 0x18); //Pointer - Subaction Main list
             pSubEvents[1] = GetWord(pData + 0x1c); //Pointer  - Subaction gfx list
             pSubEvents[2] = GetWord(pData + 0x20); //Pointer - Subaction sfx list
-            //pSubEvents[3] = GetWord(pData + 0x3C); //Pointer - Subaction other list
-            if (GetWord(pBEvents + 0x04) != 0) { lBEvents = FromWord(GetWord(pAnimations + 0x04) - pBEvents); } //Number of Actions
-            else if (GetWord(pBEvents + 0x04) == 0) { lBEvents = 1; } //Number of Actions
+            lBEvents = (pBEvents - GetWord(pData + 0x0C)) / 0x10;  //Number of Actions
 
             lSubEvents = FromWord(pSubEvents[1] - pSubEvents[0]); //Number of subactions
 
-            for (int i = 0; i < lSubEvents; i++) cboSubAction.Items.Add(Hex(i));
-            for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i));
+            if (pBEvents != 0) { for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i)); }
+            for (int i = 0; i < lSubEvents; i++) cboSubAction.Items.Add(Hex(i)); 
+            
 
         }
         public string ResolveSpecials(long id)
@@ -2262,6 +2267,7 @@ namespace SmashAttacks
                     if (selected.type == DataNode.Type.EventData)
                     {
                         tbctrlMain.SelectedTab = tbctrlMain.TabPages[0];
+                        GetAnimations(selected.address);
                         GetActions(selected.address);
                         GetSubactions(selected.address);
                         cboSubAction.SelectedIndex = 0;
@@ -2278,15 +2284,16 @@ namespace SmashAttacks
                 {
                     cboAction.Items.Clear();
                     lstEvents.Items.Clear();
+                    cboAction.Text = cboSubAction.Text = txtAnimationName.Text = txtOffset.Text = "";
                     ArticleNode selected = (ArticleNode)DataTree.SelectedNode;
                     tbctrlMain.SelectedTab = tbctrlMain.TabPages[0];
                     ResolveArticle(selected.address);
                     tbctrlActionEvents.SelectedTab = tbctrlActionEvents.TabPages[0];
-                    if (cboSubAction.Items.Count > 0 && cboAction.Items.Count > 0)
-                    {
+
+                    if (cboSubAction.Items.Count > 0)
                         cboSubAction.SelectedIndex = 0;
+                    if(cboAction.Items.Count > 0)
                         cboAction.SelectedIndex = 0;
-                    }
                 }
 
             }
@@ -2505,8 +2512,10 @@ namespace SmashAttacks
     public unsafe class Article
     {
         #pragma warning disable 649
-        private Data _data;
 
+        /*Alot of this was copied from Tabuu's source code, so credits to Dantarion and company for this work.*/
+
+        private Data _data;
         struct Data
         {
 
@@ -2533,6 +2542,22 @@ namespace SmashAttacks
         {
             get { return _data.unknown1; }
             set { _data.unknown1 = value; }
+        }
+        public int SubactionMain
+        {
+            get { return _data.SubactionMainStart; }
+        }
+        public int SubactionGFX
+        {
+            get { return _data.SubactionGFXStart; }
+        }
+        public int SubactionSFX
+        {
+            get { return _data.SubactionSFXStart; }
+        }
+        public int Actions
+        {
+            get { return _data.ActionsStart; }
         }
         public int unknown2
         {
