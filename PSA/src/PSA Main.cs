@@ -62,6 +62,7 @@ namespace SmashAttacks
         //  Variables containing pointers to various pieces of data.
         long pAnimations = 0;               //  Pointer to the Animation List.
         long pAttributes = 0;               //  Pointer to the Attribute List.
+        long pSSEAttributes = 0;            //  Pointer to the Subspace Attributes.
         long pBEvents = 0;                  //  Pointer to the B Move Events List.
         long lBEvents = 0;                  //  Length of the B Move Events List.
         long[] pSubEvents = new long[4];    //  4 Pointers to the 4 Sub Event Lists.
@@ -130,9 +131,9 @@ namespace SmashAttacks
                     sr.ReadLine();
                     Graphics g = this.CreateGraphics();
                     Rectangle rect = new Rectangle(10, 10, 150, 150);
-                    PaintEventArgs e = new PaintEventArgs(g,rect);
+                    PaintEventArgs e = new PaintEventArgs(g, rect);
                     e.Graphics.DrawRectangle(Pens.Red, rect);
-                    
+
                 }
                 sr.Close();
                 sr = null;
@@ -799,21 +800,6 @@ namespace SmashAttacks
         }
 
 
-
-        //  Default values for each special.
-        public string ResolveSpecials(long id)
-        {
-            switch (id)
-            {
-                case 0x112: return Hex(id) + " Neutral B";
-                case 0x113: return Hex(id) + " Side B";
-                case 0x114: return Hex(id) + " Up B";
-                case 0x115: return Hex(id) + " Down B";
-                case 0x116: return Hex(id) + " Final Smash";
-                default: return Hex(id);
-            }
-        }
-
         // --------------------------------------------------- \\
         // --------------Data Handling Methods---------------- \\
         // --------------------------------------------------- \\
@@ -950,6 +936,10 @@ namespace SmashAttacks
             fstream.Write(bytes, 0, bytes.Length);
         }
 
+        // --------------------------------------------------- \\
+        // --------------File Handling Methods---------------- \\
+        // --------------------------------------------------- \\
+
         //  Read the moveset data from the file specified.
         public bool OpenFile(string fname)
         {
@@ -962,7 +952,7 @@ namespace SmashAttacks
                 // Search for "data" node.
                 int off = -8;
                 bool found = false;
-                while (off < objectPointerList.Length &&!found)
+                while (off < objectPointerList.Length && !found)
                 {
                     off += 8;
                     found = GetString(nameList, GetWord(objectPointerList, 0x4 + off)).Substring(0, 4) == "data";
@@ -971,13 +961,16 @@ namespace SmashAttacks
                     throw (new Exception("Cannot locate file data."));
 
                 //  Get all important pointers.
-                long pData  = GetWord(objectPointerList, off);
+                long pData = GetWord(objectPointerList, off);
                 pAnimations = GetWord(pData + 0x0); //Pointer - animation table
                 pAttributes = GetWord(pData + 0x8); //Pointer - attributes
+                pSSEAttributes = GetWord(pData + 0xC); //pointer - SSE Attributes
+
 
                 //  Set the number of selections for the actions and sub actions lists.
-                DataTree.Nodes.Add(new DataNode(sname.Substring(3, sname.Length - 7),DataNode.Type.EventData,pData));
+                DataTree.Nodes.Add(new DataNode(sname.Substring(3, sname.Length - 7), DataNode.Type.EventData, pData));
                 DataTree.Nodes[0].Nodes.Add(new DataNode("Attributes", DataNode.Type.ValueList, pAttributes));
+                DataTree.Nodes[0].Nodes.Add(new DataNode("SSE Attributes", BaseNode.Type.ValueList, pSSEAttributes));
                 ResolveObjects();
 
                 GetActions(pData);
@@ -1115,6 +1108,7 @@ namespace SmashAttacks
             return errStatus;
         }
 
+        // Enumerate data lists
         public void GetActions(long pData)
         {
             cboAction.Items.Clear();
@@ -1139,7 +1133,6 @@ namespace SmashAttacks
             }
 
         }
-
         public void GetSubactions(long pData)
         {
             cboSubAction.Items.Clear();
@@ -1166,22 +1159,30 @@ namespace SmashAttacks
             }
             for (int i = 0; i < lSubEvents; i++) cboSubAction.Items.Add(Hex(i));
         }
-
-        public void GetArticles(long pData)
+        public unsafe void GetArticles(long pData)
         {
-            long pFloats = pData + 0x7c;
-            long lFloats = FromWord((pFadeData - pFloats))/2;
+            long pHeaderEXT = pData + 0x7C;
+            long lHeaderEXT = FromWord(pFadeData - pHeaderEXT);
+            int ArticleCount = -1;
 
-            long pArticles = pFloats + ToWord(lFloats);
-            if (GetWord(pArticles + 0x04) < 0x50) { lFloats += 2; pArticles += ToWord(2); }           
-            long lArticles = FromWord(pFadeData - pArticles);
-
-            for (int i = 0; i < lArticles; i++)
+            for (int i = 0; i < lHeaderEXT; i++)
             {
-                ArticleNode n = new ArticleNode("Article[" + i + "]", GetWord(pArticles + ToWord(i)));
-                DataTree.Nodes[0].Nodes.Add(n);
+                try
+                {
+                    if (GetWord(pHeaderEXT + ToWord(i) + 0x04) < 0xFFF) { i += 2;}
+                    fixed (byte* ptr = movesetData)
+                    {
+                        Article art = new Article(pFadeData, GetWord(pHeaderEXT + ToWord(i)), ptr);
+                        ArticleCount++;
+                        ArticleNode n = new ArticleNode("Article["+ArticleCount+"]", GetWord(pHeaderEXT + ToWord(i)));
+                        DataTree.Nodes[0].Nodes.Add(n);
+                    }
+                }
+                catch { }
             }
         }
+
+        // Resolve various data structures
         public void ResolveArticle(long pData)
         {
             cboAction.Items.Clear();
@@ -1193,13 +1194,26 @@ namespace SmashAttacks
             pSubEvents[1] = GetWord(pData + 0x1c); //Pointer  - Subaction gfx list
             pSubEvents[2] = GetWord(pData + 0x20); //Pointer - Subaction sfx list
             //pSubEvents[3] = GetWord(pData + 0x3C); //Pointer - Subaction other list
+            if (GetWord(pBEvents + 0x04) != 0) { lBEvents = FromWord(GetWord(pAnimations + 0x04) - pBEvents); } //Number of Actions
+            else if (GetWord(pBEvents + 0x04) == 0) { lBEvents = 1; } //Number of Actions
 
-            lBEvents = FromWord(GetWord(pAnimations + 0x04) - pBEvents); //Number of Actions
             lSubEvents = FromWord(pSubEvents[1] - pSubEvents[0]); //Number of subactions
 
             for (int i = 0; i < lSubEvents; i++) cboSubAction.Items.Add(Hex(i));
             for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i));
 
+        }
+        public string ResolveSpecials(long id)
+        {
+            switch (id)
+            {
+                case 0x112: return Hex(id) + " Neutral B";
+                case 0x113: return Hex(id) + " Side B";
+                case 0x114: return Hex(id) + " Up B";
+                case 0x115: return Hex(id) + " Down B";
+                case 0x116: return Hex(id) + " Final Smash";
+                default: return Hex(id);
+            }
         }
         public void ResolveObjects()
         {
@@ -1207,7 +1221,7 @@ namespace SmashAttacks
             if (objectPointerList.Length > 1)
             {
                 DataTree.Nodes.Add(new BaseNode("References"));
-                while (off1 < objectPointerList.Length - 8)
+                while (off1 < objectPointerList.Length)
                 {
                     var n = new DataNode(GetString(nameList, GetWord(objectPointerList, 0x4 + off1)), DataNode.Type.None, GetWord(objectPointerList, off1));
                     if (n.Text != "data") { DataTree.Nodes[1].Nodes.Add(n); }
@@ -1954,7 +1968,6 @@ namespace SmashAttacks
             //  Show description of the selected event.
             lblEventDescription.Text = GetEventInfo(eventId).description;
         }
-
         private void lstEvents_DoubleClick(object sender, EventArgs e)
         {
             if (btnModify.Enabled == true) btnModify_Click(sender, e);
@@ -2135,7 +2148,7 @@ namespace SmashAttacks
 
             txtAnimationName.Text = "";
             attributes.Clear();
-            
+
             DataTree.Nodes.Clear(); lstEvents.Items.Clear();
             fileHeader = null; partitionHeader = null; dataHeader = null;
             movesetData = null; pointerList = null; objectPointerList = null;
@@ -2170,7 +2183,7 @@ namespace SmashAttacks
                 txtOffset.Text = "";
 
                 if (cboAction.Items.Count == 0) { cboAction.Items.Add("<null>"); }
-                if (cboSubAction.Items.Count != 0) 
+                if (cboSubAction.Items.Count != 0)
                 {
                     cboSubAction.Enabled = true; cboEventList.Enabled = true;
                     cboSubAction.SelectedIndex = 0; cboSubAction_SelectedIndexChanged(sender, e);
@@ -2228,8 +2241,8 @@ namespace SmashAttacks
                 tbctrlMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
                 DataTree.Visible = true;
-                    this.Width += DataTree.Width + 31;
-                    tbctrlMain.Width = this.Width - (DataTree.Width + 62);                
+                this.Width += DataTree.Width + 31;
+                tbctrlMain.Width = this.Width - (DataTree.Width + 62);
             }
             else if (!chkDataTree.Checked)
             {
@@ -2251,6 +2264,8 @@ namespace SmashAttacks
                         tbctrlMain.SelectedTab = tbctrlMain.TabPages[0];
                         GetActions(selected.address);
                         GetSubactions(selected.address);
+                        cboSubAction.SelectedIndex = 0;
+                        cboAction.SelectedIndex = 0;
                     }
                     else if (selected.type == DataNode.Type.ValueList)
                     {
@@ -2266,11 +2281,16 @@ namespace SmashAttacks
                     ArticleNode selected = (ArticleNode)DataTree.SelectedNode;
                     tbctrlMain.SelectedTab = tbctrlMain.TabPages[0];
                     ResolveArticle(selected.address);
-
-                    cboAction.SelectedIndex = 0;
-                    cboSubAction.SelectedIndex = 0;
+                    tbctrlActionEvents.SelectedTab = tbctrlActionEvents.TabPages[0];
+                    if (cboSubAction.Items.Count > 0 && cboAction.Items.Count > 0)
+                    {
+                        cboSubAction.SelectedIndex = 0;
+                        cboAction.SelectedIndex = 0;
+                    }
                 }
+
             }
+
         }
     }
 
@@ -2436,7 +2456,7 @@ namespace SmashAttacks
     // Extended Treenode classes
     public class BaseNode : TreeNode
     {
-        public BaseNode(string Name) {address = 0; this.Text = Name; type = Type.None;}
+        public BaseNode(string Name) { address = 0; this.Text = Name; type = Type.None; }
         public BaseNode(string Name, Type Type, long Address)
         {
             address = Address;
@@ -2455,7 +2475,8 @@ namespace SmashAttacks
     }
     public class DataNode : BaseNode
     {
-        public DataNode(string name, Type type, long address): base(name, type, address)
+        public DataNode(string name, Type type, long address)
+            : base(name, type, address)
         {
             this.Text = name;
             this.address = address;
@@ -2468,7 +2489,8 @@ namespace SmashAttacks
     }
     public class ArticleNode : BaseNode
     {
-        public ArticleNode(string name,long address): base(name,Type.EventData,address)
+        public ArticleNode(string name, long address)
+            : base(name, Type.EventData, address)
         {
             this.Text = name;
             this.address = address;
@@ -2478,6 +2500,92 @@ namespace SmashAttacks
         public long lActions;
         public long[] pSubactions;
         public long lSubactions;
+    }
+
+    public unsafe class Article
+    {
+        #pragma warning disable 649
+        private Data _data;
+
+        struct Data
+        {
+
+            public bint unknown1;
+            public bint unknown2;
+            public bint BoneID;
+            public bint ActionFlagsStart;
+
+            public bint SubactionFlagsStart;
+            public bint ActionsStart;
+            public bint SubactionMainStart;
+            public bint SubactionGFXStart;
+
+            public bint SubactionSFXStart;
+            public bint OtherStart;
+            public bint UnknownD1;
+            public bint UnknownD2;
+
+            public bint UnknownD3;
+            public bint DataOffset;
+        }
+
+        public int unknown1
+        {
+            get { return _data.unknown1; }
+            set { _data.unknown1 = value; }
+        }
+        public int unknown2
+        {
+            get { return _data.unknown2; }
+            set { _data.unknown2 = value; }
+        }
+        public int BoneID
+        {
+            get { return _data.BoneID; }
+            set { _data.BoneID = value; }
+        }
+        public int UnknownD1
+        {
+            get { return _data.UnknownD1; }
+            set { _data.UnknownD1 = value; }
+        }
+        public int UnknownD2
+        {
+            get { return _data.UnknownD2; }
+            set { _data.UnknownD2 = value; }
+        }
+        public int UnknownD3
+        {
+            get { return _data.UnknownD3; }
+            set { _data.UnknownD3 = value; }
+        }
+        public int DataOffset
+        {
+            get { return _data.UnknownD3; }
+            set { _data.UnknownD3 = value; }
+        }
+
+        public unsafe Article(long FileLength, long pData, byte* ptr)
+        {
+            _data = *(Data*)(ptr + pData);
+            if (
+                _data.SubactionFlagsStart < 1 ||
+                _data.ActionsStart > FileLength || _data.ActionsStart % 4 != 0 ||
+                _data.SubactionFlagsStart > FileLength || _data.SubactionFlagsStart % 4 != 0 ||
+                _data.SubactionGFXStart > FileLength || _data.SubactionGFXStart % 4 != 0 ||
+                _data.SubactionSFXStart > FileLength || _data.SubactionSFXStart % 4 != 0 ||
+                _data.OtherStart > FileLength || _data.OtherStart % 4 != 0
+                )
+                throw new Exception("Not actually an Article, lol");
+            var actionCount = 0;
+            var subactions = (pData - _data.SubactionFlagsStart) / 8;
+            if (_data.ActionFlagsStart > 0)
+                actionCount = (_data.ActionsStart - _data.ActionFlagsStart) / 0x10;
+            if (_data.SubactionFlagsStart > 0 && _data.SubactionMainStart > 0)
+                subactions = (_data.SubactionMainStart - _data.SubactionFlagsStart) / 0x8;
+            if (subactions > 0x1000 || actionCount > 0x1000)
+                throw new Exception("Not actually a Article, lol");
+        }
     }
 }
 
