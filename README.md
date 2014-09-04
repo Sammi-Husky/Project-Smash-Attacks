@@ -9,7 +9,7 @@ Future Plans
 =====================
 Article support  
 Fighter.pac support  
-Item support  
-SSE attribute support  
+~~Item support~~  
+~~SSE attribute support~~  
 Adding external subroutines  
-Data explorer / Tree view  
+~~Data explorer / Tree view~~  
