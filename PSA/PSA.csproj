@@ -72,7 +72,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>favicon %283%29.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup />
   <ItemGroup>
@@ -100,6 +101,27 @@
     <Compile Include="src\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="src\HexBox\BuiltInContextMenu.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="src\HexBox\ByteCharConverters.cs" />
+    <Compile Include="src\HexBox\ByteCollection.cs" />
+    <Compile Include="src\HexBox\BytePositionInfo.cs" />
+    <Compile Include="src\HexBox\DataBlock.cs" />
+    <Compile Include="src\HexBox\DataMap.cs" />
+    <Compile Include="src\HexBox\DynamicByteProvider.cs" />
+    <Compile Include="src\HexBox\DynamicFileByteProvider.cs" />
+    <Compile Include="src\HexBox\FileByteProvider.cs" />
+    <Compile Include="src\HexBox\FileDataBlock.cs" />
+    <Compile Include="src\HexBox\FindOptions.cs" />
+    <Compile Include="src\HexBox\HexBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="src\HexBox\HexCasing.cs" />
+    <Compile Include="src\HexBox\IByteProvider.cs" />
+    <Compile Include="src\HexBox\MemoryDataBlock.cs" />
+    <Compile Include="src\HexBox\NativeMethods.cs" />
+    <Compile Include="src\HexBox\Util.cs" />
     <Compile Include="src\Nodes\ScriptNode.cs" />
     <Compile Include="src\Types\Bitset.cs" />
     <Compile Include="src\Nodes\ArticleNode.cs" />
@@ -171,6 +193,7 @@
     <EmbeddedResource Include="src\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="src\HexBox\HexBox.resx" />
     <EmbeddedResource Include="src\PSA Animation Flags.resx">
       <DependentUpon>PSA Animation Flags.cs</DependentUpon>
     </EmbeddedResource>
@@ -241,16 +264,9 @@
     <Content Include="Changelog.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="favicon %283%29.ico" />
-    <Content Include="Icon.ico" />
     <None Include="Resources\pictureBox1.Image.bmp" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Users\Husky\Desktop\sources\Be.Windows.Forms.HexBox\Be.Windows.Forms.HexBox.csproj">
-      <Project>{26c5f25f-b450-4caf-ad8b-b8d11ae73457}</Project>
-      <Name>Be.Windows.Forms.HexBox</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
