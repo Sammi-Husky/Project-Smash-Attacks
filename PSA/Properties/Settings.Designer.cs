@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PSA.Properties {
+namespace SmashAttacks.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

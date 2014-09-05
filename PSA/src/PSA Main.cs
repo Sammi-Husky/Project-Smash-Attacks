@@ -13,15 +13,16 @@
     http://www.gnu.org/licenses.
 */
 
+using SmashAttacks.Nodes;
+using SmashAttacks.Types;
 using System;
-using System.IO;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Windows.Forms;
+using System.Collections.Generic;
+using Be.Windows.Forms;
+
 
 namespace SmashAttacks
 {
@@ -43,9 +44,13 @@ namespace SmashAttacks
         public string[] iAirGroundStats = new string[0];
         public string[] iCollisionStats = new string[0];
 
-        //  Name of currently opened file.
-        public string fname = "";
-        public string sname = "";
+        // Whethere we're using a temp file or not
+        public bool isTemp = false;
+
+        // Name of the currently opened file.
+        public string tmp = "";     // Temp File name. Only valid if isTemp = true.
+        public string fname = "";   // Filename including path.
+        public string sname = "";   // Safe File name, excluding path.
 
         //  Byte arrays to contain the different segments of the file.
         public byte[] fileHeader = null;
@@ -54,6 +59,7 @@ namespace SmashAttacks
         public byte[] movesetData = null;
         public byte[] pointerList = null;
         public byte[] objectPointerList = null;
+        public byte[] ExternalPointerList = null;
         public byte[] nameList = null;
         public byte[] partitionHeader2 = null;
         public byte[] effectPartition = null;
@@ -64,6 +70,7 @@ namespace SmashAttacks
         long pAttributes = 0;               //  Pointer to the Attribute List.
         long pSSEAttributes = 0;            //  Pointer to the Subspace Attributes.
         long pBEvents = 0;                  //  Pointer to the B Move Events List.
+        long pActionFlags = 0;              //  Pointer to the Action Flags.
         long lBEvents = 0;                  //  Length of the B Move Events List.
         long[] pSubEvents = new long[4];    //  4 Pointers to the 4 Sub Event Lists.
         long lSubEvents = 0;                //  Length of the Sub Events List.
@@ -77,6 +84,8 @@ namespace SmashAttacks
         //  Variables containing short term stored data.
         Event[] eventData = new Event[0];
         Event[] copyBuffer = new Event[0];
+        List<Article> Articles = new List<Article>();
+
         int Ftype = 0;
 
         //  Data table for the attributes data grid.
@@ -967,12 +976,24 @@ namespace SmashAttacks
                 pSSEAttributes = GetWord(pData + 0xC); //pointer - SSE Attributes
 
 
-                //  Set the number of selections for the actions and sub actions lists.
-                DataTree.Nodes.Add(new DataNode(sname.Substring(3, sname.Length - 7), DataNode.Type.EventData, pData));
-                DataTree.Nodes[0].Nodes.Add(new DataNode("Attributes", DataNode.Type.ValueList, pAttributes));
-                DataTree.Nodes[0].Nodes.Add(new DataNode("SSE Attributes", BaseNode.Type.ValueList, pSSEAttributes));
-                ResolveObjects();
+                //  Setup the character's main nodes.
+                DataNode chara = new DataNode(sname.Substring(3, sname.Length - 7), DataNode.Type.EventData, pData);
+                chara.BackColor = Color.Yellow;
+                DataNode attr = new DataNode("Attributes", DataNode.Type.ValueList, pAttributes);
+                attr.BackColor = Color.GreenYellow;
+                DataNode SSE = new DataNode("SSE Attributes", BaseNode.Type.ValueList, pSSEAttributes);
+                SSE.BackColor = Color.GreenYellow;
 
+                //Add nodes to tree.
+                DataTree.Nodes.Add(chara);
+                DataTree.Nodes[0].Nodes.Add(attr);
+                DataTree.Nodes[0].Nodes.Add(SSE);
+
+                // Parse both Data Tables and add their nodes
+                ResolveObjects();
+                ResolveExternals();
+
+                // Finally, get subactions and actions
                 GetActions(pData);
                 GetSubactions(pData);
 
@@ -994,7 +1015,9 @@ namespace SmashAttacks
                     SetWord(movesetData.Length - 4, movesetData.Length);
                 }
                 pFadeData = GetWord(movesetData.Length - 4);
-                GetArticles(pData);
+
+                // Parse and add any articles
+                ParseHeaderEXT(pData);
             }
             catch (Exception error)
             {
@@ -1163,29 +1186,60 @@ namespace SmashAttacks
             }
             for (int i = 0; i < lSubEvents; i++) cboSubAction.Items.Add(Hex(i));
         }
-        public unsafe void GetArticles(long pData)
+
+        public unsafe void ParseHeaderEXT(long pData)
         {
+            // Location and length of the Header Extension
             long pHeaderEXT = pData + 0x7C;
             long lHeaderEXT = FromWord(pFadeData - pHeaderEXT);
+
+            // short term variables
             int ArticleCount = 0;
+            TreeNode root = new TreeNode("Articles");
+
+            // Parse the Header Extension, adding articles to the tree only if
+            // they pass redundancies in type class "Article.cs"
 
             for (int i = 0; i < lHeaderEXT; i++)
             {
+                // Current address in the Header Extension
                 long Addr = GetWord(pHeaderEXT + ToWord(i));
-                if(Addr < movesetData.Length)
+
+                if (Addr < movesetData.Length)
                     try
                     {
 
                         fixed (byte* ptr = movesetData)
                         {
+                            // This calls the redundancies in "Article.cs" to check if it's actually an article.
                             Article art = new Article(pFadeData, Addr, ptr);
+
+                            // If it passes, create its node and set up tooltips
                             ArticleNode n = new ArticleNode("Article[" + ArticleCount + "]", GetWord(pHeaderEXT + ToWord(i)));
-                            DataTree.Nodes[0].Nodes.Add(n);
+                            n.ToolTipText = "Subactions: " + art.SubactionCount + "\n" + "Actions: " + art.ActionCount;
+                            n.BackColor = Color.Yellow;
+
+                            // Parse collision data if it exists
+                            if (art.CollisionData > 0)
+                            {
+                                //Addresses to the collision data and entry count, NOT the collision data offset list.
+                                long pCollData = GetWord(art.CollisionData);
+                                long lCollData = GetWord(art.CollisionData + 0x04);
+
+                                for (int b = 0; b < lCollData; b++)
+                                {
+                                    ParamNode param = new ParamNode("Collision Data[" + b + "]", GetWord(pCollData + ToWord(b)) + 0x04, 0x8);
+                                    param.BackColor = Color.GreenYellow;
+                                    n.Nodes.Add(param);
+                                }
+                            }
+                            root.Nodes.Add(n);
                             ArticleCount++;
                         }
                     }
                     catch { }
             }
+            if (ArticleCount > 0) { DataTree.Nodes[0].Nodes.Add(root); }
         }
 
         // Resolve various data structures
@@ -1194,18 +1248,25 @@ namespace SmashAttacks
             cboAction.Items.Clear();
             cboSubAction.Items.Clear();
 
-            pAnimations = GetWord(pData + 0x10);// pointer - Animations list
-            pBEvents = GetWord(pData + 0x14); //Pointer - the Action list
-            pSubEvents[0] = GetWord(pData + 0x18); //Pointer - Subaction Main list
-            pSubEvents[1] = GetWord(pData + 0x1c); //Pointer  - Subaction gfx list
-            pSubEvents[2] = GetWord(pData + 0x20); //Pointer - Subaction sfx list
-            lBEvents = (pBEvents - GetWord(pData + 0x0C)) / 0x10;  //Number of Actions
+            pActionFlags = pAnimations = pBEvents = pSubEvents[0] = pSubEvents[1] = pSubEvents[3] = lBEvents = lSubEvents = 0;
 
-            lSubEvents = FromWord(pSubEvents[1] - pSubEvents[0]); //Number of subactions
+            if (GetWord(pData + 0x0C) != 0) { pActionFlags = GetWord(pData + 0x0C); }   // Pointer - The action flags list
+            if (GetWord(pData + 0x10) != 0) { pAnimations = GetWord(pData + 0x10); }    // Pointer - Animations list and Subaction Flags
+            if (GetWord(pData + 0x14) != 0) { pBEvents = GetWord(pData + 0x14); }   //Pointer - the Action list
+            if (GetWord(pData + 0x18) != 0) { pSubEvents[0] = GetWord(pData + 0x18); }  //Pointer - Subaction Main list
+            if (GetWord(pData + 0x1c) != 0) { pSubEvents[1] = GetWord(pData + 0x1c); }  //Pointer  - Subaction gfx list
+            if (GetWord(pData + 0x20) != 0) { pSubEvents[2] = GetWord(pData + 0x20); }  //Pointer - Subaction sfx list
 
-            if (pBEvents != 0) { for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i)); }
-            for (int i = 0; i < lSubEvents; i++) cboSubAction.Items.Add(Hex(i)); 
-            
+            if (pActionFlags > 0) { lBEvents = (pBEvents - pActionFlags) / 0x10; }  //Number of Actions
+
+            lSubEvents = FromBlock((pData - pAnimations));
+            if (pAnimations > 0 && pSubEvents[0] > 0) { lSubEvents = FromBlock((GetWord(pData + 0x18) - pAnimations)); }
+
+
+            //Get the lengths of the Action and Subaction lists\\
+            for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i));
+            for (int i = 0; i < lSubEvents; i++) cboSubAction.Items.Add(Hex(i));
+
 
         }
         public string ResolveSpecials(long id)
@@ -1225,27 +1286,96 @@ namespace SmashAttacks
             int off1 = 0;
             if (objectPointerList.Length > 1)
             {
-                DataTree.Nodes.Add(new BaseNode("References"));
+                DataTree.Nodes.Add(new BaseNode("Character Nodes"));
                 while (off1 < objectPointerList.Length)
                 {
-                    var n = new DataNode(GetString(nameList, GetWord(objectPointerList, 0x4 + off1)), DataNode.Type.None, GetWord(objectPointerList, off1));
-                    if (n.Text != "data") { DataTree.Nodes[1].Nodes.Add(n); }
+                    long pEntry = GetWord(objectPointerList, off1);
+                    long lEntry = FromWord(GetWord(objectPointerList, off1 + 0x04));
+                    string Name = GetString(nameList, GetWord(objectPointerList, 0x4 + off1));
+
+                    if (Name.Contains("aram") || Name.Contains("CollData") || Name.Contains("hitData"))
+                    {
+                        ParamNode Node = new ParamNode(Name, pEntry, lEntry);
+                        Node.BackColor = Color.GreenYellow;
+                        DataTree.Nodes[1].Nodes.Add(Node);
+                    }
+                    else if (Name.Contains("AnimCmd") && !Name.Contains("Disguise"))
+                    {
+                        ScriptNode Node = new ScriptNode(Name, pEntry);
+                        Node.BackColor = Color.Yellow;
+                        DataTree.Nodes[1].Nodes.Add(Node);
+                    }
+                    else
+                    {
+                        BaseNode Node = new BaseNode(Name);
+                        Node.BackColor = Color.Gray;
+                        if (Node.Text != "data") { DataTree.Nodes[1].Nodes.Add(Node); }
+                    }
                     off1 += 8;
                 }
             }
         }
+        public void ResolveExternals()
+        {
+            int off1 = 0;
+            if (ExternalPointerList.Length > 1)
+            {
+                BaseNode root = new BaseNode("Externals");
+                BaseNode effect = new BaseNode("effectAnimCmd");
+                BaseNode game = new BaseNode("gameAnimCmd");
+                BaseNode status = new BaseNode("statusAnimCmd");
 
-        public void DisplayAttributes(long length, long off)
+                while (off1 < ExternalPointerList.Length)
+                {
+                    long pEntry = GetWord(ExternalPointerList, off1);
+                    long lEntry = FromWord(GetWord(ExternalPointerList, off1 + 0x04));
+                    string Name = GetString(nameList, GetWord(ExternalPointerList, 0x4 + off1));
+                    BaseNode n = new BaseNode(Name);
+                    n.BackColor = Color.Gray;
+
+                    if (Name.Contains("effectAnim"))
+                        effect.Nodes.Add(n);
+                    else if (Name.Contains("gameAnim"))
+                        game.Nodes.Add(n);
+                    else if (Name.Contains("statusAnim"))
+                        status.Nodes.Add(n);
+                    else
+                        root.Nodes.Add(new BaseNode(Name));
+                    off1 += 8;
+                }
+                root.Nodes.Add(effect); root.Nodes.Add(game); root.Nodes.Add(status);
+                DataTree.Nodes.Add(root);
+            }
+        }
+
+        public void DisplayAttributes(long length, long off, bool UseInfo)
         {
             attributes.Clear();
             for (int i = 0; i <= length; i++)
             {
-                if (i < iAttributes.Length) { attributes.Rows.Add(iAttributes[i].name); }
-                else { attributes.Rows.Add("0x" + Hex(ToWord(i))); }
-                if (iAttributes[i].type == 0)
-                    attributes.Rows[i][1] = UnFloat(GetWord(off + ToWord(i)));
+                pAttributes = off;
+                if (UseInfo)
+                {
+                    lblAttributeDescription.Show();
+                    if (i < iAttributes.Length) { attributes.Rows.Add(iAttributes[i].name); }
+                    else { attributes.Rows.Add("0x" + Hex(ToWord(i))); }
+                    if (iAttributes[i].type == 0)
+                        attributes.Rows[i][1] = UnFloat(GetWord(off + ToWord(i)));
+                    else
+                        attributes.Rows[i][1] = GetWord(off + ToWord(i));
+                }
                 else
-                    attributes.Rows[i][1] = GetWord(off + ToWord(i));
+                {
+                    lblAttributeDescription.Hide();
+                    if (i < iAttributes.Length) { attributes.Rows.Add("0x" + Hex(ToWord(i))); }
+                    else { attributes.Rows.Add("0x" + Hex(ToWord(i))); }
+                    float f = UnFloat(GetWord(off + ToWord(i)));
+                    long raw = GetWord(off + ToWord(i));
+
+                    if (f.ToString().Contains("E-") || f.ToString().Contains("E+") || raw == 0xFFFFFFFF)
+                        attributes.Rows[i][1] = raw.ToString();
+                    else { attributes.Rows[i][1] = f; }
+                }
             }
         }
 
@@ -1267,9 +1397,9 @@ namespace SmashAttacks
             {
                 long pointerTag = GetByte(pointerList, ToWord(i));
                 if (pointerTag == 0x1) lPointerList += 0x4;
-                if (pointerTag == 0x2) lExternalPointerList += 0x8;
             }
             lObjectPointerList = objectPointerList.Length;
+            lExternalPointerList = ExternalPointerList.Length;
             lPartition1 = lDataHeader + lMovesetData + lPointerList
                         + lObjectPointerList + lExternalPointerList + lNameList;
 
@@ -1293,7 +1423,15 @@ namespace SmashAttacks
             FileStream fstream = null;
             try
             {
-                fstream = new FileStream(fileName, FileMode.Open);
+                // if file is in use, copy the file to a temp location and read that instead.
+                try { fstream = new FileStream(fileName, FileMode.Open); }
+                catch
+                {
+                    isTemp = true;
+                    string tmp = Path.GetTempFileName();
+                    File.Copy(fileName, tmp, true);
+                    fstream = new FileStream(tmp, FileMode.Open);
+                }
 
                 //  Calculate the length of each important segment in the file.
                 long lHeader = 0x40;
@@ -1324,6 +1462,7 @@ namespace SmashAttacks
                 Array.Resize<byte>(ref movesetData, (int)lData);
                 Array.Resize<byte>(ref pointerList, (int)lData);
                 Array.Resize<byte>(ref objectPointerList, (int)lObjectPointerList);
+                Array.Resize<byte>(ref ExternalPointerList, (int)lExternalPointerList);
                 Array.Resize<byte>(ref nameList, (int)lNameList);
                 Array.Resize<byte>(ref partitionHeader2, (int)lPartitionHeader);
                 Array.Resize<byte>(ref effectPartition, (int)lPartition2);
@@ -1345,15 +1484,16 @@ namespace SmashAttacks
                 }
 
                 fstream.Read(objectPointerList, 0, objectPointerList.Length);
+                fstream.Read(ExternalPointerList, 0, ExternalPointerList.Length);
 
-                //  On the same list as the pointers, but the external pointers are marked
-                //  by a 2 followed by the name offset.
-                for (int i = 0; i < FromBlock(lExternalPointerList); i++)
-                {
-                    long epOffset = ReadWord(fstream, fstream.Position);
-                    SetWord(ref pointerList, ReadWord(fstream, fstream.Position), epOffset);
-                    SetByte(ref pointerList, 0x2, epOffset);
-                }
+                ////  On the same list as the pointers, but the external pointers are marked
+                ////  by a 2 followed by the name offset.
+                //for (int i = 0; i < FromBlock(lExternalPointerList); i++)
+                //{
+                //    long epOffset = ReadWord(fstream, fstream.Position);
+                //    SetWord(ref pointerList, ReadWord(fstream, fstream.Position), epOffset);
+                //    SetByte(ref pointerList, 0x2, epOffset);
+                //}
 
                 fstream.Read(nameList, 0, nameList.Length);
 
@@ -1394,14 +1534,7 @@ namespace SmashAttacks
                     }
 
                 fstream.Write(objectPointerList, 0, objectPointerList.Length);
-
-                for (int i = 0; i < FromWordRD(pointerList.Length); i++)
-                    if (GetByte(pointerList, ToWord(i)) == 0x2)
-                    {
-                        long nOffset = GetWord(pointerList, ToWord(i)) & 0xFFFFFF;
-                        WriteWord(fstream, ToWord(i), fstream.Position);
-                        WriteWord(fstream, nOffset, fstream.Position);
-                    }
+                fstream.Write(ExternalPointerList, 0, ExternalPointerList.Length);
 
                 fstream.Write(nameList, 0, nameList.Length);
 
@@ -1412,7 +1545,7 @@ namespace SmashAttacks
             }
             catch
             {
-                MessageBox.Show("Unhandled error while saving. File has become corrupt.");
+                MessageBox.Show("Unable to open file for write access.");
             }
         }
 
@@ -1805,11 +1938,14 @@ namespace SmashAttacks
         // --------------------Specials Tab------------------- \\
         private void cboAction_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cboAction.SelectedIndex == -1) return;
-            int index = cboAction.SelectedIndex;
-            ipEventData = pBEvents + ToWord(index);
-            pEventData = GetWord(ipEventData);
-            DisplayEvents();
+            if (pBEvents != 0)
+            {
+                if (cboAction.SelectedIndex == -1) return;
+                int index = cboAction.SelectedIndex;
+                ipEventData = pBEvents + ToWord(index);
+                pEventData = GetWord(ipEventData);
+                DisplayEvents();
+            }
         }
 
         // -------------------Sub Actions Tab----------------- \\
@@ -1817,6 +1953,7 @@ namespace SmashAttacks
         {
             if (cboEventList.SelectedIndex == -1) return;
             if (cboSubAction.SelectedIndex == -1) return;
+            lblEventListOffset.Text = "<No Offset List>";
             int index1 = cboEventList.SelectedIndex;
             int index2 = cboSubAction.SelectedIndex;
             long pAnimationName;
@@ -1834,10 +1971,12 @@ namespace SmashAttacks
                 btnAnimationFlags.Enabled = false;
             }
 
-            ipEventData = pSubEvents[index1] + ToWord(index2);
-            pEventData = GetWord(ipEventData);
-            DisplayEvents();
-
+            if (pSubEvents[cboEventList.SelectedIndex] != 0)
+            {
+                ipEventData = pSubEvents[index1] + ToWord(index2);
+                pEventData = GetWord(ipEventData);
+                DisplayEvents();
+            }
         }
 
         private void txtAnimationName_TextChanged(object sender, EventArgs e)
@@ -2146,18 +2285,18 @@ namespace SmashAttacks
             fname = opnDlg.FileName;
             saveDlg.FileName = sname;
 
-            cboSubAction.Items.Clear();
-            cboAction.Items.Clear();
-            cboSubAction.Enabled = false;
-            cboEventList.Enabled = false;
 
+            cboSubAction.Enabled = cboEventList.Enabled = false;
             txtAnimationName.Text = "";
-            attributes.Clear();
 
-            DataTree.Nodes.Clear(); lstEvents.Items.Clear();
+            //Clear all variables and runtime data, to avoid file corruption or bloating
+            cboSubAction.Items.Clear(); cboAction.Items.Clear();
+            attributes.Clear(); DataTree.Nodes.Clear(); lstEvents.Items.Clear();
             fileHeader = null; partitionHeader = null; dataHeader = null;
             movesetData = null; pointerList = null; objectPointerList = null;
             nameList = null; partitionHeader2 = null; effectPartition = null;
+
+            //Get Filetype based on filename
             try
             {
                 if (sname.Contains("irby") && !sname.Contains("irby.pac"))
@@ -2179,6 +2318,7 @@ namespace SmashAttacks
                         throw new Exception("Could not open file.");
                 }
 
+                //Setup runtime data, variables, and enable controls
                 this.Text = "Smash Attacks! - " + sname;
                 mnuSave.Enabled = true;
                 mnuSaveAs.Enabled = true;
@@ -2187,6 +2327,7 @@ namespace SmashAttacks
                 tbctrlActionEvents.SelectedIndex = 0;
                 txtOffset.Text = "";
 
+                //Set default selected items in action and subaction list
                 if (cboAction.Items.Count == 0) { cboAction.Items.Add("<null>"); }
                 if (cboSubAction.Items.Count != 0)
                 {
@@ -2261,8 +2402,10 @@ namespace SmashAttacks
         {
             if (DataTree.SelectedNode != null)
             {
+                #region DataNode
                 if (DataTree.SelectedNode is DataNode)
                 {
+
                     DataNode selected = (DataNode)DataTree.SelectedNode;
                     if (selected.type == DataNode.Type.EventData)
                     {
@@ -2270,16 +2413,20 @@ namespace SmashAttacks
                         GetAnimations(selected.address);
                         GetActions(selected.address);
                         GetSubactions(selected.address);
-                        cboSubAction.SelectedIndex = 0;
-                        cboAction.SelectedIndex = 0;
+                        if (cboSubAction.Items.Count > 0)
+                            cboSubAction.SelectedIndex = 0;
+                        if (cboAction.Items.Count > 0)
+                            cboAction.SelectedIndex = 0;
                     }
                     else if (selected.type == DataNode.Type.ValueList)
                     {
                         tbctrlMain.SelectedTab = tbctrlMain.TabPages[1];
-                        DisplayAttributes(FromWord(0x2E0), selected.address);
+                        DisplayAttributes(FromWord(0x2E0), selected.address, true);
                         tbctrlMain.Invalidate();
                     }
                 }
+                #endregion
+                #region Article Node
                 else if (DataTree.SelectedNode is ArticleNode)
                 {
                     cboAction.Items.Clear();
@@ -2292,324 +2439,37 @@ namespace SmashAttacks
 
                     if (cboSubAction.Items.Count > 0)
                         cboSubAction.SelectedIndex = 0;
-                    if(cboAction.Items.Count > 0)
+                    if (cboAction.Items.Count > 0)
                         cboAction.SelectedIndex = 0;
                 }
-
+                #endregion
+                #region Parameter Node
+                if (DataTree.SelectedNode is ParamNode)
+                {
+                    ParamNode selected = (ParamNode)DataTree.SelectedNode;
+                    tbctrlMain.SelectedTab = tbctrlMain.TabPages[1];
+                    DisplayAttributes(FromWord(selected.ParamCount), selected.address, false);
+                    tbctrlMain.Invalidate();
+                }
+                #endregion
+                #region Script Node
+                if (DataTree.SelectedNode is ScriptNode)
+                {
+                    ScriptNode selected = (ScriptNode)DataTree.SelectedNode;
+                    tbctrlActionEvents.SelectedTab = tbctrlActionEvents.TabPages[2];
+                    txtOffset.Text = selected.address.ToString("x");
+                    btnGo_Click(sender, e);
+                }
+                #endregion
             }
 
         }
-    }
 
-    // --------------------------------------------------- \\
-    // ---------------------Classes----------------------- \\
-    // --------------------------------------------------- \\
-
-    //  Info holder for attributes.
-    public class InfoAttribute
-    {
-        public InfoAttribute() { }
-        ~InfoAttribute() { }
-
-        public string name;
-        public string description;
-        public long type;
-    }
-
-    //  Info holder for events.
-    public class InfoEvent
-    {
-        public InfoEvent() { dfltParameters = new long[0]; }
-        public InfoEvent(string nId, string nName, string nDescription)
+        private void testToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            idNumber = nId; name = nName; description = nDescription;
-            dfltParameters = new long[0];
-        }
-        ~InfoEvent() { }
-
-        //  Translate a string of numbers into a set of default parameter types for the event.
-        public void SetDfltParameters(string s)
-        {
-            if (s == null) return;
-            Array.Resize<long>(ref dfltParameters, s.Length);
-            for (int i = 0; i < s.Length; i++)
-            {
-                try { dfltParameters[i] = long.Parse(s.Substring(i, 1)); }
-                catch { dfltParameters[i] = 0; }
-            }
-        }
-
-        //  Return the default type for the parameter number passed.
-        public long GetDfltParameter(int i)
-        {
-            if (i >= dfltParameters.Length) return 0;
-            if (dfltParameters[i] > 6) return 0;
-            return dfltParameters[i];
-        }
-
-        public string idNumber;
-        public string name;
-        public string description;
-
-        private long[] dfltParameters;
-    }
-
-    //  Info holder for an event's parameters.
-    public class InfoParameter
-    {
-        public InfoParameter()
-        {
-            name = new string[0];
-            description = new string[0];
-        }
-
-        ~InfoParameter() { }
-
-        public string GetName(long i)
-        {
-            if (i >= name.Length) return "Parameter " + i;
-            return name[i];
-        }
-
-        public string GetDescription(long i)
-        {
-            if (i >= description.Length) return "No Description Available.";
-            return description[i];
-        }
-
-        public string idNumber;
-        public string[] name;
-        public string[] description;
-    }
-
-    //  Info holder for the syntax of an event.
-    public class InfoEventSyntax
-    {
-        public InfoEventSyntax() { }
-        ~InfoEventSyntax() { }
-
-        public string idNumber;
-        public string syntax;
-    }
-
-    //  Data holder for an event.
-    public class Event
-    {
-        public void SetEventWord(long v) { eventWord = v; ResolveEventWord(); }
-        public long GetEventWord() { return eventWord; }
-
-        //  Resolve for the string-hex version of the event word and adjust the number
-        //  of parameters to the amount indicated by the event word.
-        public void ResolveEventWord()
-        {
-            eventId = eventWord.ToString("X");
-            eventId = eventId.PadLeft(8, '0');
-            if (eventId.Length > 8)
-                eventId = eventId.Substring(eventId.Length - 8);
-
-            lParameters = (eventWord & 0xFF00) / 0x100;
-
-            Array.Resize<Block>(ref parameters, (int)lParameters);
-            for (int i = 0; i < lParameters; i++) parameters[i] = new Block();
-        }
-
-        public string eventId;
-        public long pParameters;
-        public long lParameters;
-        public Block[] parameters;
-        public long pThis;
-        long eventWord;
-    }
-
-    //  Data holder for a block (2 words).
-    public class Block
-    {
-        public long word1;
-        public long word2;
-    }
-
-    //  Data holder for an 8-bit-set.
-    public class Bitset
-    {
-        public Bitset() { bitVal = new bool[8]; }
-        ~Bitset() { }
-
-        public void SetByte(byte v) { byteVal = v; ResolveBits(); }
-        public void SetBit(int b, bool v) { bitVal[b] = v; ResolveByte(); }
-
-        public byte GetByte() { return byteVal; }
-        public bool GetBit(int b) { return bitVal[b]; }
-
-        //  Set each bit according to the bitset's current byte value.
-        public void ResolveBits()
-        {
-            for (int i = 0; i < 8; i++)
-                bitVal[i] = (((long)Math.Pow(0x2, i) & byteVal) != 0 ? true : false);
-        }
-
-        //  Set the byte value according to the bitset's bits.
-        public void ResolveByte()
-        {
-            byteVal = 0;
-            for (int i = 0; i < 8; i++)
-                if (bitVal[i] == true)
-                    byteVal += (byte)Math.Pow(0x2, i);
-        }
-
-        byte byteVal;
-        bool[] bitVal;
-    }
-
-    // Extended Treenode classes
-    public class BaseNode : TreeNode
-    {
-        public BaseNode(string Name) { address = 0; this.Text = Name; type = Type.None; }
-        public BaseNode(string Name, Type Type, long Address)
-        {
-            address = Address;
-            this.Text = Name;
-            type = Type;
-        }
-
-        public Type type;
-        public long address;
-        public enum Type
-        {
-            None = -1,
-            EventData = 0,
-            ValueList = 1,
-        }
-    }
-    public class DataNode : BaseNode
-    {
-        public DataNode(string name, Type type, long address)
-            : base(name, type, address)
-        {
-            this.Text = name;
-            this.address = address;
-        }
-        public long pAnimations;
-        public long pActions;
-        public long lActions;
-        public long[] pSubactions;
-        public long lSubactions;
-    }
-    public class ArticleNode : BaseNode
-    {
-        public ArticleNode(string name, long address)
-            : base(name, Type.EventData, address)
-        {
-            this.Text = name;
-            this.address = address;
-        }
-        public long pAnimations;
-        public long pActions;
-        public long lActions;
-        public long[] pSubactions;
-        public long lSubactions;
-    }
-
-    public unsafe class Article
-    {
-        #pragma warning disable 649
-
-        /*Alot of this was copied from Tabuu's source code, so credits to Dantarion and company for this work.*/
-
-        private Data _data;
-        struct Data
-        {
-
-            public bint unknown1;
-            public bint unknown2;
-            public bint BoneID;
-            public bint ActionFlagsStart;
-
-            public bint SubactionFlagsStart;
-            public bint ActionsStart;
-            public bint SubactionMainStart;
-            public bint SubactionGFXStart;
-
-            public bint SubactionSFXStart;
-            public bint OtherStart;
-            public bint UnknownD1;
-            public bint UnknownD2;
-
-            public bint UnknownD3;
-            public bint DataOffset;
-        }
-
-        public int unknown1
-        {
-            get { return _data.unknown1; }
-            set { _data.unknown1 = value; }
-        }
-        public int SubactionMain
-        {
-            get { return _data.SubactionMainStart; }
-        }
-        public int SubactionGFX
-        {
-            get { return _data.SubactionGFXStart; }
-        }
-        public int SubactionSFX
-        {
-            get { return _data.SubactionSFXStart; }
-        }
-        public int Actions
-        {
-            get { return _data.ActionsStart; }
-        }
-        public int unknown2
-        {
-            get { return _data.unknown2; }
-            set { _data.unknown2 = value; }
-        }
-        public int BoneID
-        {
-            get { return _data.BoneID; }
-            set { _data.BoneID = value; }
-        }
-        public int UnknownD1
-        {
-            get { return _data.UnknownD1; }
-            set { _data.UnknownD1 = value; }
-        }
-        public int UnknownD2
-        {
-            get { return _data.UnknownD2; }
-            set { _data.UnknownD2 = value; }
-        }
-        public int UnknownD3
-        {
-            get { return _data.UnknownD3; }
-            set { _data.UnknownD3 = value; }
-        }
-        public int DataOffset
-        {
-            get { return _data.UnknownD3; }
-            set { _data.UnknownD3 = value; }
-        }
-
-        public unsafe Article(long FileLength, long pData, byte* ptr)
-        {
-            _data = *(Data*)(ptr + pData);
-            if (
-                _data.SubactionFlagsStart < 1 ||
-                _data.ActionsStart > FileLength || _data.ActionsStart % 4 != 0 ||
-                _data.SubactionFlagsStart > FileLength || _data.SubactionFlagsStart % 4 != 0 ||
-                _data.SubactionGFXStart > FileLength || _data.SubactionGFXStart % 4 != 0 ||
-                _data.SubactionSFXStart > FileLength || _data.SubactionSFXStart % 4 != 0 ||
-                _data.OtherStart > FileLength || _data.OtherStart % 4 != 0
-                )
-                throw new Exception("Not actually an Article, lol");
-            var actionCount = 0;
-            var subactions = (pData - _data.SubactionFlagsStart) / 8;
-            if (_data.ActionFlagsStart > 0)
-                actionCount = (_data.ActionsStart - _data.ActionFlagsStart) / 0x10;
-            if (_data.SubactionFlagsStart > 0 && _data.SubactionMainStart > 0)
-                subactions = (_data.SubactionMainStart - _data.SubactionFlagsStart) / 0x8;
-            if (subactions > 0x1000 || actionCount > 0x1000)
-                throw new Exception("Not actually a Article, lol");
+            SmashAttacks.src.HexView f = new SmashAttacks.src.HexView(movesetData);
+            f.Text = "HexView -" + DataTree.SelectedNode.Text;
+            f.Show();
         }
     }
 }

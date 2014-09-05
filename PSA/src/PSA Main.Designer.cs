@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.mnuStrip = new System.Windows.Forms.MenuStrip();
             this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
@@ -79,6 +80,8 @@
             this.tbctrlMain = new System.Windows.Forms.TabControl();
             this.DataTree = new System.Windows.Forms.TreeView();
             this.chkDataTree = new System.Windows.Forms.CheckBox();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuStrip.SuspendLayout();
             this.tbpgAttributes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtgrdAttributes)).BeginInit();
@@ -95,7 +98,8 @@
             // 
             this.mnuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuFile,
-            this.mnuHelp});
+            this.mnuHelp,
+            this.testToolStripMenuItem});
             this.mnuStrip.Location = new System.Drawing.Point(0, 0);
             this.mnuStrip.Name = "mnuStrip";
             this.mnuStrip.Size = new System.Drawing.Size(379, 24);
@@ -232,19 +236,19 @@
             this.showAsFloatToolStripMenuItem,
             this.showAsIntToolStripMenuItem});
             this.AttributeContextMenu.Name = "AttributeContextMenu";
-            this.AttributeContextMenu.Size = new System.Drawing.Size(153, 70);
+            this.AttributeContextMenu.Size = new System.Drawing.Size(145, 48);
             // 
             // showAsFloatToolStripMenuItem
             // 
             this.showAsFloatToolStripMenuItem.Name = "showAsFloatToolStripMenuItem";
-            this.showAsFloatToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.showAsFloatToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.showAsFloatToolStripMenuItem.Text = "Show as float";
             this.showAsFloatToolStripMenuItem.Click += new System.EventHandler(this.showAsFloatToolStripMenuItem_Click);
             // 
             // showAsIntToolStripMenuItem
             // 
             this.showAsIntToolStripMenuItem.Name = "showAsIntToolStripMenuItem";
-            this.showAsIntToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.showAsIntToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.showAsIntToolStripMenuItem.Text = "Show as int";
             this.showAsIntToolStripMenuItem.Click += new System.EventHandler(this.showAsIntToolStripMenuItem_Click);
             // 
@@ -613,9 +617,11 @@
             // 
             this.DataTree.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.DataTree.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DataTree.Indent = 13;
             this.DataTree.Location = new System.Drawing.Point(120, 52);
             this.DataTree.Name = "DataTree";
+            this.DataTree.ShowNodeToolTips = true;
             this.DataTree.Size = new System.Drawing.Size(245, 440);
             this.DataTree.TabIndex = 2;
             this.DataTree.Visible = false;
@@ -634,6 +640,19 @@
             this.chkDataTree.Text = "Data Tree";
             this.chkDataTree.UseVisualStyleBackColor = true;
             this.chkDataTree.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "notifyIcon1";
+            this.notifyIcon1.Visible = true;
+            // 
+            // testToolStripMenuItem
+            // 
+            this.testToolStripMenuItem.Name = "testToolStripMenuItem";
+            this.testToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
+            this.testToolStripMenuItem.Text = "Test";
+            this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click);
             // 
             // FormMain
             // 
@@ -721,6 +740,8 @@
         private System.Windows.Forms.ToolStripMenuItem showAsIntToolStripMenuItem;
         private System.Windows.Forms.TreeView DataTree;
         private System.Windows.Forms.CheckBox chkDataTree;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
 
     }
 }

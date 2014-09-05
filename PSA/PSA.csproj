@@ -7,7 +7,7 @@
     <ProjectGuid>{875CDFFD-762E-45E5-8C2D-84DCAF00F927}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PSA</RootNamespace>
+    <RootNamespace>SmashAttacks</RootNamespace>
     <AssemblyName>PSA</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -71,6 +71,10 @@
     <Prefer32Bit>false</Prefer32Bit>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>favicon %283%29.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -90,7 +94,18 @@
     <Compile Include="src\AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\Article.cs" />
+    <Compile Include="src\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\Nodes\ScriptNode.cs" />
+    <Compile Include="src\Types\Bitset.cs" />
+    <Compile Include="src\Nodes\ArticleNode.cs" />
+    <Compile Include="src\Nodes\BaseNode.cs" />
+    <Compile Include="src\Nodes\DataNode.cs" />
+    <Compile Include="src\Nodes\ParamNode.cs" />
     <Compile Include="src\PSA Animation Flags.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -117,22 +132,29 @@
     <Compile Include="src\PSA Modify Event.Designer.cs">
       <DependentUpon>PSA Modify Event.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\Type Extensions\BigEndianTypes.cs" />
-    <Compile Include="src\Type Extensions\ByteExtension.cs" />
-    <Compile Include="src\Type Extensions\DoubleExtension.cs" />
-    <Compile Include="src\Type Extensions\DVector3.cs" />
-    <Compile Include="src\Type Extensions\EncodingExtension.cs" />
-    <Compile Include="src\Type Extensions\Int16Extension.cs" />
-    <Compile Include="src\Type Extensions\Int32Extension.cs" />
-    <Compile Include="src\Type Extensions\Int64Extension.cs" />
-    <Compile Include="src\Type Extensions\ShortExtension.cs" />
-    <Compile Include="src\Type Extensions\StringExtension.cs" />
-    <Compile Include="src\Type Extensions\UInt16Extension.cs" />
-    <Compile Include="src\Type Extensions\UInt32Extension.cs" />
-    <Compile Include="src\Type Extensions\Vector2.cs" />
-    <Compile Include="src\Type Extensions\Vector3.cs" />
-    <Compile Include="src\Type Extensions\Vector4.cs" />
-    <Compile Include="src\Type Extensions\VoidPtr.cs" />
+    <Compile Include="src\Types\Article.cs" />
+    <Compile Include="src\Types\Block.cs" />
+    <Compile Include="src\Types\Event.cs" />
+    <Compile Include="src\Types\InfoAttribute.cs" />
+    <Compile Include="src\Types\InfoEvent.cs" />
+    <Compile Include="src\Types\InfoEventSyntax.cs" />
+    <Compile Include="src\Types\InfoParameter.cs" />
+    <Compile Include="src\Types\Type Extensions\BigEndianTypes.cs" />
+    <Compile Include="src\Types\Type Extensions\ByteExtension.cs" />
+    <Compile Include="src\Types\Type Extensions\DoubleExtension.cs" />
+    <Compile Include="src\Types\Type Extensions\DVector3.cs" />
+    <Compile Include="src\Types\Type Extensions\EncodingExtension.cs" />
+    <Compile Include="src\Types\Type Extensions\Int16Extension.cs" />
+    <Compile Include="src\Types\Type Extensions\Int32Extension.cs" />
+    <Compile Include="src\Types\Type Extensions\Int64Extension.cs" />
+    <Compile Include="src\Types\Type Extensions\ShortExtension.cs" />
+    <Compile Include="src\Types\Type Extensions\StringExtension.cs" />
+    <Compile Include="src\Types\Type Extensions\UInt16Extension.cs" />
+    <Compile Include="src\Types\Type Extensions\UInt32Extension.cs" />
+    <Compile Include="src\Types\Type Extensions\Vector2.cs" />
+    <Compile Include="src\Types\Type Extensions\Vector3.cs" />
+    <Compile Include="src\Types\Type Extensions\Vector4.cs" />
+    <Compile Include="src\Types\Type Extensions\VoidPtr.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -145,6 +167,9 @@
     </Compile>
     <EmbeddedResource Include="src\AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\PSA Animation Flags.resx">
       <DependentUpon>PSA Animation Flags.cs</DependentUpon>
@@ -216,7 +241,15 @@
     <Content Include="Changelog.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="favicon %283%29.ico" />
+    <Content Include="Icon.ico" />
     <None Include="Resources\pictureBox1.Image.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Users\Husky\Desktop\sources\Be.Windows.Forms.HexBox\Be.Windows.Forms.HexBox.csproj">
+      <Project>{26c5f25f-b450-4caf-ad8b-b8d11ae73457}</Project>
+      <Name>Be.Windows.Forms.HexBox</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

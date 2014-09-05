@@ -1,11 +1,5 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+﻿using SmashAttacks.Types;
+using System;
 using System.Windows.Forms;
 
 namespace SmashAttacks
