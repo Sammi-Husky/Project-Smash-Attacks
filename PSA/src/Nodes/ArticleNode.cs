@@ -8,7 +8,7 @@ namespace SmashAttacks.Nodes
     public class ArticleNode : BaseNode
     {
         public ArticleNode(string name, long address)
-            : base(name, Type.EventData, address)
+            : base(name, address, Type.EventData)
         {
             this.Text = name;
             this.address = address;

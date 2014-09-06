@@ -26,7 +26,7 @@ https://github.com/libertyernie/brawltools
 	. Data explorer now shows External references.
 	. Added support for SSE attributes.
 	. Added the rest of the currently known animation flags
-	. 
+	. Added a native hex editor to PSA, specifically for editing data selected in the data tree.
 	. Data tree nodes are color coded for type.
 		- Green				= Value list.
 		- Yellow			= Event lists.

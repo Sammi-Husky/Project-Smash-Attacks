@@ -6,7 +6,7 @@ namespace SmashAttacks.Nodes
         public long ParamCount;
 
         public ParamNode(string name, long offset, long Count)
-            : base(name, Type.ValueList, offset)
+            : base(name, offset, Type.ValueList)
         {
             this.ParamCount = Count;
         }

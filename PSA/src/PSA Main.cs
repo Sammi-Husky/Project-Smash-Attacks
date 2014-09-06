@@ -2464,12 +2464,22 @@ namespace SmashAttacks
             }
 
         }
-
         private void testToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SmashAttacks.src.HexView f = new SmashAttacks.src.HexView(movesetData);
-            f.Text = "HexView -" + DataTree.SelectedNode.Text;
-            f.Show();
+        }
+
+        private void hexViewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (DataTree.SelectedNode.Index >= 0)
+            {
+                var node = DataTree.SelectedNode as BaseNode;
+                byte[] data = new byte[0];
+                Array.Resize(ref data, (int)node.Length);
+                Array.Copy(movesetData, node.address, data, 0, node.Length);
+                HexView f = new HexView(data);
+                f.Text = "HexView - " + DataTree.SelectedNode.Text;
+                f.Show();
+            }
         }
     }
 }

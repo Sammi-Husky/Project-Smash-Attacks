@@ -40,6 +40,7 @@
             this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuAbout = new System.Windows.Forms.ToolStripMenuItem();
+            this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.opnDlg = new System.Windows.Forms.OpenFileDialog();
             this.saveDlg = new System.Windows.Forms.SaveFileDialog();
             this.tbpgAttributes = new System.Windows.Forms.TabPage();
@@ -81,7 +82,8 @@
             this.DataTree = new System.Windows.Forms.TreeView();
             this.chkDataTree = new System.Windows.Forms.CheckBox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.hexViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuStrip.SuspendLayout();
             this.tbpgAttributes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtgrdAttributes)).BeginInit();
@@ -92,6 +94,7 @@
             this.tbpgSubActionEvents.SuspendLayout();
             this.tbSubRoutines.SuspendLayout();
             this.tbctrlMain.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // mnuStrip
@@ -167,6 +170,13 @@
             this.mnuAbout.Size = new System.Drawing.Size(107, 22);
             this.mnuAbout.Text = "About";
             this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
+            // 
+            // testToolStripMenuItem
+            // 
+            this.testToolStripMenuItem.Name = "testToolStripMenuItem";
+            this.testToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
+            this.testToolStripMenuItem.Text = "Test";
+            this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click);
             // 
             // opnDlg
             // 
@@ -617,6 +627,7 @@
             // 
             this.DataTree.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.DataTree.ContextMenuStrip = this.contextMenuStrip1;
             this.DataTree.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DataTree.Indent = 13;
             this.DataTree.Location = new System.Drawing.Point(120, 52);
@@ -647,12 +658,19 @@
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
             // 
-            // testToolStripMenuItem
+            // contextMenuStrip1
             // 
-            this.testToolStripMenuItem.Name = "testToolStripMenuItem";
-            this.testToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
-            this.testToolStripMenuItem.Text = "Test";
-            this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click);
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.hexViewToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 48);
+            // 
+            // hexViewToolStripMenuItem
+            // 
+            this.hexViewToolStripMenuItem.Name = "hexViewToolStripMenuItem";
+            this.hexViewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.hexViewToolStripMenuItem.Text = "Hex View";
+            this.hexViewToolStripMenuItem.Click += new System.EventHandler(this.hexViewToolStripMenuItem_Click);
             // 
             // FormMain
             // 
@@ -685,6 +703,7 @@
             this.tbSubRoutines.ResumeLayout(false);
             this.tbSubRoutines.PerformLayout();
             this.tbctrlMain.ResumeLayout(false);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -742,6 +761,8 @@
         private System.Windows.Forms.CheckBox chkDataTree;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem hexViewToolStripMenuItem;
 
     }
 }

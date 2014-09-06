@@ -95,16 +95,9 @@
     <Compile Include="src\AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="src\HexBox\BuiltInContextMenu.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="src\HexBox\ByteCharConverters.cs" />
     <Compile Include="src\HexBox\ByteCollection.cs" />
     <Compile Include="src\HexBox\BytePositionInfo.cs" />
     <Compile Include="src\HexBox\DataBlock.cs" />
@@ -113,7 +106,12 @@
     <Compile Include="src\HexBox\DynamicFileByteProvider.cs" />
     <Compile Include="src\HexBox\FileByteProvider.cs" />
     <Compile Include="src\HexBox\FileDataBlock.cs" />
-    <Compile Include="src\HexBox\FindOptions.cs" />
+    <Compile Include="src\HexBox\Forms\GotoDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\HexBox\Forms\GotoDialog.Designer.cs">
+      <DependentUpon>GotoDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\HexBox\HexBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -121,7 +119,12 @@
     <Compile Include="src\HexBox\IByteProvider.cs" />
     <Compile Include="src\HexBox\MemoryDataBlock.cs" />
     <Compile Include="src\HexBox\NativeMethods.cs" />
-    <Compile Include="src\HexBox\Util.cs" />
+    <Compile Include="src\HexView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\HexView.Designer.cs">
+      <DependentUpon>HexView.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\Nodes\ScriptNode.cs" />
     <Compile Include="src\Types\Bitset.cs" />
     <Compile Include="src\Nodes\ArticleNode.cs" />
@@ -190,10 +193,13 @@
     <EmbeddedResource Include="src\AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="src\HexBox\Forms\GotoDialog.resx">
+      <DependentUpon>GotoDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\HexBox\HexBox.resx" />
+    <EmbeddedResource Include="src\HexView.resx">
+      <DependentUpon>HexView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="src\PSA Animation Flags.resx">
       <DependentUpon>PSA Animation Flags.cs</DependentUpon>
     </EmbeddedResource>
