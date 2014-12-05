@@ -160,10 +160,10 @@
             this.hexBox.ForeColor = System.Drawing.Color.Black;
             this.hexBox.LineInfoForeColor = System.Drawing.Color.Empty;
             this.hexBox.LineInfoVisible = true;
-            this.hexBox.Location = new System.Drawing.Point(12, 28);
+            this.hexBox.Location = new System.Drawing.Point(0, 28);
             this.hexBox.Name = "hexBox";
             this.hexBox.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hexBox.Size = new System.Drawing.Size(661, 410);
+            this.hexBox.Size = new System.Drawing.Size(685, 417);
             this.hexBox.StringViewVisible = true;
             this.hexBox.TabIndex = 0;
             this.hexBox.UseFixedBytesPerLine = true;
@@ -182,6 +182,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "HexView";
             this.Text = "HexView - ";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.HexView_FormClosing);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);

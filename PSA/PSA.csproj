@@ -100,6 +100,7 @@
     </Compile>
     <Compile Include="src\HexBox\ByteCollection.cs" />
     <Compile Include="src\HexBox\BytePositionInfo.cs" />
+    <Compile Include="src\HexBox\ColorMap.cs" />
     <Compile Include="src\HexBox\DataBlock.cs" />
     <Compile Include="src\HexBox\DataMap.cs" />
     <Compile Include="src\HexBox\DynamicByteProvider.cs" />

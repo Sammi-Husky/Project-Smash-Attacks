@@ -1775,6 +1775,7 @@ namespace Be.Windows.Forms {
             r.Exclude(_recContent);
             e.Graphics.ExcludeClip(r);
             UpdateVisibilityBytes();
+
             if (_lineInfoVisible)
                 PaintLineInfo(e.Graphics, _startByte, _endByte);
             if (!_stringViewVisible) PaintHex(e.Graphics, _startByte, _endByte);
@@ -1844,12 +1845,20 @@ namespace Be.Windows.Forms {
             if (sB.Length == 1)
                 sB = "0" + sB;
             var bytePointF = GetBytePointF(gridPoint);
-            const bool isLastLineChar = true; // (gridPoint.X + 1 == _iHexMaxHBytes);
-            var bcWidth = (isLastLineChar) ? _charSize.Width * 2 : _charSize.Width * 3;
+            var bcWidth = _charSize.Width * 2;
             g.FillRectangle(brushBack, bytePointF.X, bytePointF.Y, bcWidth, _charSize.Height);
             g.DrawString(sB.Substring(0, 1), Font, brush, bytePointF, _stringFormat);
             bytePointF.X += _charSize.Width;
             g.DrawString(sB.Substring(1, 1), Font, brush, bytePointF, _stringFormat);
+        }
+
+        private void PaintHighlights(Graphics g, int index, int length, Color color)
+        {
+            var gridPoint = GetGridBytePoint(index, true);
+            var pf = GetBytePointF(gridPoint);
+
+            ColorMap map = new ColorMap(color, length, pf, (int)_charSize.Width, (int)_charSize.Height);
+            map.Draw(g);
         }
 
         private void PaintHexAndStringView(Graphics g, long startByte, long endByte) {
@@ -1863,9 +1872,9 @@ namespace Be.Windows.Forms {
                                          _keyInterpreter.GetType() == typeof(KeyInterpreter);
             var isStringKeyInterpreterActive = _keyInterpreter != null &&
                                                _keyInterpreter.GetType() == typeof(StringKeyInterpreter);
+
             for (var i = startByte; i < internalEndByte + 1; i++) {
                 counter++;
-
                 var StringGridPoint = GetGridBytePoint(counter, false);
                 var HexGridPoint = GetGridBytePoint(counter, true);
                 var byteStringPointF = GetByteStringPointF(StringGridPoint);

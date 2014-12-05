@@ -29,8 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.mnuStrip = new System.Windows.Forms.MenuStrip();
             this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,10 +79,9 @@
             this.lblEventDescription = new System.Windows.Forms.Label();
             this.tbctrlMain = new System.Windows.Forms.TabControl();
             this.DataTree = new System.Windows.Forms.TreeView();
-            this.chkDataTree = new System.Windows.Forms.CheckBox();
-            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.hexViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.chkDataTree = new System.Windows.Forms.CheckBox();
             this.mnuStrip.SuspendLayout();
             this.tbpgAttributes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtgrdAttributes)).BeginInit();
@@ -174,9 +172,7 @@
             // testToolStripMenuItem
             // 
             this.testToolStripMenuItem.Name = "testToolStripMenuItem";
-            this.testToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
-            this.testToolStripMenuItem.Text = "Test";
-            this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click);
+            this.testToolStripMenuItem.Size = new System.Drawing.Size(12, 20);
             // 
             // opnDlg
             // 
@@ -194,7 +190,7 @@
             this.tbpgAttributes.Location = new System.Drawing.Point(4, 22);
             this.tbpgAttributes.Name = "tbpgAttributes";
             this.tbpgAttributes.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpgAttributes.Size = new System.Drawing.Size(357, 434);
+            this.tbpgAttributes.Size = new System.Drawing.Size(371, 447);
             this.tbpgAttributes.TabIndex = 1;
             this.tbpgAttributes.Text = "Attributes";
             this.tbpgAttributes.UseVisualStyleBackColor = true;
@@ -212,16 +208,16 @@
             this.dtgrdAttributes.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dtgrdAttributes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dtgrdAttributes.ColumnHeadersVisible = false;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.Format = "N4";
-            dataGridViewCellStyle1.NullValue = null;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dtgrdAttributes.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle5.Format = "N4";
+            dataGridViewCellStyle5.NullValue = null;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dtgrdAttributes.DefaultCellStyle = dataGridViewCellStyle5;
             this.dtgrdAttributes.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
             this.dtgrdAttributes.EnableHeadersVisualStyles = false;
             this.dtgrdAttributes.GridColor = System.Drawing.SystemColors.ControlLight;
@@ -235,7 +231,7 @@
             this.dtgrdAttributes.RowTemplate.Height = 16;
             this.dtgrdAttributes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dtgrdAttributes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dtgrdAttributes.Size = new System.Drawing.Size(341, 364);
+            this.dtgrdAttributes.Size = new System.Drawing.Size(355, 377);
             this.dtgrdAttributes.TabIndex = 4;
             this.dtgrdAttributes.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgrdAttributes_CellEndEdit);
             this.dtgrdAttributes.CurrentCellChanged += new System.EventHandler(this.dtgrdAttributes_CurrentCellChanged);
@@ -268,9 +264,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblAttributeDescription.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lblAttributeDescription.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lblAttributeDescription.Location = new System.Drawing.Point(8, 385);
+            this.lblAttributeDescription.Location = new System.Drawing.Point(8, 398);
             this.lblAttributeDescription.Name = "lblAttributeDescription";
-            this.lblAttributeDescription.Size = new System.Drawing.Size(341, 42);
+            this.lblAttributeDescription.Size = new System.Drawing.Size(355, 42);
             this.lblAttributeDescription.TabIndex = 3;
             // 
             // tbpgActions
@@ -298,7 +294,7 @@
             // 
             this.btnCopyEvent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCopyEvent.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCopyEvent.Location = new System.Drawing.Point(312, 347);
+            this.btnCopyEvent.Location = new System.Drawing.Point(298, 307);
             this.btnCopyEvent.Name = "btnCopyEvent";
             this.btnCopyEvent.Size = new System.Drawing.Size(37, 19);
             this.btnCopyEvent.TabIndex = 19;
@@ -310,7 +306,7 @@
             // 
             this.btnPasteEvent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPasteEvent.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPasteEvent.Location = new System.Drawing.Point(312, 363);
+            this.btnPasteEvent.Location = new System.Drawing.Point(298, 323);
             this.btnPasteEvent.Name = "btnPasteEvent";
             this.btnPasteEvent.Size = new System.Drawing.Size(37, 20);
             this.btnPasteEvent.TabIndex = 18;
@@ -321,7 +317,7 @@
             // btnModify
             // 
             this.btnModify.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnModify.Location = new System.Drawing.Point(80, 347);
+            this.btnModify.Location = new System.Drawing.Point(80, 307);
             this.btnModify.Name = "btnModify";
             this.btnModify.Size = new System.Drawing.Size(64, 34);
             this.btnModify.TabIndex = 17;
@@ -333,7 +329,7 @@
             // 
             this.btnDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnDown.Font = new System.Drawing.Font("Wingdings 3", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this.btnDown.Location = new System.Drawing.Point(264, 359);
+            this.btnDown.Location = new System.Drawing.Point(264, 319);
             this.btnDown.Name = "btnDown";
             this.btnDown.Size = new System.Drawing.Size(40, 22);
             this.btnDown.TabIndex = 16;
@@ -345,7 +341,7 @@
             // 
             this.btnUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnUp.Font = new System.Drawing.Font("Wingdings 3", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this.btnUp.Location = new System.Drawing.Point(224, 359);
+            this.btnUp.Location = new System.Drawing.Point(224, 319);
             this.btnUp.Name = "btnUp";
             this.btnUp.Size = new System.Drawing.Size(40, 22);
             this.btnUp.TabIndex = 15;
@@ -356,7 +352,7 @@
             // btnNOP
             // 
             this.btnNOP.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnNOP.Location = new System.Drawing.Point(152, 347);
+            this.btnNOP.Location = new System.Drawing.Point(152, 307);
             this.btnNOP.Name = "btnNOP";
             this.btnNOP.Size = new System.Drawing.Size(64, 34);
             this.btnNOP.TabIndex = 14;
@@ -367,7 +363,7 @@
             // btnAdd
             // 
             this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAdd.Location = new System.Drawing.Point(8, 347);
+            this.btnAdd.Location = new System.Drawing.Point(8, 307);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(64, 34);
             this.btnAdd.TabIndex = 13;
@@ -385,7 +381,7 @@
             this.tbctrlActionEvents.Location = new System.Drawing.Point(8, 8);
             this.tbctrlActionEvents.Name = "tbctrlActionEvents";
             this.tbctrlActionEvents.SelectedIndex = 0;
-            this.tbctrlActionEvents.Size = new System.Drawing.Size(341, 80);
+            this.tbctrlActionEvents.Size = new System.Drawing.Size(327, 80);
             this.tbctrlActionEvents.TabIndex = 12;
             this.tbctrlActionEvents.SelectedIndexChanged += new System.EventHandler(this.tbctrlActionEvents_SelectedIndexChanged);
             // 
@@ -396,7 +392,7 @@
             this.tbpgSpecials.Location = new System.Drawing.Point(4, 22);
             this.tbpgSpecials.Name = "tbpgSpecials";
             this.tbpgSpecials.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpgSpecials.Size = new System.Drawing.Size(333, 54);
+            this.tbpgSpecials.Size = new System.Drawing.Size(319, 54);
             this.tbpgSpecials.TabIndex = 1;
             this.tbpgSpecials.Text = "Specials";
             this.tbpgSpecials.UseVisualStyleBackColor = true;
@@ -571,7 +567,7 @@
             this.lblEventListOffset.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblEventListOffset.Location = new System.Drawing.Point(72, 104);
             this.lblEventListOffset.Name = "lblEventListOffset";
-            this.lblEventListOffset.Size = new System.Drawing.Size(277, 18);
+            this.lblEventListOffset.Size = new System.Drawing.Size(263, 18);
             this.lblEventListOffset.TabIndex = 11;
             // 
             // label1
@@ -594,7 +590,7 @@
             this.lstEvents.Location = new System.Drawing.Point(8, 123);
             this.lstEvents.Name = "lstEvents";
             this.lstEvents.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lstEvents.Size = new System.Drawing.Size(341, 212);
+            this.lstEvents.Size = new System.Drawing.Size(327, 160);
             this.lstEvents.TabIndex = 5;
             this.lstEvents.SelectedIndexChanged += new System.EventHandler(this.lstEvents_SelectedIndexChanged);
             this.lstEvents.DoubleClick += new System.EventHandler(this.lstEvents_DoubleClick);
@@ -605,15 +601,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblEventDescription.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lblEventDescription.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lblEventDescription.Location = new System.Drawing.Point(8, 385);
+            this.lblEventDescription.Location = new System.Drawing.Point(8, 345);
             this.lblEventDescription.Name = "lblEventDescription";
-            this.lblEventDescription.Size = new System.Drawing.Size(341, 42);
+            this.lblEventDescription.Size = new System.Drawing.Size(327, 42);
             this.lblEventDescription.TabIndex = 4;
             // 
             // tbctrlMain
             // 
-            this.tbctrlMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.tbctrlMain.Controls.Add(this.tbpgActions);
             this.tbctrlMain.Controls.Add(this.tbpgAttributes);
             this.tbctrlMain.Enabled = false;
@@ -638,6 +632,20 @@
             this.DataTree.Visible = false;
             this.DataTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.DataTree_NodeMouseDoubleClick);
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.hexViewToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(123, 26);
+            // 
+            // hexViewToolStripMenuItem
+            // 
+            this.hexViewToolStripMenuItem.Name = "hexViewToolStripMenuItem";
+            this.hexViewToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.hexViewToolStripMenuItem.Text = "Hex View";
+            this.hexViewToolStripMenuItem.Click += new System.EventHandler(this.hexViewToolStripMenuItem_Click);
+            // 
             // chkDataTree
             // 
             this.chkDataTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -651,26 +659,6 @@
             this.chkDataTree.Text = "Data Tree";
             this.chkDataTree.UseVisualStyleBackColor = true;
             this.chkDataTree.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
-            // 
-            // notifyIcon1
-            // 
-            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = "notifyIcon1";
-            this.notifyIcon1.Visible = true;
-            // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.hexViewToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 48);
-            // 
-            // hexViewToolStripMenuItem
-            // 
-            this.hexViewToolStripMenuItem.Name = "hexViewToolStripMenuItem";
-            this.hexViewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.hexViewToolStripMenuItem.Text = "Hex View";
-            this.hexViewToolStripMenuItem.Click += new System.EventHandler(this.hexViewToolStripMenuItem_Click);
             // 
             // FormMain
             // 
@@ -759,7 +747,6 @@
         private System.Windows.Forms.ToolStripMenuItem showAsIntToolStripMenuItem;
         private System.Windows.Forms.TreeView DataTree;
         private System.Windows.Forms.CheckBox chkDataTree;
-        private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem hexViewToolStripMenuItem;
