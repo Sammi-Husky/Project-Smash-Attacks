@@ -110,7 +110,7 @@
             this.lblVersion.Name = "lblVersion";
             this.lblVersion.Size = new System.Drawing.Size(28, 13);
             this.lblVersion.TabIndex = 6;
-            this.lblVersion.Text = "1.3a";
+            this.lblVersion.Text = "1.3b";
             // 
             // lblGNULicense
             // 
@@ -136,7 +136,8 @@
             this.lstAdditionalContributors.FormattingEnabled = true;
             this.lstAdditionalContributors.Items.AddRange(new object[] {
             "Sammi Husky",
-            "Dantarion"});
+            "Dantarion",
+            "BlackJax96"});
             this.lstAdditionalContributors.Location = new System.Drawing.Point(248, 24);
             this.lstAdditionalContributors.Name = "lstAdditionalContributors";
             this.lstAdditionalContributors.ScrollAlwaysVisible = true;

@@ -83,7 +83,6 @@ namespace SmashAttacks
 
         //  Variables containing short term stored data.
         Event[] eventData = new Event[0];
-        Event[] copyBuffer = new Event[0];
         List<Article> Articles = new List<Article>();
 
         int Ftype = 0;
@@ -1866,43 +1865,6 @@ namespace SmashAttacks
             eventData[i + d] = ReadEventData(pEventData + ToBlock(i + d));
         }
 
-        //  Copy the specified event into the copy/paste buffer.
-        public void CopyEvent(int index)
-        {
-            int lBuffer = copyBuffer.Length;
-            Array.Resize<Event>(ref copyBuffer, lBuffer + 1);
-            copyBuffer[lBuffer] = new Event();
-            copyBuffer[lBuffer].SetEventWord(eventData[index].GetEventWord());
-            for (int i = 0; i < eventData[index].parameters.Length; i++)
-            {
-                copyBuffer[lBuffer].parameters[i].word1 = eventData[index].parameters[i].word1;
-                copyBuffer[lBuffer].parameters[i].word2 = eventData[index].parameters[i].word2;
-            }
-        }
-
-        //  Paste the specified event from the copy/paste buffer.
-        public void PasteEvent(int index)
-        {
-            Event newEvent = new Event();
-            newEvent.SetEventWord(copyBuffer[index].GetEventWord());
-            newEvent.pParameters = Allocate(newEvent.lParameters * 2);
-
-            //  Replicate the parameter list in the newly allocated space for the parameters.
-            for (int i = 0; i < newEvent.lParameters; i++)
-            {
-                newEvent.parameters[i].word1 = copyBuffer[index].parameters[i].word1;
-                newEvent.parameters[i].word2 = copyBuffer[index].parameters[i].word2;
-                SetWord(newEvent.parameters[i].word1, newEvent.pParameters + ToBlock(i));
-                if (newEvent.parameters[i].word1 != 2)
-                    SetWord(newEvent.parameters[i].word2, newEvent.pParameters + ToBlock(i) + B_WORD2);
-                else
-                    SetPointer(newEvent.parameters[i].word2, newEvent.pParameters + ToBlock(i) + B_WORD2);
-            }
-
-            AddEvent(newEvent.GetEventWord(), newEvent.pParameters);
-        }
-
-
         // --------------------------------------------------- \\
         // ------------------Form Methods--------------------- \\
         // --------------------------------------------------- \\
@@ -2104,8 +2066,18 @@ namespace SmashAttacks
         // --------------------------------------------------- \\
         private void lstEvents_SelectedIndexChanged(object sender, EventArgs e)
         {
+            bool enabled = lstEvents.SelectedIndex >= 0;
+
+            btnModify.Enabled = 
+            btnNOP.Enabled = 
+            btnCopyEvent.Enabled = 
+            btnCopyText.Enabled = 
+            btnUp.Enabled = 
+            btnDown.Enabled = 
+            enabled;
+
+            if (!enabled) return;
             if (pEventData == 0) return;
-            if (lstEvents.SelectedIndex == -1) return;
             int index = lstEvents.SelectedIndex;
             string eventId = eventData[index].eventId;
 
@@ -2195,44 +2167,135 @@ namespace SmashAttacks
             DisplayEvents();
         }
 
+        #region Serialization
+        public string Serialize(int index)
+        {
+            string s = "";
+            Event e = eventData[index];
+            s += Hex8(e.GetEventWord()) + "|";
+            foreach (Block p in e.parameters)
+                s += String.Format("{0}\\{1}|", p.word1, Hex(p.word2));
+            return s;
+        }
+
+        public Event Deserialize(string s)
+        {
+            if (String.IsNullOrEmpty(s))
+                return null;
+
+            try
+            {
+                string[] lines = s.Split('|');
+
+                if (lines[0].Length != 8)
+                    return null;
+
+                Event newEvent = new Event();
+
+                string id = lines[0];
+                uint idNumber = Convert.ToUInt32(id, 16);
+
+                newEvent.SetEventWord(idNumber);
+                newEvent.pParameters = Allocate(newEvent.lParameters * 2);
+
+                for (int i = 0; i < newEvent.lParameters; i++)
+                {
+                    string[] pLines = lines[i + 1].Split('\\');
+                    int word1 = int.Parse(pLines[0]);
+                    int word2 = UnHex(pLines[1]);
+                    
+                    newEvent.parameters[i].word1 = word1;
+                    newEvent.parameters[i].word2 = word2;
+
+                    SetWord(newEvent.parameters[i].word1, newEvent.pParameters + ToBlock(i));
+                    if (newEvent.parameters[i].word1 != 2)
+                        SetWord(newEvent.parameters[i].word2, newEvent.pParameters + ToBlock(i) + B_WORD2);
+                    else
+                        SetPointer(newEvent.parameters[i].word2, newEvent.pParameters + ToBlock(i) + B_WORD2);
+                }
+
+                AddEvent(newEvent.GetEventWord(), newEvent.pParameters);
+
+                return newEvent;
+            }
+            catch { return null; }
+        }
+        #endregion
+
         private void btnCopyEvent_Click(object sender, EventArgs e)
         {
-            if (lstEvents.SelectedIndices.Count == 0) return;
-            int lSelected = lstEvents.SelectedIndices.Count;
-            ListBox.SelectedIndexCollection selected = lstEvents.SelectedIndices;
-            Array.Resize<Event>(ref copyBuffer, 0);
+            if (lstEvents.SelectedIndices.Count == 0)
+                return;
 
-            //  Copy each selected event on the event list.
-            string s1 = "";
-            for (int i = 0; i < lSelected; i++)
+            string s = "";
+            bool first = true;
+            foreach (int i in lstEvents.SelectedIndices)
             {
-                CopyEvent(selected[i]);
-                s1 += (lstEvents.Items[selected[i]].ToString() + "\n");
+                s += (first ? "" : "/") + Serialize(i);
+                first = false;
             }
-            s1 += "\n\n ============= \n";
-            s1 += "   " + lblEventListOffset.Text + "   ";
-            s1 += "\n ============= \n";
-            for (int i = 0; i < lSelected; i++)
-            {
-                string EventID = eventData[selected[i]].eventId; string Params = eventData[selected[i]].pParameters.ToString("x");
-                Params = Params.PadLeft(8, '0');
-                s1 += EventID + " " + Params + "\n";
-            }
-            Clipboard.SetText(s1);
-            selected.Clear();
+            if (!String.IsNullOrEmpty(s))
+                Clipboard.SetText(s);
         }
 
         private void btnPasteEvent_Click(object sender, EventArgs e)
         {
             ListBox.SelectedIndexCollection selected = lstEvents.SelectedIndices;
+
+            int index = lstEvents.Items.Count, highest = lstEvents.Items.Count;
+
+            int lSelected = selected.Count;
+            if (lSelected > 0)
+                highest = selected[lSelected - 1] + 1;
+
             selected.Clear();
 
-            for (int i = 0; i < copyBuffer.Length; i++)
+            string s = Clipboard.GetText();
+
+            //Instead of coding a new function to insert events after the highest selected index,
+            //I'm going to just append them to the end and then move them back up into place.
+
+            string[] events = s.Split('/');
+            int distance = lstEvents.Items.Count + 1 - highest;
+            foreach (string x in events)
+                if (Deserialize(x) != null)
+                {
+                    DisplayEvents();
+                    selected.Add(index++);
+                }
+
+            if (distance != 0)
             {
-                PasteEvent(i);
-                DisplayEvents();
-                selected.Add(lstEvents.Items.Count - 1);
+                lSelected = selected.Count;
+
+                //Have to iterate and move each event one after another one step at a time.
+                //Moving each event by the entire distance each time breaks the rest of the code for some reason
+                for (int w = 0; w < distance; w++)
+                {
+                    //  Move each event up - return if the top selected event is at the top of the list.
+                    for (int i = 0; i < lSelected; i++)
+                        if (selected[i] > 0) MoveEvent(selected[i], -1);
+                        else return;
+
+                    //  Move each selection on the list up.
+                    for (int i = 0; i < lSelected; i++)
+                    {
+                        int x = selected[i];
+                        selected.Add(x - 1);
+                        selected.Remove(x);
+                    }
+                    DisplayEvents();
+                }
             }
+        }
+
+        private void btnCopyEventText_Click(object sender, EventArgs e)
+        {
+            string s = "";
+            foreach (int i in lstEvents.SelectedIndices)
+                s += lstEvents.Items[i].ToString() + Environment.NewLine;
+            if (!String.IsNullOrEmpty(s))
+                Clipboard.SetText(s);
         }
 
         // --------------------------------------------------- \\

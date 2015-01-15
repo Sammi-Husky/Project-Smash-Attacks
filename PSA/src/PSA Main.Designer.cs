@@ -50,6 +50,7 @@
             this.showAsIntToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblAttributeDescription = new System.Windows.Forms.Label();
             this.tbpgActions = new System.Windows.Forms.TabPage();
+            this.btnCopyText = new System.Windows.Forms.Button();
             this.btnCopyEvent = new System.Windows.Forms.Button();
             this.btnPasteEvent = new System.Windows.Forms.Button();
             this.btnModify = new System.Windows.Forms.Button();
@@ -80,10 +81,10 @@
             this.lblEventDescription = new System.Windows.Forms.Label();
             this.tbctrlMain = new System.Windows.Forms.TabControl();
             this.DataTree = new System.Windows.Forms.TreeView();
-            this.chkDataTree = new System.Windows.Forms.CheckBox();
-            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.hexViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.chkDataTree = new System.Windows.Forms.CheckBox();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.mnuStrip.SuspendLayout();
             this.tbpgAttributes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtgrdAttributes)).BeginInit();
@@ -176,6 +177,7 @@
             this.testToolStripMenuItem.Name = "testToolStripMenuItem";
             this.testToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
             this.testToolStripMenuItem.Text = "Test";
+            this.testToolStripMenuItem.Visible = false;
             this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click);
             // 
             // opnDlg
@@ -275,6 +277,7 @@
             // 
             // tbpgActions
             // 
+            this.tbpgActions.Controls.Add(this.btnCopyText);
             this.tbpgActions.Controls.Add(this.btnCopyEvent);
             this.tbpgActions.Controls.Add(this.btnPasteEvent);
             this.tbpgActions.Controls.Add(this.btnModify);
@@ -294,9 +297,23 @@
             this.tbpgActions.Text = "Action Events";
             this.tbpgActions.UseVisualStyleBackColor = true;
             // 
+            // btnCopyText
+            // 
+            this.btnCopyText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnCopyText.Enabled = false;
+            this.btnCopyText.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCopyText.Location = new System.Drawing.Point(224, 341);
+            this.btnCopyText.Name = "btnCopyText";
+            this.btnCopyText.Size = new System.Drawing.Size(80, 19);
+            this.btnCopyText.TabIndex = 20;
+            this.btnCopyText.Text = "Copy Text";
+            this.btnCopyText.UseVisualStyleBackColor = true;
+            this.btnCopyText.Click += new System.EventHandler(this.btnCopyEventText_Click);
+            // 
             // btnCopyEvent
             // 
             this.btnCopyEvent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCopyEvent.Enabled = false;
             this.btnCopyEvent.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCopyEvent.Location = new System.Drawing.Point(312, 347);
             this.btnCopyEvent.Name = "btnCopyEvent";
@@ -321,6 +338,7 @@
             // btnModify
             // 
             this.btnModify.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnModify.Enabled = false;
             this.btnModify.Location = new System.Drawing.Point(80, 347);
             this.btnModify.Name = "btnModify";
             this.btnModify.Size = new System.Drawing.Size(64, 34);
@@ -332,7 +350,8 @@
             // btnDown
             // 
             this.btnDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnDown.Font = new System.Drawing.Font("Wingdings 3", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
+            this.btnDown.Enabled = false;
+            this.btnDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
             this.btnDown.Location = new System.Drawing.Point(264, 359);
             this.btnDown.Name = "btnDown";
             this.btnDown.Size = new System.Drawing.Size(40, 22);
@@ -344,7 +363,8 @@
             // btnUp
             // 
             this.btnUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnUp.Font = new System.Drawing.Font("Wingdings 3", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
+            this.btnUp.Enabled = false;
+            this.btnUp.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
             this.btnUp.Location = new System.Drawing.Point(224, 359);
             this.btnUp.Name = "btnUp";
             this.btnUp.Size = new System.Drawing.Size(40, 22);
@@ -356,6 +376,7 @@
             // btnNOP
             // 
             this.btnNOP.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnNOP.Enabled = false;
             this.btnNOP.Location = new System.Drawing.Point(152, 347);
             this.btnNOP.Name = "btnNOP";
             this.btnNOP.Size = new System.Drawing.Size(64, 34);
@@ -638,6 +659,20 @@
             this.DataTree.Visible = false;
             this.DataTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.DataTree_NodeMouseDoubleClick);
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.hexViewToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(123, 26);
+            // 
+            // hexViewToolStripMenuItem
+            // 
+            this.hexViewToolStripMenuItem.Name = "hexViewToolStripMenuItem";
+            this.hexViewToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.hexViewToolStripMenuItem.Text = "Hex View";
+            this.hexViewToolStripMenuItem.Click += new System.EventHandler(this.hexViewToolStripMenuItem_Click);
+            // 
             // chkDataTree
             // 
             this.chkDataTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -657,20 +692,6 @@
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
-            // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.hexViewToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 48);
-            // 
-            // hexViewToolStripMenuItem
-            // 
-            this.hexViewToolStripMenuItem.Name = "hexViewToolStripMenuItem";
-            this.hexViewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.hexViewToolStripMenuItem.Text = "Hex View";
-            this.hexViewToolStripMenuItem.Click += new System.EventHandler(this.hexViewToolStripMenuItem_Click);
             // 
             // FormMain
             // 
@@ -763,6 +784,7 @@
         private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem hexViewToolStripMenuItem;
+        private System.Windows.Forms.Button btnCopyText;
 
     }
 }
