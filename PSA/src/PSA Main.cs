@@ -88,6 +88,7 @@ namespace SmashAttacks
         Event[] eventData = new Event[0];
         Event[] copyBuffer = new Event[0];
         FileType _fType;
+        private bool _updating;
 
         // Various important Lists
         List<Article> Articles = new List<Article>();
@@ -379,7 +380,7 @@ namespace SmashAttacks
 
         //  Conversion from and to scalar methods.
         public long Scalar(float val) { float fVal = (val * 60000); return (long)fVal; }
-        public float UnScalar(float val) { return val / 60000; }
+        public float UnScalar(long val) { return (float)(int)val / 60000; }
 
         //  Rounding up and down operations.
         public long RoundUp(long val, long factor) { return val + (factor - 1) - (val + (factor - 1)) % factor; }
@@ -2350,6 +2351,7 @@ namespace SmashAttacks
             fileHeader = null; partitionHeader = null; dataHeader = null;
             movesetData = null; pointerList = null; objectPointerList = null;
             nameList = null; partitionHeader2 = null; effectPartition = null;
+            Articles.Clear(); _pointers.Clear(); _sizes.Clear();
 
             //Get Filetype based on filename
             try
@@ -2426,17 +2428,22 @@ namespace SmashAttacks
 
         private void FormMain_Resize(object sender, EventArgs e)
         {
-            if (!chkDataTree.Checked)
+            if (!_updating)
             {
-                if (tbctrlMain.Width != this.Width - 31) { tbctrlMain.Width = this.Width - 31; }
-            }
-            else if (chkDataTree.Checked)
-            {
-                if (tbctrlMain.Width != this.Width - (DataTree.Width + 62)) { tbctrlMain.Width = this.Width - (DataTree.Width + 62); }
+                if (!chkDataTree.Checked)
+                {
+                    if (tbctrlMain.Width != this.Width - 31) { tbctrlMain.Width = this.Width - 31; }
+                }
+                else if (chkDataTree.Checked)
+                {
+                    if (tbctrlMain.Width != this.Width - (DataTree.Width + 62)) { tbctrlMain.Width = this.Width - (DataTree.Width + 62); }
+                }
             }
         }
+
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
+            _updating = true;
             if (chkDataTree.Checked)
             {
                 tbctrlMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -2451,6 +2458,7 @@ namespace SmashAttacks
             | System.Windows.Forms.AnchorStyles.Left)));
                 DataTree.Visible = false; this.Width -= DataTree.Width + 31; tbctrlMain.Width = this.Width - 31;
             }
+            _updating = false;
         }
 
         private void DataTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)

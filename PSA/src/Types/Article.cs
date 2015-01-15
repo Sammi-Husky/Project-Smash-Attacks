@@ -109,7 +109,7 @@ namespace SmashAttacks.Types
                 actionCount = (_data.ActionsStart - _data.ActionFlagsStart) / 0x10;
             if (_data.SubactionFlagsStart > 0 && _data.SubactionMainStart > 0)
                 subactions = (_data.SubactionMainStart - _data.SubactionFlagsStart) / 0x8;
-            if (subactions > 0x1000 || actionCount > 0x1000)
+            if (subactions > 0x1000 || actionCount > 0x1000 || subactions < 0 || actionCount < 0)
                 throw new Exception("Not actually a Article, lol");
 
             _subCount = (int)subactions;

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.mnuStrip = new System.Windows.Forms.MenuStrip();
             this.mnuFile = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
@@ -190,7 +190,7 @@
             this.tbpgAttributes.Location = new System.Drawing.Point(4, 22);
             this.tbpgAttributes.Name = "tbpgAttributes";
             this.tbpgAttributes.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpgAttributes.Size = new System.Drawing.Size(371, 447);
+            this.tbpgAttributes.Size = new System.Drawing.Size(357, 434);
             this.tbpgAttributes.TabIndex = 1;
             this.tbpgAttributes.Text = "Attributes";
             this.tbpgAttributes.UseVisualStyleBackColor = true;
@@ -208,16 +208,16 @@
             this.dtgrdAttributes.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dtgrdAttributes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dtgrdAttributes.ColumnHeadersVisible = false;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle5.Format = "N4";
-            dataGridViewCellStyle5.NullValue = null;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dtgrdAttributes.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.Format = "N4";
+            dataGridViewCellStyle3.NullValue = null;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dtgrdAttributes.DefaultCellStyle = dataGridViewCellStyle3;
             this.dtgrdAttributes.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
             this.dtgrdAttributes.EnableHeadersVisualStyles = false;
             this.dtgrdAttributes.GridColor = System.Drawing.SystemColors.ControlLight;
@@ -428,7 +428,7 @@
             this.tbpgSubActionEvents.Location = new System.Drawing.Point(4, 22);
             this.tbpgSubActionEvents.Name = "tbpgSubActionEvents";
             this.tbpgSubActionEvents.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpgSubActionEvents.Size = new System.Drawing.Size(333, 54);
+            this.tbpgSubActionEvents.Size = new System.Drawing.Size(319, 54);
             this.tbpgSubActionEvents.TabIndex = 0;
             this.tbpgSubActionEvents.Text = "Sub Actions";
             this.tbpgSubActionEvents.UseVisualStyleBackColor = true;
@@ -460,7 +460,7 @@
             this.txtAnimationName.Location = new System.Drawing.Point(192, 8);
             this.txtAnimationName.MaxLength = 64;
             this.txtAnimationName.Name = "txtAnimationName";
-            this.txtAnimationName.Size = new System.Drawing.Size(138, 20);
+            this.txtAnimationName.Size = new System.Drawing.Size(124, 20);
             this.txtAnimationName.TabIndex = 14;
             this.txtAnimationName.TextChanged += new System.EventHandler(this.txtAnimationName_TextChanged);
             // 
@@ -515,7 +515,7 @@
             this.tbSubRoutines.Controls.Add(this.label2);
             this.tbSubRoutines.Location = new System.Drawing.Point(4, 22);
             this.tbSubRoutines.Name = "tbSubRoutines";
-            this.tbSubRoutines.Size = new System.Drawing.Size(333, 54);
+            this.tbSubRoutines.Size = new System.Drawing.Size(319, 54);
             this.tbSubRoutines.TabIndex = 2;
             this.tbSubRoutines.Text = "Sub Routines";
             this.tbSubRoutines.UseVisualStyleBackColor = true;
@@ -523,7 +523,7 @@
             // btnCreateSubRoutine
             // 
             this.btnCreateSubRoutine.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCreateSubRoutine.Location = new System.Drawing.Point(256, 8);
+            this.btnCreateSubRoutine.Location = new System.Drawing.Point(242, 8);
             this.btnCreateSubRoutine.Name = "btnCreateSubRoutine";
             this.btnCreateSubRoutine.Size = new System.Drawing.Size(72, 24);
             this.btnCreateSubRoutine.TabIndex = 17;
@@ -608,10 +608,12 @@
             // 
             // tbctrlMain
             // 
+            this.tbctrlMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.tbctrlMain.Controls.Add(this.tbpgActions);
             this.tbctrlMain.Controls.Add(this.tbpgAttributes);
             this.tbctrlMain.Enabled = false;
-            this.tbctrlMain.Location = new System.Drawing.Point(8, 32);
+            this.tbctrlMain.Location = new System.Drawing.Point(12, 32);
             this.tbctrlMain.Name = "tbctrlMain";
             this.tbctrlMain.SelectedIndex = 0;
             this.tbctrlMain.Size = new System.Drawing.Size(365, 460);
@@ -625,6 +627,7 @@
             this.DataTree.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DataTree.Indent = 13;
             this.DataTree.Location = new System.Drawing.Point(120, 52);
+            this.DataTree.MinimumSize = new System.Drawing.Size(245, 440);
             this.DataTree.Name = "DataTree";
             this.DataTree.ShowNodeToolTips = true;
             this.DataTree.Size = new System.Drawing.Size(245, 440);
