@@ -2494,7 +2494,7 @@ namespace SmashAttacks
                 {
                     cboAction.Items.Clear();
                     lstEvents.Items.Clear();
-                    cboAction.Text = cboSubAction.Text = txtAnimationName.Text = txtOffset.Text = "";
+                    cboAction.Text = cboSubAction.Text = txtOffset.Text = "";
                     ArticleNode selected = (ArticleNode)DataTree.SelectedNode;
                     tbctrlMain.SelectedTab = tbctrlMain.TabPages[0];
                     ResolveArticle(selected.address);
