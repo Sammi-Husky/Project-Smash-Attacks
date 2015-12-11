@@ -365,8 +365,8 @@ namespace SmashAttacks
         }
 
         //  Conversion from and to scalar methods.
-        public long Scalar(float val) { float fVal = (val * 60000); return (long)fVal; }
-        public float UnScalar(float val) { return val / 60000; }
+        public long Scalar(float val) { return Convert.ToInt32(val * 60000f); }
+        public float UnScalar(long val) { return (float)Convert.ToDecimal((int)val) / 60000f; }
 
         //  Rounding up and down operations.
         public long RoundUp(long val, long factor) { return val + (factor - 1) - (val + (factor - 1)) % factor; }
@@ -774,16 +774,27 @@ namespace SmashAttacks
         //  Handler for specific events covering the start of a code block.
         public long TabUpEvents(string eventId)
         {
-            switch (eventId)
+            switch (uint.Parse(eventId,System.Globalization.NumberStyles.HexNumber))
             {
-                case "00040100":
-                case "000A0100":
-                case "000A0200":
-                case "000A0400":
-                case "000E0000":
-                case "00100200":
-                case "00110100":
-                case "00120000":
+                case 0x00040100:
+                case 0x000A0100:
+                case 0x000A0200:
+                case 0x000A0300:
+                case 0x000A0400:
+                case 0x000B0100:
+                case 0x000B0200:
+                case 0x000B0300:
+                case 0x000B0400:
+                case 0x000C0100:
+                case 0x000C0200:
+                case 0x000C0300:
+                case 0x000C0400:
+                case 0x000D0200:
+                case 0x000D0400:
+                case 0x000E0000:
+                case 0x00100200:
+                case 0x00110100:
+                case 0x00120000:
                     return 1;
                 default:
                     return 0;
@@ -793,14 +804,24 @@ namespace SmashAttacks
         //  Handler for specific events covering the end of a code block.
         public long TabDownEvents(string eventId)
         {
-            switch (eventId)
+            switch (uint.Parse(eventId,System.Globalization.NumberStyles.HexNumber))
             {
-                case "00050000":
-                case "000E0000":
-                case "000F0000":
-                case "00110100":
-                case "00120000":
-                case "00130000":
+                case 0x00050000:
+                case 0x000B0100:
+                case 0x000B0200:
+                case 0x000B0300:
+                case 0x000B0400:
+                case 0x000C0100:
+                case 0x000C0200:
+                case 0x000C0300:
+                case 0x000C0400:
+                case 0x000D0200:
+                case 0x000D0400:
+                case 0x000E0000:
+                case 0x000F0000:
+                case 0x00110100:
+                case 0x00120000:
+                case 0x00130000:
                     return 1;
                 default:
                     return 0;
@@ -1715,7 +1736,7 @@ namespace SmashAttacks
         {
             int[] index = new int[lstEvents.SelectedIndices.Count];
             lstEvents.SelectedIndices.CopyTo(index, 0);
-            Array.Resize<Event>(ref eventData, 0);
+            Array.Resize(ref eventData, 0);
             lblEventListOffset.Text = "0x0" + Hex(pEventData);
             lstEvents.Items.Clear();
 
@@ -2546,4 +2567,3 @@ namespace SmashAttacks
         }
     }
 }
-

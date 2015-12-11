@@ -104,5 +104,9 @@ namespace SmashAttacks
             status = DialogResult.OK;
             this.Close();
         }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+        }
     }
 }

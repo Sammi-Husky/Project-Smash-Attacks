@@ -204,6 +204,9 @@
     <EmbeddedResource Include="src\PSA Animation Flags.resx">
       <DependentUpon>PSA Animation Flags.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="src\PSA Event List.resx">
+      <DependentUpon>PSA Event List.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="src\PSA Main.resx">
       <DependentUpon>PSA Main.cs</DependentUpon>
     </EmbeddedResource>
