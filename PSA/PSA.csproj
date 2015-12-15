@@ -127,6 +127,7 @@
     <Compile Include="src\Types\Article.cs" />
     <Compile Include="src\Types\Block.cs" />
     <Compile Include="src\Types\Event.cs" />
+    <Compile Include="src\Types\Fighter.cs" />
     <Compile Include="src\Types\FitObject.cs" />
     <Compile Include="src\Types\InfoAttribute.cs" />
     <Compile Include="src\Types\InfoEvent.cs" />

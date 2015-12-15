@@ -952,7 +952,7 @@ namespace SmashAttacks
         #endregion
         #region File Handling Methods
         //  Read the moveset data from the file specified.
-        public bool OpenFile(string fname)
+        public unsafe bool OpenFile(string fname)
         {
             bool errStatus = false;
             try
@@ -973,16 +973,26 @@ namespace SmashAttacks
 
                 //  Get all important pointers.
                 long pData = GetWord(objectPointerList, off);
-                GetAnimations(pData);
-                pAttributes = GetWord(pData + 0x8); //Pointer - attributes
-                pSSEAttributes = GetWord(pData + 0xC); //pointer - SSE Attributes
+                //GetAnimations(pData);
+                //pAttributes = GetWord(pData + 0x8); //Pointer - attributes
+                //pSSEAttributes = GetWord(pData + 0xC); //pointer - SSE Attributes
 
-                // Parse both Data Tables and add their nodes
-                //ResolveObjects();
+                //// Parse both Data Tables and add their nodes
+                ////ResolveObjects();
 
-                // Finally, get subactions and actions
-                GetActions(pData);
-                GetSubactions(pData);
+                //// Finally, get subactions and actions
+                //GetActions(pData);
+                //GetSubactions(pData);
+                try
+                {
+                    fixed (byte* ptr = movesetData)
+                    {
+                        Fighter fit = new Fighter(pData, ptr);
+                        FighterObjects.Add(fit);
+                        ResolveFighterObject(fit);
+                    }
+                }
+                catch { }
 
                 //  Add attributes to the attribute table.
                 for (int i = 0; i <= FromWord(0x2E0); i++)
@@ -1216,26 +1226,24 @@ namespace SmashAttacks
         }
 
         // Resolve various data structures
-        public void ResolveArticle(Article article)
+        public void ResolveFighterObject(FitObject fitobj)
         {
             cboAction.Items.Clear();
             cboSubAction.Items.Clear();
 
             pActionFlags = pAnimations = pBEvents = pSubEvents[0] = pSubEvents[1] = pSubEvents[3] = lBEvents = lSubEvents = 0;
 
-            if (article.ActionFlags != 0) { pActionFlags = article.ActionFlags; }       // Pointer - The action flags list
-            if (article.Animations != 0) { pAnimations = article.Animations; }          // Pointer - Animations list and Subaction Flags
-            if (article.Actions != 0) { pBEvents = article.Actions; }                   //Pointer - the Action list
-            if (article.SubactionMain != 0) { pSubEvents[0] = article.SubactionMain; }  //Pointer - Subaction Main list
-            if (article.SubactionGFX != 0) { pSubEvents[1] = article.SubactionGFX; }    //Pointer  - Subaction gfx list
-            if (article.SubactionSFX != 0) { pSubEvents[2] = article.SubactionSFX; }    //Pointer - Subaction sfx list
+            if (fitobj.ActionFlags != 0) { pActionFlags = fitobj.ActionFlags; }       // Pointer - The action flags list
+            if (fitobj.Animations != 0) { pAnimations = fitobj.Animations; }          // Pointer - Animations list and Subaction Flags
+            if (fitobj.Actions != 0) { pBEvents = fitobj.Actions; }                   //Pointer - the Action list
+            if (fitobj.SubactionMain != 0) { pSubEvents[0] = fitobj.SubactionMain; }  //Pointer - Subaction Main list
+            if (fitobj.SubactionGFX != 0) { pSubEvents[1] = fitobj.SubactionGFX; }    //Pointer  - Subaction gfx list
+            if (fitobj.SubactionSFX != 0) { pSubEvents[2] = fitobj.SubactionSFX; }    //Pointer - Subaction sfx list
 
             if (pActionFlags > 0) { lBEvents = (pBEvents - pActionFlags) / 0x10; }      //Number of Actions
+            if (pAnimations > 0 && pSubEvents[0] > 0) { lSubEvents = fitobj.SubactionCount; }
 
-            lBEvents = article.ActionCount;
-            if (pAnimations > 0 && pSubEvents[0] > 0) { lSubEvents = article.SubactionCount; }
-
-            for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i));
+            for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i + (fitobj is Fighter ? 0x112 : 0)));
             for (int i = 0; i < lSubEvents; i++) cboSubAction.Items.Add(Hex(i));
         }
         public string ResolveSpecials(long id)
@@ -2357,14 +2365,7 @@ namespace SmashAttacks
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            FitObject art = ((FitObject)comboBox1.SelectedItem);
-            pActionFlags = art.ActionFlags;
-            pSubEvents[0] = art.SubactionMain;
-            pSubEvents[1] = art.SubactionGFX;
-            pSubEvents[2] = art.SubactionSFX;
-            lSubEvents = art.SubactionCount;
-            lBEvents = art.ActionCount;
-            pAnimations = art.Animations;
+            ResolveFighterObject(((FitObject)comboBox1.SelectedItem));
         }
     }
 }
