@@ -1239,9 +1239,10 @@ namespace SmashAttacks
             if (fitobj.SubactionMain != 0) { pSubEvents[0] = fitobj.SubactionMain; }  //Pointer - Subaction Main list
             if (fitobj.SubactionGFX != 0) { pSubEvents[1] = fitobj.SubactionGFX; }    //Pointer  - Subaction gfx list
             if (fitobj.SubactionSFX != 0) { pSubEvents[2] = fitobj.SubactionSFX; }    //Pointer - Subaction sfx list
+            if (fitobj.SubactionOther != 0) { pSubEvents[3] = fitobj.SubactionOther; }//Pointer - Subaction sfx list
 
             if (pActionFlags > 0) { lBEvents = (pBEvents - pActionFlags) / 0x10; }      //Number of Actions
-            if (pAnimations > 0 && pSubEvents[0] > 0) { lSubEvents = fitobj.SubactionCount; }
+            if (pAnimations > 0 && pSubEvents[0] > 0) { lSubEvents = (fitobj.SubactionMain - fitobj.Animations) / 0x08; }
 
             for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i + (fitobj is Fighter ? 0x112 : 0)));
             for (int i = 0; i < lSubEvents; i++) cboSubAction.Items.Add(Hex(i));
@@ -2366,6 +2367,10 @@ namespace SmashAttacks
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             ResolveFighterObject(((FitObject)comboBox1.SelectedItem));
+            if (cboAction.Items.Count > 0)
+                cboAction.SelectedIndex = 0;
+            if (cboSubAction.Items.Count > 0)
+                cboSubAction.SelectedIndex = 0;
         }
     }
 }

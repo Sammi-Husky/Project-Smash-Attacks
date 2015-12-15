@@ -32,6 +32,8 @@ namespace SmashAttacks.Types
             get { return _pSubactionSFX; }
         }
         protected long _pSubactionSFX;
+        public long SubactionOther { get { return _pSubactionOther; } }
+        protected long _pSubactionOther;
         public long Actions
         {
             get { return _pActions; }

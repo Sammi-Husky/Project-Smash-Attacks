@@ -31,6 +31,7 @@ namespace SmashAttacks.Types
 
             _subCount = (int)subactions;
             _actionCount = actionCount;
+            _pActionFlags = _data.ActionFlagsStart;
             _pSubactionMain = _data.SubactionMainStart;
             _pSubactionGFX = _data.SubactionGFXStart;
             _pSubactionSFX = _data.SubactionSFXStart;

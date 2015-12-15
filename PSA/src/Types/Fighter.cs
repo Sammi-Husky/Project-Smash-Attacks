@@ -17,6 +17,7 @@ namespace SmashAttacks.Types
             _pSubactionMain = _data.SubactionMainStart;
             _pSubactionGFX = _data.SubactionGFXStart;
             _pSubactionSFX = _data.SubactionSFXStart;
+            _pSubactionOther = _data.SubactionOtherStart;
             _pActions = _data.EntryActionsStart;
             _pAnimations = _data.SubactionFlagsStart;
         }
