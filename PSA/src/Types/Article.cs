@@ -1,11 +1,10 @@
-﻿#pragma warning disable 649
-using System;
+﻿using System;
 
 namespace SmashAttacks.Types
 {
-    public unsafe class Article
+    public unsafe class Article : FitObject
     {
-        /*Alot of this was copied from Tabuu's source code, so credits to Dantarion and company for this work.*/
+        /*Most of this was copied from Tabuu's source code, so credits to Dantarion and company for this work.*/
 
         private Data _data;
         struct Data
@@ -30,26 +29,13 @@ namespace SmashAttacks.Types
             public bint UnknownD3;
         }
 
+        public long pCollData;
+        public long lCollData;
+
         public int ID
         {
             get { return _data.id; }
             set { _data.id = value; }
-        }
-        public int SubactionMain
-        {
-            get { return _data.SubactionMainStart; }
-        }
-        public int SubactionGFX
-        {
-            get { return _data.SubactionGFXStart; }
-        }
-        public int SubactionSFX
-        {
-            get { return _data.SubactionSFXStart; }
-        }
-        public int Actions
-        {
-            get { return _data.ActionsStart; }
         }
         public int ArcGroup
         {
@@ -76,24 +62,17 @@ namespace SmashAttacks.Types
             get { return _data.UnknownD3; }
             set { _data.UnknownD3 = value; }
         }
-
-        private int _subCount;
-        public int SubactionCount
+        public override string ToString()
         {
-            get { return _subCount; }
-            set { _subCount = value; }
+            return $"Article {ID}";
         }
 
-        private int _actionCount;
-        public int ActionCount
-        {
-            get { return _actionCount; }
-            set { _actionCount = value; }
-        }
 
         public unsafe Article(long FileLength, long pData, byte* ptr)
         {
             _data = *(Data*)(ptr + pData);
+            base.pData = pData;
+
             if (
                 _data.SubactionFlagsStart < 1 ||
                 _data.ActionsStart > FileLength || _data.ActionsStart % 4 != 0 ||
@@ -103,6 +82,7 @@ namespace SmashAttacks.Types
                 _data.ModelVisibility > FileLength || _data.ModelVisibility % 4 != 0
                 )
                 throw new Exception("Not actually an Article, lol");
+
             var actionCount = 0;
             var subactions = (pData - _data.SubactionFlagsStart) / 8;
             if (_data.ActionFlagsStart > 0 && _data.ActionsStart > 0)
@@ -113,7 +93,12 @@ namespace SmashAttacks.Types
                 throw new Exception("Not actually a Article, lol");
 
             _subCount = (int)subactions;
-            _actionCount = (int)actionCount;
+            _actionCount = actionCount;
+            _pSubactionMain = _data.SubactionMainStart;
+            _pSubactionGFX = _data.SubactionGFXStart;
+            _pSubactionSFX = _data.SubactionSFXStart;
+            _pActions = _data.ActionsStart;
+            _pAnimations = _data.SubactionFlagsStart;
         }
     }
 }

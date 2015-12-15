@@ -33,9 +33,15 @@ namespace SmashAttacks.Types
         }
 
         public string idNumber;
+        public string ID { get { return idNumber; } }
         public string name;
+        public string Name { get { return name; } }
         public string description;
 
         private long[] dfltParameters;
+        public override string ToString()
+        {
+            return name;
+        }
     }
 }

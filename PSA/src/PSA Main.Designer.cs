@@ -52,14 +52,21 @@
             this.showAsIntToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblAttributeDescription = new System.Windows.Forms.Label();
             this.tbpgActions = new System.Windows.Forms.TabPage();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.lstEvents = new System.Windows.Forms.ListBox();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.lblEventListOffset = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.btnCopyText = new System.Windows.Forms.Button();
-            this.btnCopyEvent = new System.Windows.Forms.Button();
-            this.btnPasteEvent = new System.Windows.Forms.Button();
-            this.btnModify = new System.Windows.Forms.Button();
-            this.btnDown = new System.Windows.Forms.Button();
             this.btnUp = new System.Windows.Forms.Button();
             this.btnNOP = new System.Windows.Forms.Button();
+            this.btnDown = new System.Windows.Forms.Button();
+            this.btnCopyEvent = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
+            this.btnModify = new System.Windows.Forms.Button();
+            this.btnPasteEvent = new System.Windows.Forms.Button();
+            this.lblEventDescription = new System.Windows.Forms.Label();
             this.tbctrlActionEvents = new System.Windows.Forms.TabControl();
             this.tbpgSpecials = new System.Windows.Forms.TabPage();
             this.cboAction = new System.Windows.Forms.ComboBox();
@@ -77,25 +84,25 @@
             this.btnGo = new System.Windows.Forms.Button();
             this.txtOffset = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.lblEventListOffset = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.lstEvents = new System.Windows.Forms.ListBox();
-            this.lblEventDescription = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.tbctrlMain = new System.Windows.Forms.TabControl();
-            this.DataTree = new System.Windows.Forms.TreeView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.hexViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.chkDataTree = new System.Windows.Forms.CheckBox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.mnuStrip.SuspendLayout();
             this.tbpgAttributes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtgrdAttributes)).BeginInit();
             this.AttributeContextMenu.SuspendLayout();
             this.tbpgActions.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.panel3.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.tbctrlActionEvents.SuspendLayout();
             this.tbpgSpecials.SuspendLayout();
             this.tbpgSubActionEvents.SuspendLayout();
             this.tbSubRoutines.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.tbctrlMain.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -108,7 +115,7 @@
             this.testToolStripMenuItem});
             this.mnuStrip.Location = new System.Drawing.Point(0, 0);
             this.mnuStrip.Name = "mnuStrip";
-            this.mnuStrip.Size = new System.Drawing.Size(379, 24);
+            this.mnuStrip.Size = new System.Drawing.Size(378, 24);
             this.mnuStrip.TabIndex = 0;
             this.mnuStrip.Text = "menuStrip1";
             // 
@@ -177,10 +184,7 @@
             // testToolStripMenuItem
             // 
             this.testToolStripMenuItem.Name = "testToolStripMenuItem";
-            this.testToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
-            this.testToolStripMenuItem.Text = "Test";
-            this.testToolStripMenuItem.Visible = false;
-            this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click);
+            this.testToolStripMenuItem.Size = new System.Drawing.Size(12, 20);
             // 
             // opnDlg
             // 
@@ -198,7 +202,7 @@
             this.tbpgAttributes.Location = new System.Drawing.Point(4, 22);
             this.tbpgAttributes.Name = "tbpgAttributes";
             this.tbpgAttributes.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpgAttributes.Size = new System.Drawing.Size(357, 434);
+            this.tbpgAttributes.Size = new System.Drawing.Size(370, 461);
             this.tbpgAttributes.TabIndex = 1;
             this.tbpgAttributes.Text = "Attributes";
             this.tbpgAttributes.UseVisualStyleBackColor = true;
@@ -208,11 +212,8 @@
             this.dtgrdAttributes.AllowUserToAddRows = false;
             this.dtgrdAttributes.AllowUserToDeleteRows = false;
             this.dtgrdAttributes.AllowUserToResizeRows = false;
-            this.dtgrdAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.dtgrdAttributes.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dtgrdAttributes.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
+            this.dtgrdAttributes.BackgroundColor = System.Drawing.SystemColors.ControlLight;
             this.dtgrdAttributes.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
@@ -234,10 +235,11 @@
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dtgrdAttributes.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dtgrdAttributes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dtgrdAttributes.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
             this.dtgrdAttributes.EnableHeadersVisualStyles = false;
             this.dtgrdAttributes.GridColor = System.Drawing.SystemColors.ControlLight;
-            this.dtgrdAttributes.Location = new System.Drawing.Point(8, 8);
+            this.dtgrdAttributes.Location = new System.Drawing.Point(3, 3);
             this.dtgrdAttributes.MultiSelect = false;
             this.dtgrdAttributes.Name = "dtgrdAttributes";
             this.dtgrdAttributes.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
@@ -255,7 +257,7 @@
             this.dtgrdAttributes.RowTemplate.Height = 16;
             this.dtgrdAttributes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dtgrdAttributes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dtgrdAttributes.Size = new System.Drawing.Size(341, 364);
+            this.dtgrdAttributes.Size = new System.Drawing.Size(364, 413);
             this.dtgrdAttributes.TabIndex = 4;
             this.dtgrdAttributes.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgrdAttributes_CellEndEdit);
             this.dtgrdAttributes.CurrentCellChanged += new System.EventHandler(this.dtgrdAttributes_CurrentCellChanged);
@@ -284,106 +286,119 @@
             // 
             // lblAttributeDescription
             // 
-            this.lblAttributeDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblAttributeDescription.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lblAttributeDescription.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lblAttributeDescription.Location = new System.Drawing.Point(8, 385);
+            this.lblAttributeDescription.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lblAttributeDescription.Location = new System.Drawing.Point(3, 416);
             this.lblAttributeDescription.Name = "lblAttributeDescription";
-            this.lblAttributeDescription.Size = new System.Drawing.Size(341, 42);
+            this.lblAttributeDescription.Size = new System.Drawing.Size(364, 42);
             this.lblAttributeDescription.TabIndex = 3;
             // 
             // tbpgActions
             // 
-            this.tbpgActions.Controls.Add(this.btnCopyText);
-            this.tbpgActions.Controls.Add(this.btnCopyEvent);
-            this.tbpgActions.Controls.Add(this.btnPasteEvent);
-            this.tbpgActions.Controls.Add(this.btnModify);
-            this.tbpgActions.Controls.Add(this.btnDown);
-            this.tbpgActions.Controls.Add(this.btnUp);
-            this.tbpgActions.Controls.Add(this.btnNOP);
-            this.tbpgActions.Controls.Add(this.btnAdd);
+            this.tbpgActions.Controls.Add(this.panel1);
             this.tbpgActions.Controls.Add(this.tbctrlActionEvents);
-            this.tbpgActions.Controls.Add(this.lblEventListOffset);
-            this.tbpgActions.Controls.Add(this.label1);
-            this.tbpgActions.Controls.Add(this.lstEvents);
-            this.tbpgActions.Controls.Add(this.lblEventDescription);
+            this.tbpgActions.Controls.Add(this.groupBox1);
             this.tbpgActions.Location = new System.Drawing.Point(4, 22);
             this.tbpgActions.Name = "tbpgActions";
-            this.tbpgActions.Size = new System.Drawing.Size(357, 434);
+            this.tbpgActions.Size = new System.Drawing.Size(370, 461);
             this.tbpgActions.TabIndex = 2;
             this.tbpgActions.Text = "Action Events";
             this.tbpgActions.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.lstEvents);
+            this.panel1.Controls.Add(this.panel3);
+            this.panel1.Controls.Add(this.panel2);
+            this.panel1.Controls.Add(this.lblEventDescription);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 121);
+            this.panel1.Name = "panel1";
+            this.panel1.Padding = new System.Windows.Forms.Padding(3);
+            this.panel1.Size = new System.Drawing.Size(370, 340);
+            this.panel1.TabIndex = 21;
+            // 
+            // lstEvents
+            // 
+            this.lstEvents.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstEvents.FormattingEnabled = true;
+            this.lstEvents.HorizontalScrollbar = true;
+            this.lstEvents.Location = new System.Drawing.Point(3, 22);
+            this.lstEvents.Name = "lstEvents";
+            this.lstEvents.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.lstEvents.Size = new System.Drawing.Size(364, 211);
+            this.lstEvents.TabIndex = 5;
+            this.lstEvents.SelectedIndexChanged += new System.EventHandler(this.lstEvents_SelectedIndexChanged);
+            this.lstEvents.DoubleClick += new System.EventHandler(this.lstEvents_DoubleClick);
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.lblEventListOffset);
+            this.panel3.Controls.Add(this.label1);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel3.Location = new System.Drawing.Point(3, 3);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(364, 19);
+            this.panel3.TabIndex = 22;
+            // 
+            // lblEventListOffset
+            // 
+            this.lblEventListOffset.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblEventListOffset.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.lblEventListOffset.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lblEventListOffset.Location = new System.Drawing.Point(67, 0);
+            this.lblEventListOffset.Name = "lblEventListOffset";
+            this.lblEventListOffset.Size = new System.Drawing.Size(297, 18);
+            this.lblEventListOffset.TabIndex = 11;
+            // 
+            // label1
+            // 
+            this.label1.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label1.Location = new System.Drawing.Point(0, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(67, 18);
+            this.label1.TabIndex = 10;
+            this.label1.Text = "Offset";
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.btnCopyText);
+            this.panel2.Controls.Add(this.btnUp);
+            this.panel2.Controls.Add(this.btnNOP);
+            this.panel2.Controls.Add(this.btnDown);
+            this.panel2.Controls.Add(this.btnCopyEvent);
+            this.panel2.Controls.Add(this.btnAdd);
+            this.panel2.Controls.Add(this.btnModify);
+            this.panel2.Controls.Add(this.btnPasteEvent);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel2.Location = new System.Drawing.Point(3, 233);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(364, 50);
+            this.panel2.TabIndex = 21;
             // 
             // btnCopyText
             // 
             this.btnCopyText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnCopyText.Enabled = false;
             this.btnCopyText.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCopyText.Location = new System.Drawing.Point(224, 341);
+            this.btnCopyText.Location = new System.Drawing.Point(219, 3);
             this.btnCopyText.Name = "btnCopyText";
-            this.btnCopyText.Size = new System.Drawing.Size(80, 19);
+            this.btnCopyText.Size = new System.Drawing.Size(80, 21);
             this.btnCopyText.TabIndex = 20;
             this.btnCopyText.Text = "Copy Text";
             this.btnCopyText.UseVisualStyleBackColor = true;
             this.btnCopyText.Click += new System.EventHandler(this.btnCopyEventText_Click);
             // 
-            // btnCopyEvent
-            // 
-            this.btnCopyEvent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCopyEvent.Enabled = false;
-            this.btnCopyEvent.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCopyEvent.Location = new System.Drawing.Point(312, 347);
-            this.btnCopyEvent.Name = "btnCopyEvent";
-            this.btnCopyEvent.Size = new System.Drawing.Size(37, 19);
-            this.btnCopyEvent.TabIndex = 19;
-            this.btnCopyEvent.Text = "Copy";
-            this.btnCopyEvent.UseVisualStyleBackColor = true;
-            this.btnCopyEvent.Click += new System.EventHandler(this.btnCopyEvent_Click);
-            // 
-            // btnPasteEvent
-            // 
-            this.btnPasteEvent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnPasteEvent.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPasteEvent.Location = new System.Drawing.Point(312, 363);
-            this.btnPasteEvent.Name = "btnPasteEvent";
-            this.btnPasteEvent.Size = new System.Drawing.Size(37, 20);
-            this.btnPasteEvent.TabIndex = 18;
-            this.btnPasteEvent.Text = "Paste";
-            this.btnPasteEvent.UseVisualStyleBackColor = true;
-            this.btnPasteEvent.Click += new System.EventHandler(this.btnPasteEvent_Click);
-            // 
-            // btnModify
-            // 
-            this.btnModify.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnModify.Enabled = false;
-            this.btnModify.Location = new System.Drawing.Point(80, 347);
-            this.btnModify.Name = "btnModify";
-            this.btnModify.Size = new System.Drawing.Size(64, 34);
-            this.btnModify.TabIndex = 17;
-            this.btnModify.Text = "Modify";
-            this.btnModify.UseVisualStyleBackColor = true;
-            this.btnModify.Click += new System.EventHandler(this.btnModify_Click);
-            // 
-            // btnDown
-            // 
-            this.btnDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnDown.Enabled = false;
-            this.btnDown.Location = new System.Drawing.Point(264, 359);
-            this.btnDown.Name = "btnDown";
-            this.btnDown.Size = new System.Drawing.Size(40, 22);
-            this.btnDown.TabIndex = 16;
-            this.btnDown.Text = "▼";
-            this.btnDown.UseVisualStyleBackColor = true;
-            this.btnDown.Click += new System.EventHandler(this.btnDown_Click);
-            // 
             // btnUp
             // 
             this.btnUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnUp.Enabled = false;
-            this.btnUp.Location = new System.Drawing.Point(224, 359);
+            this.btnUp.Location = new System.Drawing.Point(219, 24);
             this.btnUp.Name = "btnUp";
-            this.btnUp.Size = new System.Drawing.Size(40, 22);
+            this.btnUp.Size = new System.Drawing.Size(40, 24);
             this.btnUp.TabIndex = 15;
             this.btnUp.Text = "▲";
             this.btnUp.UseVisualStyleBackColor = true;
@@ -393,36 +408,94 @@
             // 
             this.btnNOP.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnNOP.Enabled = false;
-            this.btnNOP.Location = new System.Drawing.Point(152, 347);
+            this.btnNOP.Location = new System.Drawing.Point(147, 9);
             this.btnNOP.Name = "btnNOP";
-            this.btnNOP.Size = new System.Drawing.Size(64, 34);
+            this.btnNOP.Size = new System.Drawing.Size(64, 36);
             this.btnNOP.TabIndex = 14;
             this.btnNOP.Text = "Nop Selected";
             this.btnNOP.UseVisualStyleBackColor = true;
             this.btnNOP.Click += new System.EventHandler(this.btnRemove_Click);
             // 
+            // btnDown
+            // 
+            this.btnDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnDown.Enabled = false;
+            this.btnDown.Location = new System.Drawing.Point(259, 24);
+            this.btnDown.Name = "btnDown";
+            this.btnDown.Size = new System.Drawing.Size(40, 24);
+            this.btnDown.TabIndex = 16;
+            this.btnDown.Text = "▼";
+            this.btnDown.UseVisualStyleBackColor = true;
+            this.btnDown.Click += new System.EventHandler(this.btnDown_Click);
+            // 
+            // btnCopyEvent
+            // 
+            this.btnCopyEvent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCopyEvent.Enabled = false;
+            this.btnCopyEvent.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCopyEvent.Location = new System.Drawing.Point(318, 3);
+            this.btnCopyEvent.Name = "btnCopyEvent";
+            this.btnCopyEvent.Size = new System.Drawing.Size(37, 21);
+            this.btnCopyEvent.TabIndex = 19;
+            this.btnCopyEvent.Text = "Copy";
+            this.btnCopyEvent.UseVisualStyleBackColor = true;
+            this.btnCopyEvent.Click += new System.EventHandler(this.btnCopyEvent_Click);
+            // 
             // btnAdd
             // 
             this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAdd.Location = new System.Drawing.Point(8, 347);
+            this.btnAdd.Location = new System.Drawing.Point(3, 9);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(64, 34);
+            this.btnAdd.Size = new System.Drawing.Size(64, 36);
             this.btnAdd.TabIndex = 13;
             this.btnAdd.Text = "Add";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
+            // btnModify
+            // 
+            this.btnModify.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnModify.Enabled = false;
+            this.btnModify.Location = new System.Drawing.Point(75, 9);
+            this.btnModify.Name = "btnModify";
+            this.btnModify.Size = new System.Drawing.Size(64, 36);
+            this.btnModify.TabIndex = 17;
+            this.btnModify.Text = "Modify";
+            this.btnModify.UseVisualStyleBackColor = true;
+            this.btnModify.Click += new System.EventHandler(this.btnModify_Click);
+            // 
+            // btnPasteEvent
+            // 
+            this.btnPasteEvent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnPasteEvent.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPasteEvent.Location = new System.Drawing.Point(318, 24);
+            this.btnPasteEvent.Name = "btnPasteEvent";
+            this.btnPasteEvent.Size = new System.Drawing.Size(37, 22);
+            this.btnPasteEvent.TabIndex = 18;
+            this.btnPasteEvent.Text = "Paste";
+            this.btnPasteEvent.UseVisualStyleBackColor = true;
+            this.btnPasteEvent.Click += new System.EventHandler(this.btnPasteEvent_Click);
+            // 
+            // lblEventDescription
+            // 
+            this.lblEventDescription.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.lblEventDescription.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lblEventDescription.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lblEventDescription.Location = new System.Drawing.Point(3, 283);
+            this.lblEventDescription.Name = "lblEventDescription";
+            this.lblEventDescription.Size = new System.Drawing.Size(364, 54);
+            this.lblEventDescription.TabIndex = 4;
+            // 
             // tbctrlActionEvents
             // 
-            this.tbctrlActionEvents.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.tbctrlActionEvents.Controls.Add(this.tbpgSpecials);
             this.tbctrlActionEvents.Controls.Add(this.tbpgSubActionEvents);
             this.tbctrlActionEvents.Controls.Add(this.tbSubRoutines);
-            this.tbctrlActionEvents.Location = new System.Drawing.Point(8, 8);
+            this.tbctrlActionEvents.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tbctrlActionEvents.Location = new System.Drawing.Point(0, 41);
             this.tbctrlActionEvents.Name = "tbctrlActionEvents";
             this.tbctrlActionEvents.SelectedIndex = 0;
-            this.tbctrlActionEvents.Size = new System.Drawing.Size(341, 80);
+            this.tbctrlActionEvents.Size = new System.Drawing.Size(370, 80);
             this.tbctrlActionEvents.TabIndex = 12;
             this.tbctrlActionEvents.SelectedIndexChanged += new System.EventHandler(this.tbctrlActionEvents_SelectedIndexChanged);
             // 
@@ -433,7 +506,7 @@
             this.tbpgSpecials.Location = new System.Drawing.Point(4, 22);
             this.tbpgSpecials.Name = "tbpgSpecials";
             this.tbpgSpecials.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpgSpecials.Size = new System.Drawing.Size(333, 54);
+            this.tbpgSpecials.Size = new System.Drawing.Size(362, 54);
             this.tbpgSpecials.TabIndex = 1;
             this.tbpgSpecials.Text = "Specials";
             this.tbpgSpecials.UseVisualStyleBackColor = true;
@@ -469,7 +542,7 @@
             this.tbpgSubActionEvents.Location = new System.Drawing.Point(4, 22);
             this.tbpgSubActionEvents.Name = "tbpgSubActionEvents";
             this.tbpgSubActionEvents.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpgSubActionEvents.Size = new System.Drawing.Size(333, 54);
+            this.tbpgSubActionEvents.Size = new System.Drawing.Size(362, 54);
             this.tbpgSubActionEvents.TabIndex = 0;
             this.tbpgSubActionEvents.Text = "Sub Actions";
             this.tbpgSubActionEvents.UseVisualStyleBackColor = true;
@@ -501,7 +574,7 @@
             this.txtAnimationName.Location = new System.Drawing.Point(192, 8);
             this.txtAnimationName.MaxLength = 64;
             this.txtAnimationName.Name = "txtAnimationName";
-            this.txtAnimationName.Size = new System.Drawing.Size(138, 20);
+            this.txtAnimationName.Size = new System.Drawing.Size(389, 20);
             this.txtAnimationName.TabIndex = 14;
             this.txtAnimationName.TextChanged += new System.EventHandler(this.txtAnimationName_TextChanged);
             // 
@@ -556,7 +629,7 @@
             this.tbSubRoutines.Controls.Add(this.label2);
             this.tbSubRoutines.Location = new System.Drawing.Point(4, 22);
             this.tbSubRoutines.Name = "tbSubRoutines";
-            this.tbSubRoutines.Size = new System.Drawing.Size(333, 54);
+            this.tbSubRoutines.Size = new System.Drawing.Size(362, 54);
             this.tbSubRoutines.TabIndex = 2;
             this.tbSubRoutines.Text = "Sub Routines";
             this.tbSubRoutines.UseVisualStyleBackColor = true;
@@ -564,7 +637,7 @@
             // btnCreateSubRoutine
             // 
             this.btnCreateSubRoutine.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCreateSubRoutine.Location = new System.Drawing.Point(256, 8);
+            this.btnCreateSubRoutine.Location = new System.Drawing.Point(507, 8);
             this.btnCreateSubRoutine.Name = "btnCreateSubRoutine";
             this.btnCreateSubRoutine.Size = new System.Drawing.Size(72, 24);
             this.btnCreateSubRoutine.TabIndex = 17;
@@ -600,107 +673,50 @@
             this.label2.TabIndex = 11;
             this.label2.Text = "Offset";
             // 
-            // lblEventListOffset
+            // groupBox1
             // 
-            this.lblEventListOffset.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblEventListOffset.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.lblEventListOffset.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lblEventListOffset.Location = new System.Drawing.Point(72, 104);
-            this.lblEventListOffset.Name = "lblEventListOffset";
-            this.lblEventListOffset.Size = new System.Drawing.Size(277, 18);
-            this.lblEventListOffset.TabIndex = 11;
+            this.groupBox1.Controls.Add(this.comboBox1);
+            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox1.Location = new System.Drawing.Point(0, 0);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(370, 41);
+            this.groupBox1.TabIndex = 23;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Current Object";
             // 
-            // label1
+            // comboBox1
             // 
-            this.label1.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label1.Location = new System.Drawing.Point(8, 104);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(64, 18);
-            this.label1.TabIndex = 10;
-            this.label1.Text = "Offset";
-            // 
-            // lstEvents
-            // 
-            this.lstEvents.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lstEvents.FormattingEnabled = true;
-            this.lstEvents.HorizontalScrollbar = true;
-            this.lstEvents.Location = new System.Drawing.Point(8, 123);
-            this.lstEvents.Name = "lstEvents";
-            this.lstEvents.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lstEvents.Size = new System.Drawing.Size(341, 212);
-            this.lstEvents.TabIndex = 5;
-            this.lstEvents.SelectedIndexChanged += new System.EventHandler(this.lstEvents_SelectedIndexChanged);
-            this.lstEvents.DoubleClick += new System.EventHandler(this.lstEvents_DoubleClick);
-            // 
-            // lblEventDescription
-            // 
-            this.lblEventDescription.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.lblEventDescription.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lblEventDescription.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lblEventDescription.Location = new System.Drawing.Point(0, 392);
-            this.lblEventDescription.Name = "lblEventDescription";
-            this.lblEventDescription.Size = new System.Drawing.Size(357, 42);
-            this.lblEventDescription.TabIndex = 4;
+            this.comboBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(3, 16);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(364, 21);
+            this.comboBox1.TabIndex = 22;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // tbctrlMain
             // 
-            this.tbctrlMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.tbctrlMain.Controls.Add(this.tbpgActions);
             this.tbctrlMain.Controls.Add(this.tbpgAttributes);
+            this.tbctrlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbctrlMain.Enabled = false;
-            this.tbctrlMain.Location = new System.Drawing.Point(8, 32);
+            this.tbctrlMain.Location = new System.Drawing.Point(0, 24);
             this.tbctrlMain.Name = "tbctrlMain";
             this.tbctrlMain.SelectedIndex = 0;
-            this.tbctrlMain.Size = new System.Drawing.Size(365, 460);
+            this.tbctrlMain.Size = new System.Drawing.Size(378, 487);
             this.tbctrlMain.TabIndex = 1;
-            // 
-            // DataTree
-            // 
-            this.DataTree.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.DataTree.ContextMenuStrip = this.contextMenuStrip1;
-            this.DataTree.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DataTree.Indent = 13;
-            this.DataTree.Location = new System.Drawing.Point(120, 52);
-            this.DataTree.Name = "DataTree";
-            this.DataTree.ShowNodeToolTips = true;
-            this.DataTree.Size = new System.Drawing.Size(245, 440);
-            this.DataTree.TabIndex = 2;
-            this.DataTree.Visible = false;
-            this.DataTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.DataTree_NodeMouseDoubleClick);
             // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.hexViewToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(123, 26);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(68, 26);
             // 
             // hexViewToolStripMenuItem
             // 
             this.hexViewToolStripMenuItem.Name = "hexViewToolStripMenuItem";
-            this.hexViewToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.hexViewToolStripMenuItem.Text = "Hex View";
-            this.hexViewToolStripMenuItem.Click += new System.EventHandler(this.hexViewToolStripMenuItem_Click);
-            // 
-            // chkDataTree
-            // 
-            this.chkDataTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkDataTree.AutoSize = true;
-            this.chkDataTree.Location = new System.Drawing.Point(281, 27);
-            this.chkDataTree.Name = "chkDataTree";
-            this.chkDataTree.Size = new System.Drawing.Size(74, 17);
-            this.chkDataTree.TabIndex = 21;
-            this.chkDataTree.Text = "Data Tree";
-            this.chkDataTree.UseVisualStyleBackColor = true;
-            this.chkDataTree.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.hexViewToolStripMenuItem.Size = new System.Drawing.Size(67, 22);
             // 
             // notifyIcon1
             // 
@@ -712,11 +728,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(379, 511);
-            this.Controls.Add(this.chkDataTree);
-            this.Controls.Add(this.mnuStrip);
-            this.Controls.Add(this.DataTree);
+            this.ClientSize = new System.Drawing.Size(378, 511);
             this.Controls.Add(this.tbctrlMain);
+            this.Controls.Add(this.mnuStrip);
             this.MainMenuStrip = this.mnuStrip;
             this.MinimumSize = new System.Drawing.Size(385, 538);
             this.Name = "FormMain";
@@ -725,19 +739,22 @@
             this.Text = "Smash Attacks!";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
             this.Load += new System.EventHandler(this.FormMain_Load);
-            this.Resize += new System.EventHandler(this.FormMain_Resize);
             this.mnuStrip.ResumeLayout(false);
             this.mnuStrip.PerformLayout();
             this.tbpgAttributes.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dtgrdAttributes)).EndInit();
             this.AttributeContextMenu.ResumeLayout(false);
             this.tbpgActions.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
             this.tbctrlActionEvents.ResumeLayout(false);
             this.tbpgSpecials.ResumeLayout(false);
             this.tbpgSubActionEvents.ResumeLayout(false);
             this.tbpgSubActionEvents.PerformLayout();
             this.tbSubRoutines.ResumeLayout(false);
             this.tbSubRoutines.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
             this.tbctrlMain.ResumeLayout(false);
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -785,7 +802,6 @@
         private System.Windows.Forms.Button btnGo;
         private System.Windows.Forms.TextBox txtOffset;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label lblEventListOffset;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListBox lstEvents;
         private System.Windows.Forms.Label lblEventDescription;
@@ -793,14 +809,17 @@
         private System.Windows.Forms.ContextMenuStrip AttributeContextMenu;
         private System.Windows.Forms.ToolStripMenuItem showAsFloatToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showAsIntToolStripMenuItem;
-        private System.Windows.Forms.TreeView DataTree;
-        private System.Windows.Forms.CheckBox chkDataTree;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem hexViewToolStripMenuItem;
         private System.Windows.Forms.Button btnCopyText;
-
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Label lblEventListOffset;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
 
