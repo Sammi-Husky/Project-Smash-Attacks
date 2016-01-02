@@ -19,6 +19,13 @@ https://github.com/libertyernie/brawltools
  ====================================
 |************ Change Log ************|
  ====================================
+ - v1.4a- (1/1/2016)
+    . Removed data tree and hex editor.
+	. Added dropdown list of fighter objects (articles & anything with action script)
+	. Added dropdown list of Value Lists to the attribute tab (floating points, attributes, etc)
+	. Added a searchbox to the change event form.
+	. Fixed bug with description box moving offscreen when resized.
+	
  - v1.4- (?/??/2014)
 	. Added support to view "Nodes" in the data tree.
 	. Articles are now fully supported!. (credit to Dantarion and company for tabuu source code excerpts)

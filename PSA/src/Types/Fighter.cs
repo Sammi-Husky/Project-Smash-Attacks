@@ -20,6 +20,8 @@ namespace SmashAttacks.Types
             _pSubactionOther = _data.SubactionOtherStart;
             _pActions = _data.EntryActionsStart;
             _pAnimations = _data.SubactionFlagsStart;
+            _subCount = (int)(SubactionMain - Animations) / 0x08;
+            _actionCount = (int)(Actions - ActionFlags) / 0x10;
         }
         private sFighter _data;
         public sFighter Data { get { return _data; } }

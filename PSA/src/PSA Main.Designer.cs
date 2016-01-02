@@ -50,6 +50,8 @@
             this.AttributeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showAsFloatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAsIntToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.lblAttributeDescription = new System.Windows.Forms.Label();
             this.tbpgActions = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -94,6 +96,7 @@
             this.tbpgAttributes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dtgrdAttributes)).BeginInit();
             this.AttributeContextMenu.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.tbpgActions.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -128,13 +131,13 @@
             this.mnuLine,
             this.mnuExit});
             this.mnuFile.Name = "mnuFile";
-            this.mnuFile.Size = new System.Drawing.Size(37, 20);
+            this.mnuFile.Size = new System.Drawing.Size(35, 20);
             this.mnuFile.Text = "File";
             // 
             // mnuOpen
             // 
             this.mnuOpen.Name = "mnuOpen";
-            this.mnuOpen.Size = new System.Drawing.Size(114, 22);
+            this.mnuOpen.Size = new System.Drawing.Size(113, 22);
             this.mnuOpen.Text = "Open";
             this.mnuOpen.Click += new System.EventHandler(this.mnuOpen_Click);
             // 
@@ -142,7 +145,7 @@
             // 
             this.mnuSave.Enabled = false;
             this.mnuSave.Name = "mnuSave";
-            this.mnuSave.Size = new System.Drawing.Size(114, 22);
+            this.mnuSave.Size = new System.Drawing.Size(113, 22);
             this.mnuSave.Text = "Save";
             this.mnuSave.Click += new System.EventHandler(this.mnuSave_Click);
             // 
@@ -150,19 +153,19 @@
             // 
             this.mnuSaveAs.Enabled = false;
             this.mnuSaveAs.Name = "mnuSaveAs";
-            this.mnuSaveAs.Size = new System.Drawing.Size(114, 22);
+            this.mnuSaveAs.Size = new System.Drawing.Size(113, 22);
             this.mnuSaveAs.Text = "Save As";
             this.mnuSaveAs.Click += new System.EventHandler(this.mnuSaveAs_Click);
             // 
             // mnuLine
             // 
             this.mnuLine.Name = "mnuLine";
-            this.mnuLine.Size = new System.Drawing.Size(111, 6);
+            this.mnuLine.Size = new System.Drawing.Size(110, 6);
             // 
             // mnuExit
             // 
             this.mnuExit.Name = "mnuExit";
-            this.mnuExit.Size = new System.Drawing.Size(114, 22);
+            this.mnuExit.Size = new System.Drawing.Size(113, 22);
             this.mnuExit.Text = "Exit";
             this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
             // 
@@ -171,13 +174,13 @@
             this.mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuAbout});
             this.mnuHelp.Name = "mnuHelp";
-            this.mnuHelp.Size = new System.Drawing.Size(44, 20);
+            this.mnuHelp.Size = new System.Drawing.Size(40, 20);
             this.mnuHelp.Text = "Help";
             // 
             // mnuAbout
             // 
             this.mnuAbout.Name = "mnuAbout";
-            this.mnuAbout.Size = new System.Drawing.Size(107, 22);
+            this.mnuAbout.Size = new System.Drawing.Size(103, 22);
             this.mnuAbout.Text = "About";
             this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
             // 
@@ -197,8 +200,9 @@
             // 
             // tbpgAttributes
             // 
-            this.tbpgAttributes.Controls.Add(this.dtgrdAttributes);
             this.tbpgAttributes.Controls.Add(this.lblAttributeDescription);
+            this.tbpgAttributes.Controls.Add(this.dtgrdAttributes);
+            this.tbpgAttributes.Controls.Add(this.groupBox2);
             this.tbpgAttributes.Location = new System.Drawing.Point(4, 22);
             this.tbpgAttributes.Name = "tbpgAttributes";
             this.tbpgAttributes.Padding = new System.Windows.Forms.Padding(3);
@@ -239,7 +243,7 @@
             this.dtgrdAttributes.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnKeystroke;
             this.dtgrdAttributes.EnableHeadersVisualStyles = false;
             this.dtgrdAttributes.GridColor = System.Drawing.SystemColors.ControlLight;
-            this.dtgrdAttributes.Location = new System.Drawing.Point(3, 3);
+            this.dtgrdAttributes.Location = new System.Drawing.Point(3, 43);
             this.dtgrdAttributes.MultiSelect = false;
             this.dtgrdAttributes.Name = "dtgrdAttributes";
             this.dtgrdAttributes.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
@@ -257,7 +261,7 @@
             this.dtgrdAttributes.RowTemplate.Height = 16;
             this.dtgrdAttributes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dtgrdAttributes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dtgrdAttributes.Size = new System.Drawing.Size(364, 413);
+            this.dtgrdAttributes.Size = new System.Drawing.Size(364, 415);
             this.dtgrdAttributes.TabIndex = 4;
             this.dtgrdAttributes.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dtgrdAttributes_CellEndEdit);
             this.dtgrdAttributes.CurrentCellChanged += new System.EventHandler(this.dtgrdAttributes_CurrentCellChanged);
@@ -268,21 +272,43 @@
             this.showAsFloatToolStripMenuItem,
             this.showAsIntToolStripMenuItem});
             this.AttributeContextMenu.Name = "AttributeContextMenu";
-            this.AttributeContextMenu.Size = new System.Drawing.Size(145, 48);
+            this.AttributeContextMenu.Size = new System.Drawing.Size(140, 48);
             // 
             // showAsFloatToolStripMenuItem
             // 
             this.showAsFloatToolStripMenuItem.Name = "showAsFloatToolStripMenuItem";
-            this.showAsFloatToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.showAsFloatToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.showAsFloatToolStripMenuItem.Text = "Show as float";
             this.showAsFloatToolStripMenuItem.Click += new System.EventHandler(this.showAsFloatToolStripMenuItem_Click);
             // 
             // showAsIntToolStripMenuItem
             // 
             this.showAsIntToolStripMenuItem.Name = "showAsIntToolStripMenuItem";
-            this.showAsIntToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.showAsIntToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.showAsIntToolStripMenuItem.Text = "Show as int";
             this.showAsIntToolStripMenuItem.Click += new System.EventHandler(this.showAsIntToolStripMenuItem_Click);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.comboBox2);
+            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox2.Location = new System.Drawing.Point(3, 3);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(364, 40);
+            this.groupBox2.TabIndex = 6;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Value List";
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Location = new System.Drawing.Point(3, 16);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(358, 21);
+            this.comboBox2.TabIndex = 0;
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
             // lblAttributeDescription
             // 
@@ -313,10 +339,10 @@
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Controls.Add(this.lblEventDescription);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 121);
+            this.panel1.Location = new System.Drawing.Point(0, 127);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(3);
-            this.panel1.Size = new System.Drawing.Size(370, 340);
+            this.panel1.Size = new System.Drawing.Size(370, 334);
             this.panel1.TabIndex = 21;
             // 
             // lstEvents
@@ -327,7 +353,7 @@
             this.lstEvents.Location = new System.Drawing.Point(3, 22);
             this.lstEvents.Name = "lstEvents";
             this.lstEvents.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lstEvents.Size = new System.Drawing.Size(364, 211);
+            this.lstEvents.Size = new System.Drawing.Size(364, 205);
             this.lstEvents.TabIndex = 5;
             this.lstEvents.SelectedIndexChanged += new System.EventHandler(this.lstEvents_SelectedIndexChanged);
             this.lstEvents.DoubleClick += new System.EventHandler(this.lstEvents_DoubleClick);
@@ -374,7 +400,7 @@
             this.panel2.Controls.Add(this.btnModify);
             this.panel2.Controls.Add(this.btnPasteEvent);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(3, 233);
+            this.panel2.Location = new System.Drawing.Point(3, 227);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(364, 50);
             this.panel2.TabIndex = 21;
@@ -481,7 +507,7 @@
             this.lblEventDescription.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lblEventDescription.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblEventDescription.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lblEventDescription.Location = new System.Drawing.Point(3, 283);
+            this.lblEventDescription.Location = new System.Drawing.Point(3, 277);
             this.lblEventDescription.Name = "lblEventDescription";
             this.lblEventDescription.Size = new System.Drawing.Size(364, 54);
             this.lblEventDescription.TabIndex = 4;
@@ -495,7 +521,7 @@
             this.tbctrlActionEvents.Location = new System.Drawing.Point(0, 41);
             this.tbctrlActionEvents.Name = "tbctrlActionEvents";
             this.tbctrlActionEvents.SelectedIndex = 0;
-            this.tbctrlActionEvents.Size = new System.Drawing.Size(370, 80);
+            this.tbctrlActionEvents.Size = new System.Drawing.Size(370, 86);
             this.tbctrlActionEvents.TabIndex = 12;
             this.tbctrlActionEvents.SelectedIndexChanged += new System.EventHandler(this.tbctrlActionEvents_SelectedIndexChanged);
             // 
@@ -506,7 +532,7 @@
             this.tbpgSpecials.Location = new System.Drawing.Point(4, 22);
             this.tbpgSpecials.Name = "tbpgSpecials";
             this.tbpgSpecials.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpgSpecials.Size = new System.Drawing.Size(362, 54);
+            this.tbpgSpecials.Size = new System.Drawing.Size(362, 60);
             this.tbpgSpecials.TabIndex = 1;
             this.tbpgSpecials.Text = "Specials";
             this.tbpgSpecials.UseVisualStyleBackColor = true;
@@ -542,7 +568,7 @@
             this.tbpgSubActionEvents.Location = new System.Drawing.Point(4, 22);
             this.tbpgSubActionEvents.Name = "tbpgSubActionEvents";
             this.tbpgSubActionEvents.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpgSubActionEvents.Size = new System.Drawing.Size(362, 54);
+            this.tbpgSubActionEvents.Size = new System.Drawing.Size(362, 60);
             this.tbpgSubActionEvents.TabIndex = 0;
             this.tbpgSubActionEvents.Text = "Sub Actions";
             this.tbpgSubActionEvents.UseVisualStyleBackColor = true;
@@ -629,7 +655,7 @@
             this.tbSubRoutines.Controls.Add(this.label2);
             this.tbSubRoutines.Location = new System.Drawing.Point(4, 22);
             this.tbSubRoutines.Name = "tbSubRoutines";
-            this.tbSubRoutines.Size = new System.Drawing.Size(362, 54);
+            this.tbSubRoutines.Size = new System.Drawing.Size(362, 60);
             this.tbSubRoutines.TabIndex = 2;
             this.tbSubRoutines.Text = "Sub Routines";
             this.tbSubRoutines.UseVisualStyleBackColor = true;
@@ -680,19 +706,20 @@
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(370, 41);
-            this.groupBox1.TabIndex = 23;
+            this.groupBox1.TabIndex = 24;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Current Object";
             // 
             // comboBox1
             // 
             this.comboBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.Enabled = false;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(3, 16);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(364, 21);
             this.comboBox1.TabIndex = 22;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // tbctrlMain
             // 
@@ -744,6 +771,7 @@
             this.tbpgAttributes.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dtgrdAttributes)).EndInit();
             this.AttributeContextMenu.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
             this.tbpgActions.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
@@ -818,8 +846,10 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Label lblEventListOffset;
+        private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox comboBox2;
     }
 }
 

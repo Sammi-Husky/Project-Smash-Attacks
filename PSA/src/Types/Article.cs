@@ -5,7 +5,7 @@ namespace SmashAttacks.Types
     public unsafe class Article : FitObject
     {
         /*Most of this was copied from Tabuu's source code, so credits to Dantarion and company for this work.*/
-        public unsafe Article(long FileLength, long pData, byte* ptr)
+        public unsafe Article Parse(long FileLength, long pData, byte* ptr)
         {
             _data = *(sArticle*)(ptr + pData);
             base.pData = pData;
@@ -18,7 +18,7 @@ namespace SmashAttacks.Types
                 _data.SubactionSFXStart > FileLength || _data.SubactionSFXStart % 4 != 0 ||
                 _data.ModelVisibility > FileLength || _data.ModelVisibility % 4 != 0
                 )
-                throw new Exception("Not actually an Article, lol");
+                return null;
 
             var actionCount = 0;
             var subactions = (pData - _data.SubactionFlagsStart) / 8;
@@ -27,7 +27,7 @@ namespace SmashAttacks.Types
             if (_data.SubactionFlagsStart > 0 && _data.SubactionMainStart > 0)
                 subactions = (_data.SubactionMainStart - _data.SubactionFlagsStart) / 0x8;
             if (subactions > 0x1000 || actionCount > 0x1000)
-                throw new Exception("Not actually a Article, lol");
+                return null;
 
             _subCount = (int)subactions;
             _actionCount = actionCount;
@@ -37,6 +37,9 @@ namespace SmashAttacks.Types
             _pSubactionSFX = _data.SubactionSFXStart;
             _pActions = _data.ActionsStart;
             _pAnimations = _data.SubactionFlagsStart;
+            _subCount = (int)subactions;
+            _actionCount = actionCount;
+            return this;
         }
 
         private sArticle _data;

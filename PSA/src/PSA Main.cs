@@ -66,7 +66,6 @@ namespace SmashAttacks
         //  Variables containing pointers to various pieces of data.
         long pAnimations = 0;               //  Pointer to the Animation List.
         long pAttributes = 0;               //  Pointer to the Attribute List.
-        long pSSEAttributes = 0;            //  Pointer to the Subspace Attributes.
         long pBEvents = 0;                  //  Pointer to the B Move Events List.
         long pActionFlags = 0;              //  Pointer to the Action Flags.
         long lBEvents = 0;                  //  Length of the B Move Events List.
@@ -82,6 +81,7 @@ namespace SmashAttacks
         //  Variables containing short term stored data.
         Event[] eventData = new Event[0];
         List<FitObject> FighterObjects = new List<FitObject>();
+        List<ValueListObject> floatingPoints = new List<ValueListObject>();
 
         int Ftype = 0;
 
@@ -952,7 +952,7 @@ namespace SmashAttacks
         #endregion
         #region File Handling Methods
         //  Read the moveset data from the file specified.
-        public unsafe bool OpenFile(string fname)
+        public unsafe bool OpenFighter(string fname)
         {
             bool errStatus = false;
             try
@@ -971,40 +971,6 @@ namespace SmashAttacks
                 if (!found)
                     throw (new Exception("Cannot locate file data."));
 
-                //  Get all important pointers.
-                long pData = GetWord(objectPointerList, off);
-                //GetAnimations(pData);
-                //pAttributes = GetWord(pData + 0x8); //Pointer - attributes
-                //pSSEAttributes = GetWord(pData + 0xC); //pointer - SSE Attributes
-
-                //// Parse both Data Tables and add their nodes
-                ////ResolveObjects();
-
-                //// Finally, get subactions and actions
-                //GetActions(pData);
-                //GetSubactions(pData);
-                try
-                {
-                    fixed (byte* ptr = movesetData)
-                    {
-                        Fighter fit = new Fighter(pData, ptr);
-                        FighterObjects.Add(fit);
-                        ResolveFighterObject(fit);
-                    }
-                }
-                catch { }
-
-                //  Add attributes to the attribute table.
-                for (int i = 0; i <= FromWord(0x2E0); i++)
-                {
-                    if (i < iAttributes.Length) { attributes.Rows.Add(iAttributes[i].name); }
-                    else { attributes.Rows.Add("0x" + Hex(ToWord(i))); }
-                    if (iAttributes[i].type == 0)
-                        attributes.Rows[i][1] = UnFloat(GetWord(pAttributes + ToWord(i)));
-                    else
-                        attributes.Rows[i][1] = GetWord(pAttributes + ToWord(i));
-                }
-
                 //  Setup the empty space buffer at the end of the moveset data.
                 if (GetWord(movesetData.Length - 0x8) != FADEDATA)
                 {
@@ -1013,9 +979,20 @@ namespace SmashAttacks
                 }
                 pFadeData = GetWord(movesetData.Length - 4);
 
-                // Parse and add any articles
-                ParseHeaderEXT(pData);
-                comboBox1.DataSource = FighterObjects;
+                //  Get Data pointers.
+                long pData = GetWord(objectPointerList, off);
+
+                fixed (byte* ptr = movesetData)
+                {
+                    Fighter fit = new Fighter(pData, ptr);
+                    FighterObjects.Add(fit);
+                    ResolveFighterObject(fit);
+                    floatingPoints.Add(new ValueListObject(fit.Data.AttributeStart, 0x2e0) { Name = "Attributes", iAttributes = iAttributes });
+                    floatingPoints.Add(new ValueListObject(fit.Data.SSEAttributeStart, 0x2e0) { Name = "SSE Attributes", iAttributes = iAttributes });
+                    ParseHeaderEXT(pData);
+                    comboBox1.DataSource = FighterObjects;
+                    comboBox2.DataSource = floatingPoints;
+                }
             }
             catch (Exception error)
             {
@@ -1025,7 +1002,7 @@ namespace SmashAttacks
 
             return errStatus;
         }
-        public bool OpenItem(string fname)
+        public unsafe bool OpenItem(string fname)
         {
             bool errStatus = false;
             try
@@ -1047,20 +1024,12 @@ namespace SmashAttacks
                 //  Get all important pointers.
                 long pData = GetWord(objectPointerList, off);
 
-                GetAnimations(pData);
-                pAttributes = GetWord(pData + 0x8); //Pointer - attributes
-                GetActions(pData);
-                GetSubactions(pData);
-
-                //  Add attributes to the attribute table.
-                attributes.Rows.Add("0x00");
-                iAttributes[0].description = "No description";
-                for (int i = 0; i <= FromWord(0x00); i++)
+                fixed (byte* ptr = movesetData)
                 {
-                    if (iAttributes[i].type == 0)
-                        attributes.Rows[i][1] = UnFloat(GetWord(pAttributes + ToWord(i)));
-                    else
-                        attributes.Rows[i][1] = GetWord(pAttributes + ToWord(i));
+                    Item fit = new Item(pData, ptr);
+                    FighterObjects.Add(fit);
+                    ResolveFighterObject(fit);
+                    comboBox1.DataSource = FighterObjects;
                 }
 
                 //  Setup the empty space buffer at the end of the moveset data.
@@ -1184,45 +1153,34 @@ namespace SmashAttacks
             int ArticleCount = 0;
             //TreeNode root = new TreeNode("Articles");
 
-            // Parse the Header Extension, adding articles to the tree only if
-            // they pass redundancies in type class "Article.cs"
-
+            // Parse the Header Extension and add them only if
+            // they pass checks in Article.cs
             for (int i = 0; i < lHeaderEXT; i++)
             {
                 // Current address in the Header Extension
                 long Addr = GetWord(pHeaderEXT + ToWord(i));
 
                 if (Addr < movesetData.Length)
-                    try
+                    fixed (byte* ptr = movesetData)
                     {
-
-                        fixed (byte* ptr = movesetData)
+                        // This calls the redundancies in "Article.cs" to check if it's actually an article.
+                        Article art = new Article().Parse(pFadeData, Addr, ptr);
+                        if (art != null)
                         {
-                            // This calls the redundancies in "Article.cs" to check if it's actually an article.
-                            Article art = new Article(pFadeData, Addr, ptr);
-
-                            // Parse collision data if it exists
-                            if (art.CollisionData > 0)
-                            {
-                                //Addresses to the collision data and entry count, NOT the collision data offset list.
-                                //long pCollData = GetWord(art.CollisionData);
-                                //long lCollData = GetWord(art.CollisionData + 0x04);
-
-                                //for (int b = 0; b < lCollData; b++)
-                                //{
-                                //    ParamNode param = new ParamNode("Collision Data[" + b + "]", GetWord(pCollData + ToWord(b)) + 0x04, 0x8);
-                                //    param.BackColor = Color.GreenYellow;
-                                //    n.Nodes.Add(param);
-                                //}
-                            }
-                            //root.Nodes.Add(n);
                             FighterObjects.Add(art);
                             ArticleCount++;
                         }
+                        else
+                        {
+                            long off = GetWord(pHeaderEXT + ToWord(i));
+                            int size = 0;
+                            while (GetWord(off + size) != 1)
+                                size += 4;
+
+                            floatingPoints.Add(new ValueListObject(off, size));
+                        }
                     }
-                    catch { }
             }
-            //if (ArticleCount > 0) { DataTree.Nodes[0].Nodes.Add(root); }
         }
 
         // Resolve various data structures
@@ -1240,9 +1198,8 @@ namespace SmashAttacks
             if (fitobj.SubactionGFX != 0) { pSubEvents[1] = fitobj.SubactionGFX; }    //Pointer  - Subaction gfx list
             if (fitobj.SubactionSFX != 0) { pSubEvents[2] = fitobj.SubactionSFX; }    //Pointer - Subaction sfx list
             if (fitobj.SubactionOther != 0) { pSubEvents[3] = fitobj.SubactionOther; }//Pointer - Subaction sfx list
-
-            if (pActionFlags > 0) { lBEvents = (pBEvents - pActionFlags) / 0x10; }      //Number of Actions
-            if (pAnimations > 0 && pSubEvents[0] > 0) { lSubEvents = (fitobj.SubactionMain - fitobj.Animations) / 0x08; }
+            lSubEvents = fitobj.SubactionCount;
+            lBEvents = fitobj.ActionCount;
 
             for (int i = 0; i < lBEvents; i++) cboAction.Items.Add(ResolveSpecials(i + (fitobj is Fighter ? 0x112 : 0)));
             for (int i = 0; i < lSubEvents; i++) cboSubAction.Items.Add(Hex(i));
@@ -1259,47 +1216,12 @@ namespace SmashAttacks
                 default: return Hex(id);
             }
         }
-        //public void ResolveObjects()
-        //{
-        //    int off1 = 0;
-        //    if (objectPointerList.Length > 1)
-        //    {
-        //        DataTree.Nodes.Add(new BaseNode("Character Nodes"));
-        //        while (off1 < objectPointerList.Length)
-        //        {
-        //            long pEntry = GetWord(objectPointerList, off1);
-        //            long lEntry = FromWord(GetWord(objectPointerList, off1 + 0x04));
-        //            string Name = GetString(nameList, GetWord(objectPointerList, 0x4 + off1));
-
-        //            if (Name.Contains("aram") || Name.Contains("CollData") || Name.Contains("hitData"))
-        //            {
-        //                ParamNode Node = new ParamNode(Name, pEntry, lEntry);
-        //                Node.BackColor = Color.GreenYellow;
-        //                DataTree.Nodes[1].Nodes.Add(Node);
-        //            }
-        //            else if (Name.Contains("AnimCmd") && !Name.Contains("Disguise"))
-        //            {
-        //                ScriptNode Node = new ScriptNode(Name, pEntry);
-        //                Node.BackColor = Color.Yellow;
-        //                DataTree.Nodes[1].Nodes.Add(Node);
-        //            }
-        //            else
-        //            {
-        //                BaseNode Node = new BaseNode(Name);
-        //                Node.BackColor = Color.Gray;
-        //                if (Node.Text != "data") { DataTree.Nodes[1].Nodes.Add(Node); }
-        //            }
-        //            off1 += 8;
-        //        }
-        //    }
-        //}
-
         public void DisplayAttributes(long length, long off, bool UseInfo)
         {
             attributes.Clear();
+            pAttributes = off;
             for (int i = 0; i <= length; i++)
             {
-                pAttributes = off;
                 if (UseInfo)
                 {
                     lblAttributeDescription.Show();
@@ -2308,7 +2230,7 @@ namespace SmashAttacks
                 else
                 {
                     Ftype = 0;
-                    if (OpenFile(fname) == true)
+                    if (OpenFighter(fname) == true)
                         throw new Exception("Could not open file.");
                 }
 
@@ -2317,6 +2239,7 @@ namespace SmashAttacks
                 mnuSave.Enabled = true;
                 mnuSaveAs.Enabled = true;
                 tbctrlMain.Enabled = true;
+                comboBox1.Enabled = true;
                 tbctrlMain.SelectedIndex = 0;
                 tbctrlActionEvents.SelectedIndex = 0;
                 txtOffset.Text = "";
@@ -2371,6 +2294,12 @@ namespace SmashAttacks
                 cboAction.SelectedIndex = 0;
             if (cboSubAction.Items.Count > 0)
                 cboSubAction.SelectedIndex = 0;
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ValueListObject obj = (ValueListObject)comboBox2.SelectedItem;
+            DisplayAttributes(FromWord(obj.Length), obj.offset, obj.iAttributes != null);
         }
     }
 }
