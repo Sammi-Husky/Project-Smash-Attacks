@@ -46,13 +46,13 @@
             this.opnDlg = new System.Windows.Forms.OpenFileDialog();
             this.saveDlg = new System.Windows.Forms.SaveFileDialog();
             this.tbpgAttributes = new System.Windows.Forms.TabPage();
+            this.lblAttributeDescription = new System.Windows.Forms.Label();
             this.dtgrdAttributes = new System.Windows.Forms.DataGridView();
             this.AttributeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showAsFloatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAsIntToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.lblAttributeDescription = new System.Windows.Forms.Label();
             this.tbpgActions = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lstEvents = new System.Windows.Forms.ListBox();
@@ -211,6 +211,16 @@
             this.tbpgAttributes.Text = "Attributes";
             this.tbpgAttributes.UseVisualStyleBackColor = true;
             // 
+            // lblAttributeDescription
+            // 
+            this.lblAttributeDescription.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.lblAttributeDescription.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lblAttributeDescription.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lblAttributeDescription.Location = new System.Drawing.Point(3, 416);
+            this.lblAttributeDescription.Name = "lblAttributeDescription";
+            this.lblAttributeDescription.Size = new System.Drawing.Size(364, 42);
+            this.lblAttributeDescription.TabIndex = 3;
+            // 
             // dtgrdAttributes
             // 
             this.dtgrdAttributes.AllowUserToAddRows = false;
@@ -309,16 +319,6 @@
             this.comboBox2.Size = new System.Drawing.Size(358, 21);
             this.comboBox2.TabIndex = 0;
             this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
-            // 
-            // lblAttributeDescription
-            // 
-            this.lblAttributeDescription.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.lblAttributeDescription.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lblAttributeDescription.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lblAttributeDescription.Location = new System.Drawing.Point(3, 416);
-            this.lblAttributeDescription.Name = "lblAttributeDescription";
-            this.lblAttributeDescription.Size = new System.Drawing.Size(364, 42);
-            this.lblAttributeDescription.TabIndex = 3;
             // 
             // tbpgActions
             // 
@@ -720,6 +720,7 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(364, 21);
             this.comboBox1.TabIndex = 22;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // tbctrlMain
             // 
