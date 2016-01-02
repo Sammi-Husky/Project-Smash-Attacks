@@ -60,7 +60,7 @@
             this.btnDone.Location = new System.Drawing.Point(8, 224);
             this.btnDone.Name = "btnDone";
             this.btnDone.Size = new System.Drawing.Size(56, 24);
-            this.btnDone.TabIndex = 2;
+            this.btnDone.TabIndex = 0;
             this.btnDone.Text = "Done";
             this.btnDone.UseVisualStyleBackColor = true;
             this.btnDone.Click += new System.EventHandler(this.btnDone_Click);
@@ -76,10 +76,11 @@
             // 
             // textBox1
             // 
+            this.textBox1.HideSelection = false;
             this.textBox1.Location = new System.Drawing.Point(12, 8);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(199, 20);
-            this.textBox1.TabIndex = 4;
+            this.textBox1.TabIndex = 0;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // FormEventList

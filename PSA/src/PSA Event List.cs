@@ -1,6 +1,7 @@
 ﻿using SmashAttacks.Types;
 using System;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace SmashAttacks
 {
@@ -13,7 +14,6 @@ namespace SmashAttacks
         //  Array containing available events.
         InfoEvent[] iEvents = new InfoEvent[0];
 
-
         // --------------------------------------------------- \\
         // ------------------Startup Methods------------------ \\
         // --------------------------------------------------- \\
@@ -21,6 +21,11 @@ namespace SmashAttacks
         public FormEventList()
         {
             InitializeComponent();
+        }
+        public FormEventList(InfoEvent[] events)
+        {
+            InitializeComponent();
+            iEvents = events;
         }
 
         //  Form destructor.
@@ -32,16 +37,9 @@ namespace SmashAttacks
         //  Setup procedure.
         public void Setup()
         {
-            //  Add each event to the event list, but omit any events lacking a formal name.
-            if (lstEvents.Items.Count <= 0)
-                for (int i = 0; i < p.iEvents.Length; i++)
-                    if (p.iEvents[i].name != p.iEvents[i].idNumber)
-                    {
-                        int i2 = iEvents.Length;
-                        Array.Resize<InfoEvent>(ref iEvents, i2 + 1);
-                        iEvents[i2] = p.iEvents[i];
-                        lstEvents.Items.Add(p.iEvents[i].name);
-                    }
+            lstEvents.DataSource = iEvents;
+            lstEvents.DisplayMember = "Name";
+            lstEvents.ValueMember = "ID";
 
             txtEventId.Text = p.Hex8(eventWord);
             status = DialogResult.Cancel;
@@ -67,9 +65,7 @@ namespace SmashAttacks
         private void lstEvents_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lstEvents.SelectedIndex == -1) return;
-            long index = lstEvents.SelectedIndex;
-
-            txtEventId.Text = iEvents[index].idNumber;
+            txtEventId.Text = lstEvents.SelectedValue.ToString();
         }
 
         private void txtEventId_TextChanged(object sender, EventArgs e)
@@ -79,9 +75,8 @@ namespace SmashAttacks
 
             //  Select the event corresponding to the id input.
             lstEvents.SelectedIndex = -1;
-            for (int i = 0; i < iEvents.Length; i++)
-                if (eventId == iEvents[i].idNumber)
-                { lstEvents.SelectedIndex = i; break; }
+            lstEvents.SelectedIndex = 
+                lstEvents.Items.IndexOf(lstEvents.Items.Cast<InfoEvent>().Single(x => x.ID.ToString() == eventId));
 
         }
 
@@ -107,6 +102,9 @@ namespace SmashAttacks
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
+            lstEvents.DataSource =
+                iEvents.Cast<InfoEvent>().Where(x =>
+                x.Name.ToLower().Contains(textBox1.Text.ToLower())).ToArray();
         }
     }
 }
