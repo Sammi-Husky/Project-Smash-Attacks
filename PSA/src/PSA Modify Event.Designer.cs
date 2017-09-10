@@ -33,10 +33,10 @@
             this.btnDone = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.lblParamDescription = new System.Windows.Forms.Label();
-            this.lblParameterListOffset = new System.Windows.Forms.Label();
+            this.lblParameterListOffset = new System.Windows.Forms.TextBox();
             this.lblName4 = new System.Windows.Forms.Label();
-            this.lblEventName = new System.Windows.Forms.Label();
-            this.lblEventId = new System.Windows.Forms.Label();
+            this.lblEventName = new System.Windows.Forms.TextBox();
+            this.lblEventId = new System.Windows.Forms.TextBox();
             this.btnChangeEvent = new System.Windows.Forms.Button();
             this.lstParameters = new System.Windows.Forms.ListBox();
             this.cboType = new System.Windows.Forms.ComboBox();
@@ -139,6 +139,7 @@
             this.lblParameterListOffset.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblParameterListOffset.Location = new System.Drawing.Point(80, 32);
             this.lblParameterListOffset.Name = "lblParameterListOffset";
+            this.lblParameterListOffset.ReadOnly = true;
             this.lblParameterListOffset.Size = new System.Drawing.Size(223, 18);
             this.lblParameterListOffset.TabIndex = 15;
             // 
@@ -160,6 +161,7 @@
             this.lblEventName.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblEventName.Location = new System.Drawing.Point(16, 8);
             this.lblEventName.Name = "lblEventName";
+            this.lblEventName.ReadOnly = true;
             this.lblEventName.Size = new System.Drawing.Size(167, 20);
             this.lblEventName.TabIndex = 16;
             // 
@@ -170,6 +172,7 @@
             this.lblEventId.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblEventId.Location = new System.Drawing.Point(183, 8);
             this.lblEventId.Name = "lblEventId";
+            this.lblEventId.ReadOnly = true;
             this.lblEventId.Size = new System.Drawing.Size(66, 20);
             this.lblEventId.TabIndex = 17;
             // 
@@ -552,10 +555,10 @@
         private System.Windows.Forms.Button btnDone;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Label lblParamDescription;
-        private System.Windows.Forms.Label lblParameterListOffset;
+        private System.Windows.Forms.TextBox lblParameterListOffset;
         private System.Windows.Forms.Label lblName4;
-        private System.Windows.Forms.Label lblEventName;
-        private System.Windows.Forms.Label lblEventId;
+        private System.Windows.Forms.TextBox lblEventName;
+        private System.Windows.Forms.TextBox lblEventId;
         private System.Windows.Forms.Button btnChangeEvent;
         private System.Windows.Forms.ListBox lstParameters;
         private System.Windows.Forms.ComboBox cboType;
