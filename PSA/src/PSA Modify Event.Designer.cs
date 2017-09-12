@@ -136,11 +136,10 @@
             this.lblParameterListOffset.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblParameterListOffset.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.lblParameterListOffset.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblParameterListOffset.Location = new System.Drawing.Point(80, 32);
             this.lblParameterListOffset.Name = "lblParameterListOffset";
             this.lblParameterListOffset.ReadOnly = true;
-            this.lblParameterListOffset.Size = new System.Drawing.Size(223, 18);
+            this.lblParameterListOffset.Size = new System.Drawing.Size(223, 20);
             this.lblParameterListOffset.TabIndex = 15;
             // 
             // lblName4
@@ -158,7 +157,6 @@
             this.lblEventName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblEventName.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.lblEventName.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblEventName.Location = new System.Drawing.Point(16, 8);
             this.lblEventName.Name = "lblEventName";
             this.lblEventName.ReadOnly = true;
@@ -169,7 +167,6 @@
             // 
             this.lblEventId.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblEventId.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.lblEventId.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblEventId.Location = new System.Drawing.Point(183, 8);
             this.lblEventId.Name = "lblEventId";
             this.lblEventId.ReadOnly = true;
@@ -179,9 +176,9 @@
             // btnChangeEvent
             // 
             this.btnChangeEvent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnChangeEvent.Location = new System.Drawing.Point(247, 7);
+            this.btnChangeEvent.Location = new System.Drawing.Point(250, 7);
             this.btnChangeEvent.Name = "btnChangeEvent";
-            this.btnChangeEvent.Size = new System.Drawing.Size(58, 23);
+            this.btnChangeEvent.Size = new System.Drawing.Size(53, 23);
             this.btnChangeEvent.TabIndex = 18;
             this.btnChangeEvent.Text = "Change";
             this.btnChangeEvent.UseVisualStyleBackColor = true;
@@ -545,6 +542,7 @@
             this.pnlRequirement.ResumeLayout(false);
             this.pnlRequirement.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
