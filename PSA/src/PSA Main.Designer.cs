@@ -57,7 +57,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.lstEvents = new System.Windows.Forms.ListBox();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.lblEventListOffset = new System.Windows.Forms.Label();
+            this.lblEventListOffset = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.btnCopyText = new System.Windows.Forms.Button();
@@ -376,6 +376,7 @@
             this.lblEventListOffset.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblEventListOffset.Location = new System.Drawing.Point(67, 0);
             this.lblEventListOffset.Name = "lblEventListOffset";
+            this.lblEventListOffset.ReadOnly = true;
             this.lblEventListOffset.Size = new System.Drawing.Size(297, 18);
             this.lblEventListOffset.TabIndex = 11;
             // 
@@ -846,7 +847,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Label lblEventListOffset;
+        private System.Windows.Forms.TextBox lblEventListOffset;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ComboBox comboBox1;
